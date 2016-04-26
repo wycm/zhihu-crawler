@@ -1,0 +1,19 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="mycrawl:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/mycrawl_jar</output-path>
+    <root id="archive" name="mycrawl.jar">
+      <element id="module-output" name="mycrawl" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-logging/commons-logging/1.2/commons-logging-1.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpcore/4.4.1/httpcore-4.4.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/mysql/mysql-connector-java/5.1.6/mysql-connector-java-5.1.6.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-codec/commons-codec/1.9/commons-codec-1.9.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/commons-io/commons-io/2.4/commons-io-2.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/json/json/20151123/json-20151123.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/jsoup/jsoup/1.7.2/jsoup-1.7.2.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/apache/httpcomponents/httpclient/4.5/httpclient-4.5.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/log4j/log4j/1.2.15/log4j-1.2.15.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/mail/mail/1.4/mail-1.4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/javax/activation/activation/1.1/activation-1.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
