@@ -7,8 +7,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ac01bf6-3ff9-4c41-acc2-b8bb746ee53b" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/crawl/util/chcUtils.java" afterPath="$PROJECT_DIR$/src/com/crawl/util/chcUtils.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/crawl/zhihu/client/ModelLogin.java" afterPath="$PROJECT_DIR$/src/com/crawl/zhihu/client/ModelLogin.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/crawl/dao/ZhuhuDAO.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/crawl/zhihu/user/ParseWebPageTask.java" afterPath="$PROJECT_DIR$/src/com/crawl/zhihu/user/ParseWebPageTask.java" />
     </list>
     <ignored path="mycrawl.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -40,11 +41,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CrawlZhiHu.java" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CrawlZhiHu.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/user/CrawlZhiHu.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="37" column="34" selection-start-line="37" selection-start-column="34" selection-end-line="37" selection-end-column="34" />
+            <state relative-caret-position="85">
+              <caret line="30" column="38" selection-start-line="30" selection-start-column="38" selection-end-line="30" selection-end-column="38" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -72,11 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="chcUtils.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="chcUtils.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/crawl/util/chcUtils.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="445">
-              <caret line="323" column="5" selection-start-line="323" selection-start-column="5" selection-end-line="323" selection-end-column="5" />
+            <state relative-caret-position="695">
+              <caret line="327" column="20" selection-start-line="327" selection-start-column="20" selection-end-line="327" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -85,12 +86,23 @@
       <file leaf-file-name="ParseWebPageTask.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/user/ParseWebPageTask.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="485">
-              <caret line="112" column="17" selection-start-line="112" selection-start-column="17" selection-end-line="112" selection-end-column="17" />
+            <state relative-caret-position="333">
+              <caret line="135" column="51" selection-start-line="135" selection-start-column="51" selection-end-line="135" selection-end-column="51" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ZhuhuDAO.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/crawl/dao/ZhuhuDAO.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-678">
+              <caret line="75" column="22" selection-start-line="75" selection-start-column="22" selection-end-line="75" selection-end-column="22" />
               <folding>
-                <marker date="1461461229596" expanded="true" signature="6401:6453" placeholder="insert into user... " />
-                <marker date="1461461229596" expanded="true" signature="7622:7656" placeholder="insert into href... " />
-                <marker date="1461461229596" expanded="true" signature="7998:8014" placeholder="DELETE FROM " />
+                <element signature="imports" expanded="true" />
+                <marker date="1461733589821" expanded="true" signature="1755:1807" placeholder="insert into user... " />
+                <marker date="1461733589821" expanded="true" signature="3214:3248" placeholder="insert into href... " />
+                <marker date="1461733589821" expanded="true" signature="3640:3656" placeholder="DELETE FROM " />
               </folding>
             </state>
           </provider>
@@ -109,8 +121,8 @@
       <file leaf-file-name="ConnectionManage.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/crawl/dao/ConnectionManage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="650">
-              <caret line="38" column="9" selection-start-line="38" selection-start-column="9" selection-end-line="38" selection-end-column="9" />
+            <state relative-caret-position="100">
+              <caret line="7" column="24" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -131,16 +143,6 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="325">
               <caret line="24" column="59" selection-start-line="24" selection-start-column="59" selection-end-line="24" selection-end-column="59" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GetWebPageTask.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/user/GetWebPageTask.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="797">
-              <caret line="66" column="38" selection-start-line="66" selection-start-column="38" selection-end-line="66" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -167,7 +169,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/com/crawl/zhihu/CrawlZhiHu.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/zhihu/ParseWebPageTask.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/zhihu/GetWebPageTask.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/entity/User.java" />
@@ -200,14 +201,12 @@
         <option value="$PROJECT_DIR$/src/com/crawl/zhihu/user/Storage.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/test/Test1.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/util/Md5Util.java" />
-        <option value="$PROJECT_DIR$/src/com/crawl/dao/ConnectionManage.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/dao/DBbean.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/dao/IConnectionPool.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/dao/ConnectionPoolManager.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/dao/DBInitInfo.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/dao/TestConnectionPool.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/dao/ConnectionPool.java" />
-        <option value="$PROJECT_DIR$/src/com/crawl/zhihu/user/ParseWebPageTask.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/proxy/GetWebPageTask.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/util/ThreadPoolMonitor.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/proxy/ProxyTest.java" />
@@ -218,6 +217,9 @@
         <option value="$PROJECT_DIR$/src/com/crawl/util/MyLogger.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/zhihu/client/ModelLogin.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/util/chcUtils.java" />
+        <option value="$PROJECT_DIR$/src/com/crawl/dao/ConnectionManage.java" />
+        <option value="$PROJECT_DIR$/src/com/crawl/dao/ZhuhuDAO.java" />
+        <option value="$PROJECT_DIR$/src/com/crawl/zhihu/user/ParseWebPageTask.java" />
       </list>
     </option>
   </component>
@@ -316,6 +318,54 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mycrawl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mycrawl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="zhihu" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="user" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mycrawl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="mycrawl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="crawl" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="zhihu" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -985,16 +1035,16 @@
       <workItem from="1461633336027" duration="2273000" />
       <workItem from="1461672387481" duration="1566000" />
       <workItem from="1461675360970" duration="2073000" />
-      <workItem from="1461717169092" duration="7009000" />
+      <workItem from="1461717169092" duration="8487000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="237102000" />
+    <option name="totallyTimeSpent" value="238580000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1004,7 +1054,7 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32921347" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3296875" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.30786517" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.4494382" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1046,13 +1096,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/crawlimganswer/MyThreadPoolExecutor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="275">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/crawlimganswer/ParseImgAnswerTask.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1021">
@@ -1320,16 +1363,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/user/CrawlZhiHu.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="37" column="34" selection-start-line="37" selection-start-column="34" selection-end-line="37" selection-end-column="34" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/crawl/util/MyLogger.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="406">
@@ -1338,30 +1371,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/user/ParseWebPageTask.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="485">
-          <caret line="112" column="17" selection-start-line="112" selection-start-column="17" selection-end-line="112" selection-end-column="17" />
-          <folding>
-            <marker date="1461461229596" expanded="true" signature="6401:6453" placeholder="insert into user... " />
-            <marker date="1461461229596" expanded="true" signature="7622:7656" placeholder="insert into href... " />
-            <marker date="1461461229596" expanded="true" signature="7998:8014" placeholder="DELETE FROM " />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/resources/log4j.properties">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="423">
           <caret line="28" column="44" selection-start-line="28" selection-start-column="44" selection-end-line="28" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/crawl/dao/ConnectionManage.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="650">
-          <caret line="38" column="9" selection-start-line="38" selection-start-column="9" selection-end-line="38" selection-end-column="9" />
           <folding />
         </state>
       </provider>
@@ -1392,9 +1405,48 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/crawl/util/chcUtils.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="445">
-          <caret line="323" column="5" selection-start-line="323" selection-start-column="5" selection-end-line="323" selection-end-column="5" />
+        <state relative-caret-position="695">
+          <caret line="327" column="20" selection-start-line="327" selection-start-column="20" selection-end-line="327" selection-end-column="20" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/crawl/dao/ConnectionManage.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="7" column="24" selection-start-line="7" selection-start-column="24" selection-end-line="7" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/crawl/dao/ZhuhuDAO.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-678">
+          <caret line="75" column="22" selection-start-line="75" selection-start-column="22" selection-end-line="75" selection-end-column="22" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <marker date="1461733589821" expanded="true" signature="1755:1807" placeholder="insert into user... " />
+            <marker date="1461733589821" expanded="true" signature="3214:3248" placeholder="insert into href... " />
+            <marker date="1461733589821" expanded="true" signature="3640:3656" placeholder="DELETE FROM " />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/user/ParseWebPageTask.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="333">
+          <caret line="135" column="51" selection-start-line="135" selection-start-column="51" selection-end-line="135" selection-end-column="51" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/user/CrawlZhiHu.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="85">
+          <caret line="30" column="38" selection-start-line="30" selection-start-column="38" selection-end-line="30" selection-end-column="38" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
