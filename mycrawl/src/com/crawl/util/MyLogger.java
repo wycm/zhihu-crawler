@@ -27,7 +27,7 @@ public class MyLogger extends Logger{
             //运行在服务器上
             p.setProperty("log4j.appender.logfile.File","/alidata/server/mycrawllog.log");
             p.setProperty("log4j.rootLogger","INFO,stdout,logfile");
-            p.setProperty("log4j.appender.logfile.Threshold","INFO");
+            p.setProperty("log4j.appender.logfile.Threshold","ERROR");
         }else{
             //运行在本地,日志只需输出到控制台
             p.setProperty("log4j.rootLogger","INFO,stdout,logfile");
