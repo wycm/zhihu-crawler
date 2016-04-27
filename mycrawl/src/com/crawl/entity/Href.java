@@ -1,4 +1,4 @@
-package com.crawl.zhihu.client;
+package com.crawl.entity;
 
 /**
  * Created by Administrator on 2016/4/14 0014.
