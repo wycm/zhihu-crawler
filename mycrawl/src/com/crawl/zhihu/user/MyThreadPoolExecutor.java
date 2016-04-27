@@ -47,6 +47,4 @@ public class MyThreadPoolExecutor extends ThreadPoolExecutor{
         ConnectionManage.close();
         logger.info("----总共耗时:" + (endTime - startTime) + "ms");
     }
-    public static void main(String args []) throws Exception {
-    }
 }

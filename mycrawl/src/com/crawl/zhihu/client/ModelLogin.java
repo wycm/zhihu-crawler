@@ -28,8 +28,8 @@ public class ModelLogin {
      * @param url 验证码地址
      * @return
      */
-    public String yzm(CloseableHttpClient httpClient, String url){
-        HttpClientUtil.downloadFile(httpClient, url, "d:/test/", "1.gif",true);
+    public String yzm(CloseableHttpClient httpClient,HttpClientContext context, String url){
+        HttpClientUtil.downloadFile(httpClient, context, url, "d:/test/", "1.gif",true);
         Scanner sc = new Scanner(System.in);
         String yzm = sc.nextLine();
         return yzm;
@@ -39,18 +39,18 @@ public class ModelLogin {
      * 登录成功后将cookie序列化到本地
      * @throws Exception
      */
-    public void login(CloseableHttpClient httpClient, HttpClientContext context){
+    public boolean login(CloseableHttpClient httpClient, HttpClientContext context){
         String yzm = null;
         String loginState = null;
-        HttpGet getRequest = new HttpGet("http://www.zhihu.com/#signin");
-        HttpClientUtil.getWebPage(httpClient,context, getRequest, "utf-8", true);
-        HttpPost request = new HttpPost("http://www.zhihu.com/login/email");
+        HttpGet getRequest = new HttpGet("https://www.zhihu.com/#signin");
+        HttpClientUtil.getWebPage(httpClient,context, getRequest, "utf-8", false);
+        HttpPost request = new HttpPost("https://www.zhihu.com/login/email");
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
-        yzm = yzm(httpClient,"http://www.zhihu.com/captcha.gif");//肉眼识别验证码
+        yzm = yzm(httpClient, context,"https://www.zhihu.com/captcha.gif?type=login");//肉眼识别验证码
         formParams.add(new BasicNameValuePair("captcha", yzm));
         formParams.add(new BasicNameValuePair("_xsrf", ""));//这个参数可以不用
-        formParams.add(new BasicNameValuePair("email", "你的邮箱"));
-        formParams.add(new BasicNameValuePair("password", "你的密码"));
+        formParams.add(new BasicNameValuePair("email", "1057160387@qq.com"));
+        formParams.add(new BasicNameValuePair("password", "wangyang110."));
         formParams.add(new BasicNameValuePair("remember_me", "true"));
         UrlEncodedFormEntity entity = null;
         try {
@@ -59,15 +59,17 @@ public class ModelLogin {
             e.printStackTrace();
         }
         request.setEntity(entity);
-        loginState = HttpClientUtil.getWebPage(httpClient,context, request, "utf-8", true);//登录
+        loginState = HttpClientUtil.getWebPage(httpClient,context, request, "utf-8", false);//登录
         JSONObject jo = new JSONObject(loginState);
         if(jo.get("r").toString().equals("0")){
             System.out.println("登录成功");
-            getRequest = new HttpGet("https://www.zhihu.com");
-            HttpClientUtil.getWebPage(httpClient,context ,getRequest, "utf-8", true);//访问首页
-            HttpClientUtil.serializeObject(context.getCookieStore(),"resources/zhihucookies");//序列化知乎Cookies，下次登录直接通过该cookies登录
+//            getRequest = new HttpGet("https://www.zhihu.com");
+//            HttpClientUtil.getWebPage(httpClient,context ,getRequest, "utf-8", false);//访问首页
+//            HttpClientUtil.serializeObject(context.getCookieStore(),"resources/zhihucookies");//序列化知乎Cookies，下次登录直接通过该cookies登录
+            return true;
         }else{
-            System.out.println("登录失败");
+            System.out.println("登录失败" + loginState);
+            return false;
         }
     }
     public static void main(String args []){
@@ -77,6 +79,6 @@ public class ModelLogin {
         ml.login(httpClient,context);
 //        context.setCookieStore((CookieStore) chcUtils.antiSerializeMyHttpClient("resources/zhihucookies"));
         HttpGet getRequest = new HttpGet("https://www.zhihu.com");
-        HttpClientUtil.getWebPage(httpClient,context,getRequest,"utf-8",true);
+        HttpClientUtil.getWebPage(httpClient,context,getRequest,"utf-8",false);
     }
 }

@@ -33,7 +33,6 @@ public class ParseWebPageTask implements Runnable{
 	ThreadPoolExecutor gwpThreadPool = null;//获取网页线程池
 	MyThreadPoolExecutor pwpThreadPool = null;//解析网页线程池
 	public ParseWebPageTask(){
-
 	}
 	public ParseWebPageTask(ZhihuHttpClient zhClient,Storage storage,ThreadPoolExecutor gwpThreadPool,MyThreadPoolExecutor pwpThreadPool){
 		this.storage = storage;
@@ -66,7 +65,7 @@ public class ParseWebPageTask implements Runnable{
 					}
 				}
 			}else {
-				//解析用户关注页
+				//解析用户关注页面
 				Elements es = doc.select(".zm-list-content-medium .zm-list-content-title a");
 				for(Element temp:es){
 					String userIndex = temp.attr("href") + "/followees";
@@ -96,7 +95,7 @@ public class ParseWebPageTask implements Runnable{
 //				storage.getResult().getHrefSet().clear();
 //			}
 		if(ZhuhuDAO.insertHref(cn,md5Href) || gwpThreadPool.getQueue().size() <= 50){
-//			该链接未访问过，将用户链接插入数据库或者当前获取任务线程池没有任务（防止出现死锁）
+			//该链接未访问过，将用户链接插入数据库或者当前获取任务线程池没有任务（防止出现死锁）
 			if(pwpThreadPool.getQueue().size() <= 100){
 				//解析线程池等待任务小于100时，才加入获取任务队列
 				HttpGet getRequest = null;

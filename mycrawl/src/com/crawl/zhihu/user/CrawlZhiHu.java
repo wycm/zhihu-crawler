@@ -10,9 +10,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.log4j.Logger;
 
 /**
- *
- * @author Administrator
- * 多线程获取知乎问题所有问题链接
+ * 爬虫入口
  *
  */
 public class CrawlZhiHu {
@@ -52,7 +50,7 @@ public class CrawlZhiHu {
             if(ParseWebPageTask.userCount >= crawlUserCount){
                 getWebPagethreadPool.shutdown();
                 if(getWebPagethreadPool.isTerminated()  && storage.getQueue().size() == 0){
-                    //获取网页线程池任务完成,并且仓库任务为0时，终止解析线程池
+                    //获取网页线程池任务完成,并且仓库任务为0时，终止解析网页线程池
                     parseWebPagethreadPool.shutdown();
                     et1.shutdown();
                     et2.shutdown();

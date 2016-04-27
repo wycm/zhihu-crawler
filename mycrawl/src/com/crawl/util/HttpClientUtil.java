@@ -98,10 +98,15 @@ public class HttpClientUtil {
 	 * @param saveFileName 文件名，包括后缀名
 	 * @param isReplaceFile 若存在文件时，是否还需要下载文件
 	 */
-	public static void downloadFile(CloseableHttpClient httpClient,String fileURL,String path,String saveFileName,Boolean isReplaceFile){
+	public static void downloadFile(CloseableHttpClient httpClient
+			, HttpClientContext context
+			, String fileURL
+			, String path
+			, String saveFileName
+			, Boolean isReplaceFile){
 		try{
 			HttpGet request = new HttpGet(fileURL);
-			CloseableHttpResponse response = httpClient.execute(request);
+			CloseableHttpResponse response = httpClient.execute(request,context);
 			System.out.println("status:" + response.getStatusLine().getStatusCode());
 			File file =new File(path);
 			//如果文件夹不存在则创建
@@ -157,7 +162,7 @@ public class HttpClientUtil {
 	 * @param request 请求
 	 * @param encoding 字符编码
 	 * @param isPrintConsole 是否打印到控制台
-     * @return
+     * @return 网页内容
      */
 	public static String getWebPage(CloseableHttpClient httpClient
 			, HttpClientContext context
@@ -202,7 +207,7 @@ public class HttpClientUtil {
 		return webPage.toString();
 	}
 	/**
-	 * 打印cookies
+	 * 输出cookies
 	 * @param cs
 	 */
 	public static void getCookies(CookieStore cs){
@@ -229,7 +234,7 @@ public class HttpClientUtil {
 		System.out.println("------标头结束------");
 	}
 	/**
-	 * 讲input转换为String
+	 * InputStream转换为String
 	 * @param is
 	 * @param encoding
 	 * @return
@@ -289,6 +294,12 @@ public class HttpClientUtil {
 		System.out.println("反序列化成功 ");
 		return object;
 	}
+
+	/**
+	 * unicode转化String
+	 * @param unicode
+	 * @return
+     */
 	public static String unicodeToString(String unicode) {
 
 		StringBuffer string = new StringBuffer();

@@ -30,7 +30,7 @@ public class MyLogger extends Logger{
             p.setProperty("log4j.appender.logfile.Threshold","ERROR");
         }else{
             //运行在本地,日志只需输出到控制台
-            p.setProperty("log4j.rootLogger","INFO,stdout,logfile");
+            p.setProperty("log4j.rootLogger","DEBUG,stdout,logfile");
             p.setProperty("log4j.appender.logfile.Threshold","INFO");
         }
         return p;

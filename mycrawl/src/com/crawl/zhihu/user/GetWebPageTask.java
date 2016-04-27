@@ -14,7 +14,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.log4j.Logger;
 
 /**
- * 获取网页线程，负责执行request，返回网页内容加入Storage
+ * 获取网页线程，负责执行request，将response的网页内容加入Storage
  * @author Administrator
  */
 public class GetWebPageTask implements Runnable{
@@ -43,17 +43,17 @@ public class GetWebPageTask implements Runnable{
 			// 执行getMethod
 			response = hc.execute(getMethod,zhClient.getContext());
 			int status = response.getStatusLine().getStatusCode();
-			logger.info("executing request " + getMethod.getURI() + "   status:" + status);
 			while(status == 429 || status == 502 || status == 504){
 				//如果状态码为 429，则继续发起该请求
 				Thread.sleep(100);
+				logger.error("executing request " + getMethod.getURI() + "   status:" + status);
 				response = hc.execute(getMethod,zhClient.getContext());
 				status = response.getStatusLine().getStatusCode();
-				logger.error("executing request " + getMethod.getURI() + "   status:" + status);
 				if(status != 429 && status != 502 && status != 504){
 					break;
 				}
 			}
+			logger.info("executing request " + getMethod.getURI() + "   status:" + status);
 			if(status == HttpStatus.SC_OK){
 				gwpCount++;
 				String s = IOUtils.toString(response.getEntity().getContent());
