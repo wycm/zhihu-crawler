@@ -1,15 +1,13 @@
 package com.crawl.zhihu.client;
 
 import com.crawl.util.MyLogger;
-import com.crawl.util.chcUtils;
-import org.apache.http.HttpHost;
+import com.crawl.util.HttpClientUtil;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.log4j.Logger;
 
@@ -36,9 +34,9 @@ public class ZhihuHttpClient {
                 .build();
         //方式3
 //        this.httpClient = chcUtils.getMyHttpClient();
-        this.context = chcUtils.getMyHttpClientContext();
+        this.context = HttpClientUtil.getMyHttpClientContext();
         //反序列化Cookie
-        this.context.setCookieStore((CookieStore) chcUtils.antiSerializeMyHttpClient("/resources/zhihucookies"));
+        this.context.setCookieStore((CookieStore) HttpClientUtil.antiSerializeMyHttpClient("/resources/zhihucookies"));
     }
 
     public CloseableHttpClient getHttpClient() {

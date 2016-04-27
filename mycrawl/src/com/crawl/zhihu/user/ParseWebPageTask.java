@@ -8,7 +8,7 @@ import com.crawl.dao.ZhuhuDAO;
 import com.crawl.entity.User;
 import com.crawl.util.Md5Util;
 import com.crawl.util.MyLogger;
-import com.crawl.util.chcUtils;
+import com.crawl.util.HttpClientUtil;
 import com.crawl.zhihu.client.ZhihuHttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.log4j.Logger;
@@ -176,6 +176,6 @@ public class ParseWebPageTask implements Runnable{
 //		map.put("method","next");
 //		map.put("_xsrf","77a69764c4db4f05ffcbd143f8f066d6");
 //		chcUtils.setHttpPostParams(pRequest,map);
-		chcUtils.getWebPage(zh.getHttpClient(),zh.getContext(),gRequest,"utf-8",true);
+		HttpClientUtil.getWebPage(zh.getHttpClient(),zh.getContext(),gRequest,"utf-8",true);
 	}
 }
