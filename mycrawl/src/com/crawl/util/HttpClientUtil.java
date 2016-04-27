@@ -30,10 +30,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class chcUtils {
-	private static Logger logger = MyLogger.getMyLogger(chcUtils.class);
+public class HttpClientUtil {
+	private static Logger logger = MyLogger.getMyLogger(HttpClientUtil.class);
 	public static void main(String args []){
-		chcUtils.antiSerializeMyHttpClient("/resources/zhihucookie");
+		HttpClientUtil.antiSerializeMyHttpClient("/resources/zhihucookie");
 		System.out.println("文件加载成功");
 	}
 	/**
@@ -149,7 +149,21 @@ public class chcUtils {
 			e1.printStackTrace();
 		}
 	}
-	public static String getWebPage(CloseableHttpClient httpClient,HttpClientContext context ,HttpRequestBase request,String encoding,boolean isPrintConsole){
+
+	/**
+	 *
+	 * @param httpClient HttpClient客户端
+	 * @param context 上下文
+	 * @param request 请求
+	 * @param encoding 字符编码
+	 * @param isPrintConsole 是否打印到控制台
+     * @return
+     */
+	public static String getWebPage(CloseableHttpClient httpClient
+			, HttpClientContext context
+			, HttpRequestBase request
+			, String encoding
+			, boolean isPrintConsole){
 		System.out.println("request头开始---");
 		getAllHeaders(request.getAllHeaders());
 		CloseableHttpResponse response = null;
@@ -254,7 +268,7 @@ public class chcUtils {
 	 * @throws Exception
 	 */
 	public static Object antiSerializeMyHttpClient(String name){
-		InputStream fis = chcUtils.class.getResourceAsStream(name);
+		InputStream fis = HttpClientUtil.class.getResourceAsStream(name);
 		ObjectInputStream ois = null;
 		Object object = null;
 		try {
