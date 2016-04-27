@@ -7,6 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9ac01bf6-3ff9-4c41-acc2-b8bb746ee53b" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.gitignore" afterPath="$PROJECT_DIR$/../.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/crawl/dao/ConnectionManage.java" afterPath="$PROJECT_DIR$/src/com/crawl/dao/ConnectionManage.java" />
     </list>
     <ignored path="mycrawl.iws" />
@@ -96,8 +98,8 @@
       <file leaf-file-name="ConnectionManage.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/com/crawl/dao/ConnectionManage.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="44" column="28" selection-start-line="44" selection-start-column="28" selection-end-line="44" selection-end-column="28" />
+            <state relative-caret-position="525">
+              <caret line="57" column="9" selection-start-line="57" selection-start-column="9" selection-end-line="57" selection-end-column="9" />
               <folding />
             </state>
           </provider>
@@ -995,7 +997,7 @@
       <workItem from="1461672387481" duration="1566000" />
       <workItem from="1461675360970" duration="2073000" />
       <workItem from="1461717169092" duration="8606000" />
-      <workItem from="1461741175715" duration="4760000" />
+      <workItem from="1461741175715" duration="4932000" />
     </task>
     <task id="LOCAL-00001" summary="all">
       <created>1461743792739</created>
@@ -1008,7 +1010,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="243459000" />
+    <option name="totallyTimeSpent" value="243631000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
@@ -1414,8 +1416,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/crawl/dao/ConnectionManage.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="44" column="28" selection-start-line="44" selection-start-column="28" selection-end-line="44" selection-end-column="28" />
+        <state relative-caret-position="525">
+          <caret line="57" column="9" selection-start-line="57" selection-start-column="9" selection-end-line="57" selection-end-column="9" />
           <folding />
         </state>
       </provider>
