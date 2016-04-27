@@ -1,7 +1,7 @@
 package com.crawl.zhihu.crawlimganswer;
 
 import com.crawl.util.MyLogger;
-import com.crawl.zhihu.client.Href;
+import com.crawl.entity.Href;
 import com.crawl.zhihu.client.ZhihuHttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.log4j.Logger;

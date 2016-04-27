@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 获取用户带有图片的答案
+ * 获取知乎用户带有图片的回答
  */
 public class CrawlUserImgAnswer {
     private static Logger logger = MyLogger.getMyLogger(CrawlUserImgAnswer.class);

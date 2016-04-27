@@ -14,13 +14,12 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.log4j.Logger;
 
 /**
- * Created by Administrator on 2016/4/8 0008.
  * 知乎HttpClient客户端，首先登录成功，并且维护cookies
  */
 public class ZhihuHttpClient {
     private static Logger logger = MyLogger.getMyLogger(ZhihuHttpClient.class);
     private CloseableHttpClient httpClient = null;//http客户端
-    private HttpClientContext context = null;//htt上下文
+    private HttpClientContext context = null;//http上下文
     public ZhihuHttpClient(){
         RequestConfig globalConfig = RequestConfig.custom()
                 .setCookieSpec(CookieSpecs.BROWSER_COMPATIBILITY)
@@ -38,7 +37,7 @@ public class ZhihuHttpClient {
         //方式3
 //        this.httpClient = chcUtils.getMyHttpClient();
         this.context = chcUtils.getMyHttpClientContext();
-        //设置cookie
+        //反序列化Cookie
         this.context.setCookieStore((CookieStore) chcUtils.antiSerializeMyHttpClient("/resources/zhihucookies"));
     }
 

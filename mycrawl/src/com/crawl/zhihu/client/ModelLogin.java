@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Scanner;
 
 /**
- * Created by Administrator on 2016/4/8 0008.
  * 模拟登录知乎
  */
 public class ModelLogin {
@@ -50,9 +49,9 @@ public class ModelLogin {
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
         yzm = yzm(httpClient,"http://www.zhihu.com/captcha.gif");//肉眼识别验证码
         formParams.add(new BasicNameValuePair("captcha", yzm));
-        formParams.add(new BasicNameValuePair("_xsrf", ""));
-        formParams.add(new BasicNameValuePair("email", "1057160387@qq.com"));
-        formParams.add(new BasicNameValuePair("password", "wangyang110."));
+        formParams.add(new BasicNameValuePair("_xsrf", ""));//这个参数不要也可以登录成功
+        formParams.add(new BasicNameValuePair("email", "你的邮箱"));
+        formParams.add(new BasicNameValuePair("password", "你的密码"));
         formParams.add(new BasicNameValuePair("remember_me", "true"));
         UrlEncodedFormEntity entity = null;
         try {
@@ -66,8 +65,8 @@ public class ModelLogin {
         if(jo.get("r").toString().equals("0")){
             System.out.println("登录成功");
             getRequest = new HttpGet("https://www.zhihu.com");
-            chcUtils.getWebPage(httpClient,context ,getRequest, "utf-8", true);//直接访问首页
-            chcUtils.serializeObject(context.getCookieStore(),"resources/zhihucookies");//序列化知乎cookies，下次登录直接通过该cookies登录
+            chcUtils.getWebPage(httpClient,context ,getRequest, "utf-8", true);//访问首页
+            chcUtils.serializeObject(context.getCookieStore(),"resources/zhihucookies");//序列化知乎Cookies，下次登录直接通过该cookies登录
         }else{
             System.out.println("登录失败");
         }
@@ -76,8 +75,8 @@ public class ModelLogin {
         ModelLogin ml = new ModelLogin();
         HttpClientContext context = chcUtils.getMyHttpClientContext();
         CloseableHttpClient httpClient = chcUtils.getMyHttpClient();
-//        ml.login(httpClient,context);
-        context.setCookieStore((CookieStore) chcUtils.antiSerializeMyHttpClient("resources/zhihucookies"));
+        ml.login(httpClient,context);
+//        context.setCookieStore((CookieStore) chcUtils.antiSerializeMyHttpClient("resources/zhihucookies"));
         HttpGet getRequest = new HttpGet("https://www.zhihu.com");
         chcUtils.getWebPage(httpClient,context,getRequest,"utf-8",true);
     }

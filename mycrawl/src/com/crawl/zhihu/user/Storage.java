@@ -8,13 +8,13 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * 生产者消费者模型仓库
- * @author Administrator
+ * 存放网页内容 仓库
+ * @author wy
  *
  */
 public class Storage {
 	private static Logger logger = MyLogger.getMyLogger(Storage.class);
-	private BlockingQueue<String> queue = null;
+	private BlockingQueue<String> queue = null;//阻塞队列，存放网页内容
 	private Result result = null;
 	public Storage(){
 		queue = new LinkedBlockingQueue<String>();
@@ -67,6 +67,5 @@ public class Storage {
 		}
 		logger.info("出队成功--当前仓库元素个数" + queue.size());
 		return s;
-
 	}
 }

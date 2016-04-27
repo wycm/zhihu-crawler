@@ -1,7 +1,5 @@
 package com.crawl.zhihu.user;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -19,7 +17,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import static java.lang.Thread.sleep;
 
 /**
  * 线程池执行的任务
@@ -50,7 +47,7 @@ public class ParseWebPageTask implements Runnable{
 		try {
 			pwpCount++;
 			User u = null;
-			String ym = storage.pop();//出队
+			String ym = storage.pop();//从任务队列里面取出一个元素
 			Document doc = Jsoup.parse(ym);
 			Connection cn = ConnectionManage.getConnection();
 			if(doc.select("title").size() != 0){
@@ -60,8 +57,7 @@ public class ParseWebPageTask implements Runnable{
 //					storage.getResult().getUserVector().add(u);//将用户存入Vector
 				}
 				for(int i = 0;i < u.getFollowees()/20 + 1;i++){
-					//因为知乎每次最多返回20个关注用户
-					//获取关注用户列表
+					//获取关注用户列表,因为知乎每次最多返回20个关注用户
 					String url = "https://www.zhihu.com/node/ProfileFolloweesListV2?params={%22offset%22:" + 20*i + ",%22order_by%22:%22created%22,%22hash_id%22:%22" + u.getHashId() +"%22}";
 					url = url.replaceAll("[{]","%7B").replaceAll("[}]","%7D").replaceAll(" ","%20");
 					if(gwpThreadPool.getQueue().size() <= 100){

@@ -14,8 +14,7 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.log4j.Logger;
 
 /**
- * 线程池执行的任务
- * 抓取网页
+ * 获取网页线程，负责执行request，返回网页内容加入Storage
  * @author Administrator
  */
 public class GetWebPageTask implements Runnable{
@@ -54,7 +53,8 @@ public class GetWebPageTask implements Runnable{
 				if(status != 429 && status != 502 && status != 504){
 					break;
 				}
-			}if(status == HttpStatus.SC_OK){
+			}
+			if(status == HttpStatus.SC_OK){
 				gwpCount++;
 				String s = IOUtils.toString(response.getEntity().getContent());
 				storage.push(s);//入队

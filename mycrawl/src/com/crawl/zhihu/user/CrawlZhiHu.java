@@ -35,19 +35,18 @@ public class CrawlZhiHu {
     public void getZhiHu(ZhihuHttpClient zhClient, String startUrl){
         System.out.print("请输入要抓取的用户数量:");
         int crawlUserCount = new Scanner(System.in).nextInt();
-        ThreadPoolMonitor et1,et2;
+        ThreadPoolMonitor et1,et2;//监测线程池执行情况
         // 构造一个获取网页线程池
         ThreadPoolExecutor getWebPagethreadPool = new ThreadPoolExecutor(5, 10, 3, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<Runnable>(1000), new ThreadPoolExecutor.DiscardOldestPolicy());
         //构造一个解析网页线程池
         MyThreadPoolExecutor parseWebPagethreadPool = new MyThreadPoolExecutor(1, 1, 3, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<Runnable>(1000), new ThreadPoolExecutor.DiscardOldestPolicy(),storage);
-//        deleteHrefTable(ConnectionManage.getConnection());//先清空href表
         HttpGet getRequest = new HttpGet(startUrl);
         getWebPagethreadPool.execute(new GetWebPageTask(zhClient,getRequest,storage,getWebPagethreadPool,parseWebPagethreadPool));
         et1 = new ThreadPoolMonitor(parseWebPagethreadPool,"解析网页线程池--");
         et2 = new ThreadPoolMonitor(getWebPagethreadPool,"获取网页线程池--");
-        new Thread(et1).start();//用一个线程来监视，该线程池执行情况，方便调整，以达到最大效率
+        new Thread(et1).start();
         new Thread(et2).start();
         while(true){
             if(ParseWebPageTask.userCount >= crawlUserCount){
