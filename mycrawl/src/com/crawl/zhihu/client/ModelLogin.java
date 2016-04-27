@@ -48,7 +48,7 @@ public class ModelLogin {
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
         yzm = yzm(httpClient,"http://www.zhihu.com/captcha.gif");//肉眼识别验证码
         formParams.add(new BasicNameValuePair("captcha", yzm));
-        formParams.add(new BasicNameValuePair("_xsrf", ""));//这个参数不要也可以登录成功
+        formParams.add(new BasicNameValuePair("_xsrf", ""));//这个参数可以不用
         formParams.add(new BasicNameValuePair("email", "你的邮箱"));
         formParams.add(new BasicNameValuePair("password", "你的密码"));
         formParams.add(new BasicNameValuePair("remember_me", "true"));

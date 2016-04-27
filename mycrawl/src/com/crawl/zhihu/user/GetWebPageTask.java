@@ -49,7 +49,7 @@ public class GetWebPageTask implements Runnable{
 				Thread.sleep(100);
 				response = hc.execute(getMethod,zhClient.getContext());
 				status = response.getStatusLine().getStatusCode();
-				logger.info("executing request " + getMethod.getURI() + "   status:" + status);
+				logger.error("executing request " + getMethod.getURI() + "   status:" + status);
 				if(status != 429 && status != 502 && status != 504){
 					break;
 				}
