@@ -45,13 +45,13 @@ public class GetWebPageTask implements Runnable{
 			response = hc.execute(getMethod,zhClient.getContext());
 			int status = response.getStatusLine().getStatusCode();
 			logger.info("executing request " + getMethod.getURI() + "   status:" + status);
-			while(status == 429){
+			while(status == 429 || status == 502 || status == 504){
 				//如果状态码为 429，则继续发起该请求
 				Thread.sleep(100);
 				response = hc.execute(getMethod,zhClient.getContext());
 				status = response.getStatusLine().getStatusCode();
 				logger.info("executing request " + getMethod.getURI() + "   status:" + status);
-				if(status != 429){
+				if(status != 429 && status != 502 && status != 504){
 					break;
 				}
 			}if(status == HttpStatus.SC_OK){
