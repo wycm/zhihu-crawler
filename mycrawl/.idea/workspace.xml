@@ -8,6 +8,9 @@
   <component name="ChangeListManager">
     <list default="true" id="9ac01bf6-3ff9-4c41-acc2-b8bb746ee53b" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/../.gitignore" afterPath="$PROJECT_DIR$/../.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/crawl/zhihu/user/CrawlZhiHu.java" afterPath="$PROJECT_DIR$/src/com/crawl/zhihu/user/CrawlZhiHu.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/crawl/zhihu/user/MyThreadPoolExecutor.java" afterPath="$PROJECT_DIR$/src/com/crawl/zhihu/user/MyThreadPoolExecutor.java" />
     </list>
     <ignored path="mycrawl.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -39,14 +42,24 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CrawlZhiHu.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CrawlZhiHu.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/user/CrawlZhiHu.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="775">
-              <caret line="33" column="9" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
+            <state relative-caret-position="272">
+              <caret line="42" column="20" selection-start-line="42" selection-start-column="20" selection-end-line="42" selection-end-column="20" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="MyThreadPoolExecutor.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/user/MyThreadPoolExecutor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="150">
+              <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -99,7 +112,6 @@
         <option value="$PROJECT_DIR$/src/com/crawl/test/StringTest.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/test/WaitTest.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/zhihu/client/Result.java" />
-        <option value="$PROJECT_DIR$/src/com/crawl/zhihu/user/MyThreadPoolExecutor.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/test/BubbleSort.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/test/Test2.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/test/YHQ.java" />
@@ -123,6 +135,7 @@
         <option value="$PROJECT_DIR$/src/com/crawl/zhihu/user/GetWebPageTask.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/util/MyLogger.java" />
         <option value="$PROJECT_DIR$/src/com/crawl/zhihu/user/CrawlZhiHu.java" />
+        <option value="$PROJECT_DIR$/src/com/crawl/zhihu/user/MyThreadPoolExecutor.java" />
       </list>
     </option>
   </component>
@@ -172,6 +185,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -192,8 +207,6 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scratches" />
-      <pane id="PackagesPane" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -839,12 +852,13 @@
       <workItem from="1461557623946" duration="582000" />
       <workItem from="1461633336027" duration="2273000" />
       <workItem from="1461672387481" duration="1566000" />
-      <workItem from="1461675360970" duration="1466000" />
+      <workItem from="1461675360970" duration="2073000" />
+      <workItem from="1461717169092" duration="761000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="229486000" />
+    <option name="totallyTimeSpent" value="230854000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1296" height="1000" extended-state="6" />
@@ -1151,14 +1165,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/user/MyThreadPoolExecutor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="750">
-          <caret line="40" column="0" selection-start-line="40" selection-start-column="0" selection-end-line="40" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/crawlimganswer/GetWebPageTask.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="560">
@@ -1235,11 +1241,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/user/CrawlZhiHu.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="775">
-          <caret line="33" column="9" selection-start-line="33" selection-start-column="9" selection-end-line="33" selection-end-column="9" />
+        <state relative-caret-position="272">
+          <caret line="42" column="20" selection-start-line="42" selection-start-column="20" selection-end-line="42" selection-end-column="20" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/crawl/zhihu/user/MyThreadPoolExecutor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="150">
+          <caret line="12" column="26" selection-start-line="12" selection-start-column="26" selection-end-line="12" selection-end-column="26" />
+          <folding />
         </state>
       </provider>
     </entry>

@@ -1,18 +1,13 @@
 package com.crawl.zhihu.user;
 import java.util.Scanner;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import com.crawl.dao.ConnectionManage;
 import com.crawl.util.MyLogger;
 import com.crawl.util.ThreadPoolMonitor;
 import com.crawl.zhihu.client.ZhihuHttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.log4j.Logger;
-
-import static com.crawl.zhihu.user.ParseWebPageTask.deleteHrefTable;
 
 /**
  *
@@ -30,12 +25,9 @@ public class CrawlZhiHu {
     {
         ZhihuHttpClient zhClient = new ZhihuHttpClient();
         CrawlZhiHu crawlZhiHu= new CrawlZhiHu();
-        crawlZhiHu.getZhiHu(zhClient, "https://www.zhihu.com/people/WxzxzW/followees");
-        ;
+        crawlZhiHu.getZhiHu(zhClient, "https://www.zhihu.com/people/wo-yan-chen-mo/followees");
     }
     /**
-     * 我的用户
-     *
      * @param zhClient 知乎HttpClient客户端
      * @param startUrl
      * @throws Exception

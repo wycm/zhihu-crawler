@@ -10,7 +10,7 @@ import java.util.concurrent.*;
 
 /**
  * Created by Administrator on 2016/4/9 0009.
- * 重写terminated方法
+ * 重写terminated方法，用户统计最后结果
  */
 public class MyThreadPoolExecutor extends ThreadPoolExecutor{
     private static Logger logger = MyLogger.getMyLogger(MyThreadPoolExecutor.class);
