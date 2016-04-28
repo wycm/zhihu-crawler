@@ -2,7 +2,9 @@ package com.crawl.dao;
 import com.crawl.util.MyLogger;
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.sql.*;
+import java.util.Properties;
 
 /**
  * @author Administrator
@@ -39,10 +41,17 @@ public class ConnectionManage{
 		}
 	}
 	private static Connection createConnection(){
-		String host = "120.27.36.59";
+		Properties p = new Properties();
+		try {
+			p.load(MyLogger.class.getResourceAsStream("/resources/jdbc.properties"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+//		String host = "120.27.36.59";
+		String host = p.getProperty("host");
 		//host = InetAddress.getLocalHost().getHostAddress();
-		String user="*";
-		String password="*";
+		String user = p.getProperty("username");
+		String password = p.getProperty("password");
 		String url="jdbc:mysql://" + host + ":3306/zhihu";
 		//server host:120.27.36.59
 		//"useUnicode=true&65001 (UTF-8)";
