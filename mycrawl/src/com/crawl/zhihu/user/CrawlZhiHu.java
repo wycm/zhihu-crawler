@@ -11,7 +11,6 @@ import org.apache.log4j.Logger;
 
 /**
  * 爬虫入口
- *
  */
 public class CrawlZhiHu {
     private static Logger logger = MyLogger.getMyLogger(CrawlZhiHu.class);
@@ -19,15 +18,14 @@ public class CrawlZhiHu {
     public CrawlZhiHu(){
         storage = new Storage();
     }
-    public static void main(String[] args) throws Exception
-    {
+    public static void main(String[] args) throws Exception{
         ZhihuHttpClient zhClient = new ZhihuHttpClient();
         CrawlZhiHu crawlZhiHu= new CrawlZhiHu();
         crawlZhiHu.getZhiHu(zhClient, "https://www.zhihu.com/people/wo-yan-chen-mo/followees");
     }
     /**
      * @param zhClient 知乎HttpClient客户端
-     * @param startUrl
+     * @param startUrl 爬虫开始的url
      * @throws Exception
      */
     public void getZhiHu(ZhihuHttpClient zhClient, String startUrl){
