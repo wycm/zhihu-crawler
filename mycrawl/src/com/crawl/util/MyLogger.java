@@ -7,7 +7,7 @@ import java.net.InetAddress;
 import java.util.Properties;
 
 /**
- * Created by Administrator on 2016/4/12 0012.
+ * Created by wycm on 2016/4/12 0012.
  */
 public class MyLogger extends Logger{
     protected MyLogger(String name) {
@@ -30,7 +30,7 @@ public class MyLogger extends Logger{
             p.setProperty("log4j.appender.logfile.Threshold","ERROR");
         }else{
             //运行在本地,日志只需输出到控制台
-            p.setProperty("log4j.rootLogger","DEBUG,stdout,logfile");
+            p.setProperty("log4j.rootLogger","INFO,stdout,logfile");
             p.setProperty("log4j.appender.logfile.Threshold","INFO");
         }
         return p;
