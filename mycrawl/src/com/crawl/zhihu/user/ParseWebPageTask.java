@@ -19,10 +19,7 @@ import org.jsoup.select.Elements;
 
 
 /**
- * 线程池执行的任务
- * 解析网页，并将用户信息插入数据库
- * @author Administrator
- *
+ * 解析网页线程，负责解析网页并将解析出的用户资料插入数据库
  */
 public class ParseWebPageTask implements Runnable{
 	private static Logger logger = MyLogger.getMyLogger(MyThreadPoolExecutor.class);
