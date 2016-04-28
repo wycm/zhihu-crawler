@@ -41,8 +41,8 @@ public class ConnectionManage{
 	private static Connection createConnection(){
 		String host = "120.27.36.59";
 		//host = InetAddress.getLocalHost().getHostAddress();
-		String user="root";
-		String password="12345";
+		String user="*";
+		String password="*";
 		String url="jdbc:mysql://" + host + ":3306/zhihu";
 		//server host:120.27.36.59
 		//"useUnicode=true&65001 (UTF-8)";
