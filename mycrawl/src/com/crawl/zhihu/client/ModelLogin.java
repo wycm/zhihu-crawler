@@ -11,7 +11,6 @@ import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
-
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,21 +22,10 @@ import java.util.Scanner;
 public class ModelLogin {
     private static Logger logger = MyLogger.getMyLogger(ModelLogin.class);
     /**
-     * 肉眼识别验证码
-     * @param httpClient
-     * @param url 验证码地址
+     *
+     * @param httpClient Http客户端
+     * @param context Http上下文
      * @return
-     */
-    public String yzm(CloseableHttpClient httpClient,HttpClientContext context, String url){
-        HttpClientUtil.downloadFile(httpClient, context, url, "d:/test/", "1.gif",true);
-        Scanner sc = new Scanner(System.in);
-        String yzm = sc.nextLine();
-        return yzm;
-    }
-    /**
-     * 模拟登录知乎
-     * 登录成功后将cookie序列化到本地
-     * @throws Exception
      */
     public boolean login(CloseableHttpClient httpClient, HttpClientContext context){
         String yzm = null;
@@ -49,8 +37,8 @@ public class ModelLogin {
         yzm = yzm(httpClient, context,"https://www.zhihu.com/captcha.gif?type=login");//肉眼识别验证码
         formParams.add(new BasicNameValuePair("captcha", yzm));
         formParams.add(new BasicNameValuePair("_xsrf", ""));//这个参数可以不用
-        formParams.add(new BasicNameValuePair("email", "1057160387@qq.com"));
-        formParams.add(new BasicNameValuePair("password", "wangyang110."));
+        formParams.add(new BasicNameValuePair("email", "邮箱"));
+        formParams.add(new BasicNameValuePair("password", "密码"));
         formParams.add(new BasicNameValuePair("remember_me", "true"));
         UrlEncodedFormEntity entity = null;
         try {
@@ -63,14 +51,27 @@ public class ModelLogin {
         JSONObject jo = new JSONObject(loginState);
         if(jo.get("r").toString().equals("0")){
             System.out.println("登录成功");
-//            getRequest = new HttpGet("https://www.zhihu.com");
-//            HttpClientUtil.getWebPage(httpClient,context ,getRequest, "utf-8", false);//访问首页
-//            HttpClientUtil.serializeObject(context.getCookieStore(),"resources/zhihucookies");//序列化知乎Cookies，下次登录直接通过该cookies登录
+            getRequest = new HttpGet("https://www.zhihu.com");
+            HttpClientUtil.getWebPage(httpClient,context ,getRequest, "utf-8", false);//访问首页
+            HttpClientUtil.serializeObject(context.getCookieStore(),"resources/zhihucookies");//序列化知乎Cookies，下次登录直接通过该cookies登录
             return true;
         }else{
             System.out.println("登录失败" + loginState);
             return false;
         }
+    }
+    /**
+     * 肉眼识别验证码
+     * @param httpClient Http客户端
+     * @param context Http上下文
+     * @param url 验证码地址
+     * @return
+     */
+    public String yzm(CloseableHttpClient httpClient,HttpClientContext context, String url){
+        HttpClientUtil.downloadFile(httpClient, context, url, "d:/test/", "1.gif",true);
+        Scanner sc = new Scanner(System.in);
+        String yzm = sc.nextLine();
+        return yzm;
     }
     public static void main(String args []){
         ModelLogin ml = new ModelLogin();

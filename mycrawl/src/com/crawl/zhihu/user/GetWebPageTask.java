@@ -15,7 +15,6 @@ import org.apache.log4j.Logger;
 
 /**
  * 获取网页线程，负责执行request，将response的网页内容加入Storage
- * @author Administrator
  */
 public class GetWebPageTask implements Runnable{
 	private static Logger logger = MyLogger.getMyLogger(GetWebPageTask.class);
@@ -43,22 +42,23 @@ public class GetWebPageTask implements Runnable{
 			// 执行getMethod
 			response = hc.execute(getMethod,zhClient.getContext());
 			int status = response.getStatusLine().getStatusCode();
-			while(status == 429 || status == 502 || status == 504){
+			logger.error("executing request " + getMethod.getURI() + "   status:" + status);
+			while(status == 429){
 				//如果状态码为 429，则继续发起该请求
 				Thread.sleep(100);
-				logger.error("executing request " + getMethod.getURI() + "   status:" + status);
 				response = hc.execute(getMethod,zhClient.getContext());
 				status = response.getStatusLine().getStatusCode();
-				if(status != 429 && status != 502 && status != 504){
+				if(status != 429){
 					break;
 				}
 			}
-			logger.info("executing request " + getMethod.getURI() + "   status:" + status);
 			if(status == HttpStatus.SC_OK){
 				gwpCount++;
 				String s = IOUtils.toString(response.getEntity().getContent());
 				storage.push(s);//入队
 				pwpThreadPool.execute(new ParseWebPageTask(zhClient,this.storage,gwpThreadPool,pwpThreadPool));
+			} else if(status == 502 || status == 504){
+				return ;
 			}
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
@@ -94,7 +94,7 @@ public class GetWebPageTask implements Runnable{
 					logger.error("IOException",e);
 				}
 			}
-			if (response.getStatusLine ().getStatusCode () != 200) {
+			if (response.getStatusLine().getStatusCode() != 200) {
 				getMethod.abort();
 			}
 		}

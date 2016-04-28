@@ -22,139 +22,18 @@ import org.apache.http.impl.cookie.BestMatchSpecFactory;
 import org.apache.http.impl.cookie.BrowserCompatSpecFactory;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.log4j.Logger;
-
 import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * HttpClient工具类
+ */
 public class HttpClientUtil {
 	private static Logger logger = MyLogger.getMyLogger(HttpClientUtil.class);
 	public static void main(String args []){
-		HttpClientUtil.antiSerializeMyHttpClient("/resources/zhihucookie");
-		System.out.println("文件加载成功");
 	}
-	/**
-	 * 下载图片
-	 * @param imageURL 图片地址
-	 * @param path 保存路径
-	 * @param saveFileName 文件名，包括后缀名
-	 */
-	public static void downloadFile(String imageURL,String path,String saveFileName){
-		try{
-			URL url = new URL(imageURL);
-			URLConnection con = url.openConnection();
-			con.setConnectTimeout(1000);
-			File file =new File(path);
-			//如果文件夹不存在则创建
-			if  (!file .exists()  && !file .isDirectory()){
-				//System.out.println("//不存在");
-				file.mkdirs();
-			} else{
-				System.out.println("//目录存在");
-			}
-			file = new File(path + saveFileName);
-			if(!file.exists())
-			//如果文件不存在，则下载
-			{
-				try {
-					OutputStream os = new FileOutputStream(file);
-					InputStream is = con.getInputStream();
-					byte[] buff = new byte[is.available()];
-					while(true) {
-						int readed = is.read(buff);
-						if(readed == -1) {
-							break;
-						}
-						byte[] temp = new byte[readed];
-						System.arraycopy(buff, 0, temp, 0, readed);
-						os.write(temp);
-					}
-					is.close();
-					os.close();
-					System.out.println(imageURL + "文件下载成功");
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			else{
-				System.out.println(path);
-				System.out.println("该文件存在！");
-			}
-		} catch(IllegalArgumentException e){
-			System.out.println("连接超时...");
-
-		} catch(Exception e1){
-			e1.printStackTrace();
-		}
-	}
-
-	/**
-	 * 下载图片
-	 * @param fileURL 文件地址
-	 * @param path 保存路径
-	 * @param saveFileName 文件名，包括后缀名
-	 * @param isReplaceFile 若存在文件时，是否还需要下载文件
-	 */
-	public static void downloadFile(CloseableHttpClient httpClient
-			, HttpClientContext context
-			, String fileURL
-			, String path
-			, String saveFileName
-			, Boolean isReplaceFile){
-		try{
-			HttpGet request = new HttpGet(fileURL);
-			CloseableHttpResponse response = httpClient.execute(request,context);
-			System.out.println("status:" + response.getStatusLine().getStatusCode());
-			File file =new File(path);
-			//如果文件夹不存在则创建
-			if  (!file .exists()  && !file .isDirectory()){
-				//System.out.println("//不存在");
-				file.mkdirs();
-			} else{
-				System.out.println("//目录存在");
-			}
-			file = new File(path + saveFileName);
-			if(!file.exists() || isReplaceFile)
-			//如果文件不存在，则下载
-			{
-				try {
-					OutputStream os = new FileOutputStream(file);
-					InputStream is = response.getEntity().getContent();
-					byte[] buff = new byte[(int) response.getEntity().getContentLength()];
-					while(true) {
-						int readed = is.read(buff);
-						if(readed == -1) {
-							break;
-						}
-						byte[] temp = new byte[readed];
-						System.arraycopy(buff, 0, temp, 0, readed);
-						os.write(temp);
-						System.out.println("文件下载中....");
-					}
-					is.close();
-					os.close();
-					System.out.println(fileURL + "文件下载成功");
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-			else{
-				System.out.println(path);
-				System.out.println("该文件存在！");
-			}
-			request.releaseConnection();
-		} catch(IllegalArgumentException e){
-			System.out.println("连接超时...");
-
-		} catch(Exception e1){
-			e1.printStackTrace();
-		}
-	}
-
 	/**
 	 *
 	 * @param httpClient HttpClient客户端
@@ -169,8 +48,6 @@ public class HttpClientUtil {
 			, HttpRequestBase request
 			, String encoding
 			, boolean isPrintConsole){
-		System.out.println("request头开始---");
-		getAllHeaders(request.getAllHeaders());
 		CloseableHttpResponse response = null;
 		try {
 			response = httpClient.execute(request,context);
@@ -181,11 +58,6 @@ public class HttpClientUtil {
 			e.printStackTrace();
 			logger.error("IOException",e);
 		}
-		System.out.println("response头开始---");
-		getAllHeaders(response.getAllHeaders());
-		System.out.println("cookie开始");
-		getCookies(context.getCookieStore());
-		System.out.println("cookie结束");
 		System.out.println("status---" + response.getStatusLine().getStatusCode());
 		BufferedReader rd = null;
 		StringBuilder webPage = null;
@@ -206,46 +78,6 @@ public class HttpClientUtil {
 		request.releaseConnection();
 		return webPage.toString();
 	}
-	/**
-	 * 输出cookies
-	 * @param cs
-	 */
-	public static void getCookies(CookieStore cs){
-		List<Cookie> cookies = cs.getCookies();
-		if(cookies == null){
-			System.out.println("该CookiesStore无cookie");
-		}else{
-			for(int i = 0;i < cookies.size();i++){
-				System.out.println("cookie：" + cookies.get(i).getName() + ":"+ cookies.get(i).getValue()
-						+ "----过期时间"+ cookies.get(i).getExpiryDate()
-						+ "----Comment"+ cookies.get(i).getComment()
-						+ "----CommentURL"+ cookies.get(i).getCommentURL()
-						+ "----domain"+ cookies.get(i).getDomain()
-						+ "----ports"+ cookies.get(i).getPorts()
-				);
-			}
-		}
-	}
-	public static void getAllHeaders(Header [] headers){
-		System.out.println("------标头开始------");
-		for(int i = 0;i < headers.length;i++){
-			System.out.println(headers[i]);
-		}
-		System.out.println("------标头结束------");
-	}
-	/**
-	 * InputStream转换为String
-	 * @param is
-	 * @param encoding
-	 * @return
-	 * @throws Exception
-	 */
-	public static String isToString(InputStream is,String encoding) throws Exception{
-		StringWriter writer = new StringWriter();
-		IOUtils.copy(is, writer, encoding);
-		return writer.toString();
-	}
-
 	/**
 	 * 序列化对象
 	 * @param object
@@ -294,33 +126,9 @@ public class HttpClientUtil {
 		System.out.println("反序列化成功 ");
 		return object;
 	}
-
 	/**
-	 * unicode转化String
-	 * @param unicode
-	 * @return
-     */
-	public static String unicodeToString(String unicode) {
-
-		StringBuffer string = new StringBuffer();
-
-		String[] hex = unicode.split("\\\\u");
-
-		for (int i = 1; i < hex.length; i++) {
-
-			// 转换出每一个代码点
-			int data = Integer.parseInt(hex[i], 16);
-
-			// 追加成string
-			string.append((char) data);
-		}
-
-		return string.toString();
-	}
-	/**
-	 * 设置cookies策略
-	 * 支持https
-	 * @return
+	 * 设置Cookies策略
+	 * @return CloseableHttpClient
 	 */
 	public static CloseableHttpClient getMyHttpClient(){
 		CloseableHttpClient httpClient = null;
@@ -334,7 +142,7 @@ public class HttpClientUtil {
 	}
 	/**
 	 * 设置上下文
-	 * @return
+	 * @return HttpClientContext
 	 */
 	public static HttpClientContext getMyHttpClientContext(){
 		HttpClientContext context = null;
@@ -348,6 +156,123 @@ public class HttpClientUtil {
 		return context;
 	}
 	/**
+	 * 下载图片
+	 * @param fileURL 文件地址
+	 * @param path 保存路径
+	 * @param saveFileName 文件名，包括后缀名
+	 * @param isReplaceFile 若存在文件时，是否还需要下载文件
+	 */
+	public static void downloadFile(CloseableHttpClient httpClient
+			, HttpClientContext context
+			, String fileURL
+			, String path
+			, String saveFileName
+			, Boolean isReplaceFile){
+		try{
+			HttpGet request = new HttpGet(fileURL);
+			CloseableHttpResponse response = httpClient.execute(request,context);
+			System.out.println("status:" + response.getStatusLine().getStatusCode());
+			File file =new File(path);
+			//如果文件夹不存在则创建
+			if  (!file .exists()  && !file .isDirectory()){
+				//System.out.println("//不存在");
+				file.mkdirs();
+			} else{
+				System.out.println("//目录存在");
+			}
+			file = new File(path + saveFileName);
+			if(!file.exists() || isReplaceFile){
+				//如果文件不存在，则下载
+				try {
+					OutputStream os = new FileOutputStream(file);
+					InputStream is = response.getEntity().getContent();
+					byte[] buff = new byte[(int) response.getEntity().getContentLength()];
+					while(true) {
+						int readed = is.read(buff);
+						if(readed == -1) {
+							break;
+						}
+						byte[] temp = new byte[readed];
+						System.arraycopy(buff, 0, temp, 0, readed);
+						os.write(temp);
+						System.out.println("文件下载中....");
+					}
+					is.close();
+					os.close();
+					System.out.println(fileURL + "文件下载成功");
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			else{
+				System.out.println(path);
+				System.out.println("该文件存在！");
+			}
+			request.releaseConnection();
+		} catch(IllegalArgumentException e){
+			System.out.println("连接超时...");
+
+		} catch(Exception e1){
+			e1.printStackTrace();
+		}
+	}
+	/**
+	 * 输出Cookies
+	 * @param cs
+	 */
+	public static void getCookies(CookieStore cs){
+		List<Cookie> cookies = cs.getCookies();
+		if(cookies == null){
+			System.out.println("该CookiesStore无Cookie");
+		}else{
+			for(int i = 0;i < cookies.size();i++){
+				System.out.println("cookie：" + cookies.get(i).getName() + ":"+ cookies.get(i).getValue()
+						+ "----过期时间"+ cookies.get(i).getExpiryDate()
+						+ "----Comment"+ cookies.get(i).getComment()
+						+ "----CommentURL"+ cookies.get(i).getCommentURL()
+						+ "----domain"+ cookies.get(i).getDomain()
+						+ "----ports"+ cookies.get(i).getPorts()
+				);
+			}
+		}
+	}
+	public static void getAllHeaders(Header [] headers){
+		System.out.println("------标头开始------");
+		for(int i = 0;i < headers.length;i++){
+			System.out.println(headers[i]);
+		}
+		System.out.println("------标头结束------");
+	}
+	/**
+	 * InputStream转换为String
+	 * @param is
+	 * @param encoding
+	 * @return
+	 * @throws Exception
+	 */
+	public static String isToString(InputStream is,String encoding) throws Exception{
+		StringWriter writer = new StringWriter();
+		IOUtils.copy(is, writer, encoding);
+		return writer.toString();
+	}
+	/**
+	 * unicode转化String
+	 * @param unicode
+	 * @return
+     */
+	public static String unicodeToString(String unicode) {
+		StringBuffer string = new StringBuffer();
+		String[] hex = unicode.split("\\\\u");
+		for (int i = 1; i < hex.length; i++) {
+			// 转换出每一个代码点
+			int data = Integer.parseInt(hex[i], 16);
+			// 追加成string
+			string.append((char) data);
+		}
+		return string.toString();
+	}
+	/**
 	 * 设置request请求参数
 	 * @param request
 	 * @param params
@@ -359,38 +284,5 @@ public class HttpClientUtil {
 		}
 		UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formParams, "utf-8");
 		request.setEntity(entity);
-	}
-	/**
-	 * 读取字符文件
-	 * @param fileName
-	 * @return
-     */
-	public static String readFileByBytes(String fileName){
-		File file = new File(fileName);
-		StringBuffer sb = new StringBuffer();
-		InputStream in = null;
-		try {
-			System.out.println("以字节为单位读取文件内容，一次读多个字节：");
-			// 一次读多个字节
-			byte[] tempbytes = new byte[100];
-			int byteread = 0;
-			in = new FileInputStream(fileName);
-			// 读入多个字节到字节数组中，byteread为一次读入的字节数
-			while ((byteread = in.read(tempbytes)) != -1) {
-//				System.out.write(tempbytes, 0, byteread);
-				sb.append(new String(tempbytes,0,byteread,"utf-8"));
-			}
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		} finally {
-			if (in != null) {
-				try {
-					in.close();
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
-			}
-		}
-		return sb.toString();
 	}
 }
