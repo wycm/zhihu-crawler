@@ -25,7 +25,6 @@ public class GetWebPageTask implements Runnable{
 	ThreadPoolExecutor gwpThreadPool = null;//获取网页线程池
 	MyThreadPoolExecutor pwpThreadPool = null;//解析网页线程池
 	public GetWebPageTask(){
-
 	}
 	public GetWebPageTask(ZhihuHttpClient zhClient, HttpGet getMethod, Storage storage,ThreadPoolExecutor gwpThreadPool,MyThreadPoolExecutor pwpThreadPool){
 		// TODO Auto-generated constructor stub
@@ -57,7 +56,7 @@ public class GetWebPageTask implements Runnable{
 				String s = IOUtils.toString(response.getEntity().getContent());
 				storage.push(s);//入队
 				pwpThreadPool.execute(new ParseWebPageTask(zhClient,this.storage,gwpThreadPool,pwpThreadPool));
-			} else if(status == 502 || status == 504){
+			} else if(status == 502 || status == 504 || status == 500){
 				return ;
 			}
 		} catch (ClientProtocolException e) {
