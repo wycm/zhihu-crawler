@@ -1,8 +1,7 @@
 package com.crawl.entity;
 
 /**
- * Created by Administrator on 2016/4/8 0008.
- * 用户信息
+ * 用户资料
  */
 public class User {
     private String location;//位置
