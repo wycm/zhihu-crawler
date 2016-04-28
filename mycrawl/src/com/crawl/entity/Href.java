@@ -1,7 +1,7 @@
 package com.crawl.entity;
 
 /**
- * 链接
+ * url
  */
 public class Href {
     private String ym;//源码
