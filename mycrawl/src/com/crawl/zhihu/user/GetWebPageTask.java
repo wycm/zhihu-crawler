@@ -43,7 +43,7 @@ public class GetWebPageTask implements Runnable{
 			int status = response.getStatusLine().getStatusCode();
 			logger.error("executing request " + getMethod.getURI() + "   status:" + status);
 			while(status == 429){
-				//如果状态码为 429，则继续发起该请求
+				//如果状态码为429，则继续发起该请求
 				Thread.sleep(100);
 				response = hc.execute(getMethod,zhClient.getContext());
 				status = response.getStatusLine().getStatusCode();
@@ -57,6 +57,9 @@ public class GetWebPageTask implements Runnable{
 				storage.push(s);//入队
 				pwpThreadPool.execute(new ParseWebPageTask(zhClient,this.storage,gwpThreadPool,pwpThreadPool));
 			} else if(status == 502 || status == 504 || status == 500){
+				//如果状态码50X，将该请求继续加入线程池
+				Thread.sleep(100);
+				gwpThreadPool.execute(new GetWebPageTask(zhClient,getMethod,storage,gwpThreadPool,pwpThreadPool));
 				return ;
 			}
 		} catch (ClientProtocolException e) {
