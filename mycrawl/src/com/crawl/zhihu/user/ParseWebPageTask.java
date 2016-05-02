@@ -71,7 +71,6 @@ public class ParseWebPageTask implements Runnable{
 			}
 			if(!cn.isClosed()){
 				cn.close();
-				cn = null;
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
