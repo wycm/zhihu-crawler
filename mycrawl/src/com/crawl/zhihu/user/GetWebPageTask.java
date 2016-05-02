@@ -38,7 +38,6 @@ public class GetWebPageTask implements Runnable{
 		CloseableHttpResponse response = null;
 		CloseableHttpClient hc = zhClient.getHttpClient();
 		try {
-			// 执行getMethod
 			response = hc.execute(getMethod,zhClient.getContext());
 			int status = response.getStatusLine().getStatusCode();
 			logger.info("executing request " + getMethod.getURI() + "   status:" + status);
