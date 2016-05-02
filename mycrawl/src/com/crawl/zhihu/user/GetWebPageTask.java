@@ -41,7 +41,7 @@ public class GetWebPageTask implements Runnable{
 			// 执行getMethod
 			response = hc.execute(getMethod,zhClient.getContext());
 			int status = response.getStatusLine().getStatusCode();
-			logger.error("executing request " + getMethod.getURI() + "   status:" + status);
+			logger.info("executing request " + getMethod.getURI() + "   status:" + status);
 			while(status == 429){
 				//如果状态码为429，则继续发起该请求
 				Thread.sleep(100);
