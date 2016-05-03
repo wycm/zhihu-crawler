@@ -3,8 +3,7 @@ package com.crawl.util;
 import java.security.MessageDigest;
 
 public class Md5Util {
-	public static String Convert2Md5(String password)
-	{
+	public static String Convert2Md5(String password){
 		MessageDigest md5 = null;  
         try{  
             md5 = MessageDigest.getInstance("MD5");  
