@@ -5,7 +5,6 @@ import org.apache.log4j.Logger;
 import java.util.concurrent.ThreadPoolExecutor;
 /**
  * 线程池工具类，监视ThreadPoolExecutor执行情况
- * @author Administrator
  *
  */
 public class ThreadPoolMonitor implements Runnable{
