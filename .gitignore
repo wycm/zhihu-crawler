@@ -72,3 +72,4 @@ jdbc.properties
 zhihucookies
 crawlimganswer/
 proxy/
+redis/
