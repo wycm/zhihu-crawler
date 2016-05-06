@@ -69,6 +69,7 @@ fabric.properties
 test/
 ConnectionPool.java
 jdbc.properties
+server.properties
 zhihucookies
 crawlimganswer/
 proxy/
