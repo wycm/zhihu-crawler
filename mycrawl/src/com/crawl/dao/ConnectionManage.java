@@ -7,8 +7,7 @@ import java.sql.*;
 import java.util.Properties;
 
 /**
- * @author Administrator
- *
+ * @author wy
  */
 public class ConnectionManage{
 	private static Logger logger = MyLogger.getMyLogger(ConnectionManage.class);
