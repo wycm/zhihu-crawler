@@ -1,17 +1,4 @@
-/*
-Navicat MySQL Data Transfer
 
-Source Server         : RemoteServer
-Source Server Version : 50537
-Source Host           : 120.27.36.59:3306
-Source Database       : zhihu
-
-Target Server Type    : MYSQL
-Target Server Version : 50537
-File Encoding         : 65001
-
-Date: 2016-05-05 20:27:47
-*/
 
 SET FOREIGN_KEY_CHECKS=0;
 
