@@ -47,14 +47,10 @@ public class ConnectionManage{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//		String host = "120.27.36.59";
 		String host = p.getProperty("host");
-		//host = InetAddress.getLocalHost().getHostAddress();
 		String user = p.getProperty("username");
 		String password = p.getProperty("password");
 		String url="jdbc:mysql://" + host + ":3306/zhihu";
-		//server host:120.27.36.59
-		//"useUnicode=true&65001 (UTF-8)";
 		Connection con=null;
 		try{
 			Class.forName("org.gjt.mm.mysql.Driver") ;//加载驱动
