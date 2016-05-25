@@ -65,9 +65,10 @@ com_crashlytics_export_strings.xml
 crashlytics.properties
 crashlytics-build.properties
 fabric.properties
+# idea
+.idea/
+*.iml
 
-test/
-ConnectionPool.java
 jdbc.properties
 server.properties
 zhihucookies
