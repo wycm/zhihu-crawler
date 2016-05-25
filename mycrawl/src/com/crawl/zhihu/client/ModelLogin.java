@@ -21,24 +21,46 @@ import java.util.Scanner;
  */
 public class ModelLogin {
     private static Logger logger = MyLogger.getMyLogger(ModelLogin.class);
+    //知乎首页
+    final private static String INDEX_URL = "https://www.zhihu.com";
+    //邮箱登录地址
+    final private static String EMAIL_LOGIN_URL = "https://www.zhihu.com/login/email";
+    //手机号码登录地址
+    final private static String PHONENUM_LOGIN_URL = "https://www.zhihu.com/login/phone_num";
+    //登录验证码地址
+    final private static String YZM_URL = "https://www.zhihu.com/captcha.gif?type=login";
     /**
      *
      * @param httpClient Http客户端
      * @param context Http上下文
+     * @param emailOrPhoneNum 邮箱或手机号码
+     * @param pwd 密码
      * @return
      */
-    public boolean login(CloseableHttpClient httpClient, HttpClientContext context){
+    public boolean login(CloseableHttpClient httpClient,
+                         HttpClientContext context,
+                         String emailOrPhoneNum,
+                         String pwd){
         String yzm = null;
         String loginState = null;
-        HttpGet getRequest = new HttpGet("https://www.zhihu.com/#signin");
+        HttpGet getRequest = new HttpGet(INDEX_URL);
         HttpClientUtil.getWebPage(httpClient,context, getRequest, "utf-8", false);
-        HttpPost request = new HttpPost("https://www.zhihu.com/login/email");
+        HttpPost request = null;
         List<NameValuePair> formParams = new ArrayList<NameValuePair>();
-        yzm = yzm(httpClient, context,"https://www.zhihu.com/captcha.gif?type=login");//肉眼识别验证码
+        if(emailOrPhoneNum.contains("@")){
+            //通过邮箱登录
+            request = new HttpPost(EMAIL_LOGIN_URL);
+            formParams.add(new BasicNameValuePair("email", "1057160387@qq.com"));
+        }
+        else {
+            //通过手机号码登录
+            request = new HttpPost(PHONENUM_LOGIN_URL);
+            formParams.add(new BasicNameValuePair("phone_num", "13088280860"));
+        }
+        yzm = yzm(httpClient, context,YZM_URL);//肉眼识别验证码
         formParams.add(new BasicNameValuePair("captcha", yzm));
         formParams.add(new BasicNameValuePair("_xsrf", ""));//这个参数可以不用
-        formParams.add(new BasicNameValuePair("email", "邮箱"));
-        formParams.add(new BasicNameValuePair("password", "密码"));
+        formParams.add(new BasicNameValuePair("password", pwd));
         formParams.add(new BasicNameValuePair("remember_me", "true"));
         UrlEncodedFormEntity entity = null;
         try {
@@ -52,8 +74,10 @@ public class ModelLogin {
         if(jo.get("r").toString().equals("0")){
             System.out.println("登录成功");
             getRequest = new HttpGet("https://www.zhihu.com");
-            HttpClientUtil.getWebPage(httpClient,context ,getRequest, "utf-8", false);//访问首页
-            HttpClientUtil.serializeObject(context.getCookieStore(),"resources/zhihucookies");//序列化知乎Cookies，下次登录直接通过该cookies登录
+            //访问首页
+            HttpClientUtil.getWebPage(httpClient,context ,getRequest, "utf-8", false);
+            //序列化知乎Cookies，下次登录直接通过该cookies登录
+            HttpClientUtil.serializeObject(context.getCookieStore(),"resources/zhihucookies");
             return true;
         }else{
             System.out.println("登录失败" + loginState);
@@ -77,9 +101,6 @@ public class ModelLogin {
         ModelLogin ml = new ModelLogin();
         HttpClientContext context = HttpClientUtil.getMyHttpClientContext();
         CloseableHttpClient httpClient = HttpClientUtil.getMyHttpClient();
-        ml.login(httpClient,context);
-//        context.setCookieStore((CookieStore) chcUtils.antiSerializeMyHttpClient("resources/zhihucookies"));
-        HttpGet getRequest = new HttpGet("https://www.zhihu.com");
-        HttpClientUtil.getWebPage(httpClient,context,getRequest,"utf-8",false);
+        ml.login(httpClient,context,"手机号码或邮箱地址","密码");
     }
 }
