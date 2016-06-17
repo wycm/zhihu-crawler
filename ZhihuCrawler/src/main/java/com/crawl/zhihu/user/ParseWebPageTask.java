@@ -141,7 +141,6 @@ public class ParseWebPageTask implements Runnable{
 		}
 		return u;
 	}
-
 	/**
 	 * 获取用户个人资料
 	 * @param doc

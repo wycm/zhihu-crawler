@@ -51,12 +51,12 @@ public class ModelLogin {
         if(emailOrPhoneNum.contains("@")){
             //通过邮箱登录
             request = new HttpPost(EMAIL_LOGIN_URL);
-            formParams.add(new BasicNameValuePair("email", "1057160387@qq.com"));
+            formParams.add(new BasicNameValuePair("email", emailOrPhoneNum));
         }
         else {
             //通过手机号码登录
             request = new HttpPost(PHONENUM_LOGIN_URL);
-            formParams.add(new BasicNameValuePair("phone_num", "13088280860"));
+            formParams.add(new BasicNameValuePair("phone_num", emailOrPhoneNum));
         }
         yzm = yzm(httpClient, context,YZM_URL);//肉眼识别验证码
         formParams.add(new BasicNameValuePair("captcha", yzm));
@@ -102,6 +102,6 @@ public class ModelLogin {
         ModelLogin ml = new ModelLogin();
         HttpClientContext context = HttpClientUtil.getMyHttpClientContext();
         CloseableHttpClient httpClient = HttpClientUtil.getMyHttpClient();
-        ml.login(httpClient,context,"邮箱或手机号码","密码");
+        ml.login(httpClient,context,"1057160387@qq.com","wangyang110.");
     }
 }

@@ -13,17 +13,15 @@ public class MyLogger extends Logger{
     }
     private static Properties setLogProperty(){
         Properties p = new Properties();
-        Properties ipP = new Properties();
         String ip = null;
         try {
             p.load(MyLogger.class.getResourceAsStream("/log4j.properties"));
-            ipP.load(MyLogger.class.getResourceAsStream("/server.properties"));
             InetAddress addr = InetAddress.getLocalHost();
             ip = addr.getHostAddress().toString(); //获取本机ip
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(ip.equals(ipP.getProperty("innerip"))){
+        if(ip.contains(".19.85")){
             //运行在服务器上
             p.setProperty("log4j.appender.logfile.File","/alidata/server/mycrawllog.log");
             p.setProperty("log4j.rootLogger","INFO,stdout,logfile");
