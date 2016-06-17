@@ -38,5 +38,4 @@ public class MyLogger extends Logger{
         PropertyConfigurator.configure(setLogProperty());
         return logger;
     }
-
 }
