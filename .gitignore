@@ -69,7 +69,6 @@ fabric.properties
 .idea/
 *.iml
 
-server.properties
 zhihucookies
 crawlimganswer/
 proxy/
