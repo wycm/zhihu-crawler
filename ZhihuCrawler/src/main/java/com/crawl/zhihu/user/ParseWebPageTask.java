@@ -1,7 +1,7 @@
 package com.crawl.zhihu.user;
 
 import com.crawl.dao.ConnectionManage;
-import com.crawl.dao.ZhuhuDAO;
+import com.crawl.dao.ZhihuDAO;
 import com.crawl.entity.User;
 import com.crawl.util.HttpClientUtil;
 import com.crawl.util.Md5Util;
@@ -32,7 +32,10 @@ public class ParseWebPageTask implements Runnable{
 	MyThreadPoolExecutor pwpThreadPool = null;//解析网页线程池
 	public ParseWebPageTask(){
 	}
-	public ParseWebPageTask(ZhihuHttpClient zhClient,Storage storage,ThreadPoolExecutor gwpThreadPool,MyThreadPoolExecutor pwpThreadPool){
+	public ParseWebPageTask(ZhihuHttpClient zhClient
+			, Storage storage
+			, ThreadPoolExecutor gwpThreadPool
+			, MyThreadPoolExecutor pwpThreadPool){
 		this.storage = storage;
 		this.zhClient = zhClient;
 		this.gwpThreadPool = gwpThreadPool;
@@ -50,7 +53,7 @@ public class ParseWebPageTask implements Runnable{
 			if(doc.select("title").size() != 0){
 				//解析用户信息(包含html标签，为用户页面)
 				u = parseUserdetail(doc);
-				if(ZhuhuDAO.insetToDB(cn,u)){
+				if(ZhihuDAO.insetToDB(cn,u)){
 //					storage.getResult().getUserVector().add(u);//将用户存入Vector
 				}
 				for(int i = 0;i < u.getFollowees()/20 + 1;i++){
@@ -91,7 +94,7 @@ public class ParseWebPageTask implements Runnable{
 //			if(storage.getResult().getHrefSet().size() >= 10000){
 //				storage.getResult().getHrefSet().clear();
 //			}
-		if(ZhuhuDAO.insertHref(cn,md5Href) || gwpThreadPool.getQueue().size() <= 50){
+		if(ZhihuDAO.insertHref(cn,md5Href) || gwpThreadPool.getQueue().size() <= 50){
 			//该链接未访问过，将用户链接插入数据库或者当前获取任务线程池没有任务（防止出现死锁）
 			if(pwpThreadPool.getQueue().size() <= 100){
 				//解析线程池等待任务小于100时，才加入获取任务队列

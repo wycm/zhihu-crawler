@@ -1,5 +1,7 @@
 package com.crawl.zhihu.user;
 
+import com.crawl.dao.ConnectionManage;
+import com.crawl.dao.ZhihuDAO;
 import com.crawl.util.MyLogger;
 import com.crawl.util.ThreadPoolMonitor;
 import com.crawl.zhihu.client.ZhihuHttpClient;
@@ -23,7 +25,9 @@ public class CrawlZhiHu {
     public static void main(String[] args) throws Exception{
         ZhihuHttpClient zhClient = new ZhihuHttpClient();
         CrawlZhiHu crawlZhiHu= new CrawlZhiHu();
-        crawlZhiHu.getZhiHu(zhClient, "https://www.zhihu.com/people/wo-yan-chen-mo/followees");
+        //初始化数据库表
+        ZhihuDAO.DBTablesInit(ConnectionManage.getConnection());
+        crawlZhiHu.getZhiHu(zhClient, "https://www.zhihu.com/people/wo-yan-chen-mo");
     }
     /**
      * @param zhClient 知乎HttpClient客户端
@@ -35,7 +39,7 @@ public class CrawlZhiHu {
         int crawlUserCount = new Scanner(System.in).nextInt();
         ThreadPoolMonitor et1,et2;//监测线程池执行情况
         // 构造一个获取网页线程池
-        ThreadPoolExecutor getWebPagethreadPool = new ThreadPoolExecutor(5, 10, 3, TimeUnit.SECONDS,
+        ThreadPoolExecutor getWebPagethreadPool = new ThreadPoolExecutor(8, 10, 3, TimeUnit.SECONDS,
                 new ArrayBlockingQueue<Runnable>(1000), new ThreadPoolExecutor.DiscardOldestPolicy());
         //构造一个解析网页线程池
         MyThreadPoolExecutor parseWebPagethreadPool = new MyThreadPoolExecutor(1, 1, 3, TimeUnit.SECONDS,

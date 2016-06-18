@@ -70,7 +70,6 @@ fabric.properties
 *.iml
 
 server.properties
-jdbc.properties
 zhihucookies
 crawlimganswer/
 proxy/

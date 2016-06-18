@@ -1,6 +1,7 @@
 package com.crawl.dao;
 
 import com.crawl.util.MyLogger;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -52,13 +53,19 @@ public class ConnectionManage{
 		String host = p.getProperty("host");
 		String user = p.getProperty("username");
 		String password = p.getProperty("password");
-		String url="jdbc:mysql://" + host + ":3306/zhihu";
+		String dbName = p.getProperty("dbname");
+		String url="jdbc:mysql://" + host + ":3306/" + dbName;
 		Connection con=null;
 		try{
 			Class.forName("org.gjt.mm.mysql.Driver") ;//加载驱动
 			con = DriverManager.getConnection(url,user,password);//建立mysql的连接
 			//System.out.println("success!");
-		}catch(ClassNotFoundException e1){
+		}
+		catch(MySQLSyntaxErrorException e){
+			logger.error("数据库不存在..请先手动创建创建数据库:" + dbName);
+			e.printStackTrace();
+		}
+		catch(ClassNotFoundException e1){
 			System.out.println("数据库驱动不存在！");
 			e1.printStackTrace();
 			logger.error("ClassNotFoundException",e1);

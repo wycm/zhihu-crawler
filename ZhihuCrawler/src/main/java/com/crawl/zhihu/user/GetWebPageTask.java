@@ -25,9 +25,10 @@ public class GetWebPageTask implements Runnable{
 	ZhihuHttpClient zhClient = null;
 	ThreadPoolExecutor gwpThreadPool = null;//获取网页线程池
 	MyThreadPoolExecutor pwpThreadPool = null;//解析网页线程池
-	public GetWebPageTask(){
-	}
-	public GetWebPageTask(ZhihuHttpClient zhClient, HttpGet getMethod, Storage storage,ThreadPoolExecutor gwpThreadPool,MyThreadPoolExecutor pwpThreadPool){
+	public GetWebPageTask(ZhihuHttpClient zhClient
+			, HttpGet getMethod, Storage storage
+			, ThreadPoolExecutor gwpThreadPool
+			, MyThreadPoolExecutor pwpThreadPool){
 		// TODO Auto-generated constructor stub
 		this.zhClient = zhClient;
 		this.getMethod = getMethod;

@@ -5,16 +5,57 @@ import com.crawl.util.MyLogger;
 import com.crawl.zhihu.user.ParseWebPageTask;
 import org.apache.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.io.IOException;
+import java.sql.*;
+import java.util.Properties;
 
 /**
  *
  */
-public class ZhuhuDAO {
-    private static Logger logger = MyLogger.getMyLogger(ZhuhuDAO.class);
+public class ZhihuDAO {
+    private static Logger logger = MyLogger.getMyLogger(ZhihuDAO.class);
+
+    /**
+     * 数据库表初始化，创建数据库表。
+     * 如果存在的话，则不创建
+     * @param cn
+     */
+    public static void DBTablesInit(Connection cn){
+        ResultSet rs = null;
+        Properties p = new Properties();
+        try {
+            //加载properties文件
+            p.load(ZhihuDAO.class.getResourceAsStream("/jdbc.properties"));
+            rs = cn.getMetaData().getTables(null, null, "href", null);
+            Statement st = cn.createStatement();
+            //不存在href表
+            if(!rs.next()){
+                //创建href表
+                st.execute(p.getProperty("createHrefTable"));
+                logger.info("href表创建成功");
+            }
+            else{
+                logger.info("href表已存在");
+            }
+            rs = cn.getMetaData().getTables(null, null, "user", null);
+            //不存在user表
+            if(!rs.next()){
+                //创建user表
+                st.execute(p.getProperty("createUserTable"));
+                logger.info("user表创建成功");
+            }
+            else{
+                logger.info("user表已存在");
+            }
+            rs.close();
+            st.close();
+            cn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
     /**
      * 判断该数据库中是否存在该用户
      * @param cn
