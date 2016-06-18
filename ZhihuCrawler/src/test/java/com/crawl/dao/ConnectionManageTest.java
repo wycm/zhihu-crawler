@@ -9,5 +9,6 @@ public class ConnectionManageTest {
     @Test
     public void testCreateConnection(){
         ConnectionManage.getConnection();
+        ConnectionManage.close();
     }
 }
