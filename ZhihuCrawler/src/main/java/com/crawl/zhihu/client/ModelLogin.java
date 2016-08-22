@@ -98,10 +98,4 @@ public class ModelLogin {
         String yzm = sc.nextLine();
         return yzm;
     }
-    public static void main(String args []){
-        ModelLogin ml = new ModelLogin();
-        HttpClientContext context = HttpClientUtil.getMyHttpClientContext();
-        CloseableHttpClient httpClient = HttpClientUtil.getMyHttpClient();
-        ml.login(httpClient,context,"email","password.");
-    }
 }
