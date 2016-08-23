@@ -59,7 +59,7 @@ public class HttpClientUtil {
 			e.printStackTrace();
 			logger.error("IOException",e);
 		}
-		System.out.println("status---" + response.getStatusLine().getStatusCode());
+		logger.info("status---" + response.getStatusLine().getStatusCode());
 		BufferedReader rd = null;
 		StringBuilder webPage = null;
 		try {
@@ -70,7 +70,7 @@ public class HttpClientUtil {
 			while((line = rd.readLine()) != null) {
 				webPage.append(line);
 				if(isPrintConsole){
-					System.out.println(line);
+					logger.info(line);
 				}
 			}
 		} catch (IOException e) {
@@ -90,7 +90,7 @@ public class HttpClientUtil {
 			fos = new FileOutputStream(filePath);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(object);
-			System.out.println("序列化成功");
+			logger.info("序列化成功");
 			oos.flush();
 			fos.close();
 			oos.close();
@@ -105,7 +105,7 @@ public class HttpClientUtil {
 	 * @param name
 	 * @throws Exception
 	 */
-	public static Object antiSerializeMyHttpClient(String name){
+	public static Object antiSerializeMyHttpClient(String name) throws NullPointerException{
 		InputStream fis = HttpClientUtil.class.getResourceAsStream(name);
 		ObjectInputStream ois = null;
 		Object object = null;
@@ -116,15 +116,9 @@ public class HttpClientUtil {
 			ois.close();
 		} catch (IOException e) {
 			e.printStackTrace();
-			logger.error("IOException",e);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			logger.error("ClassNotFoundException",e);
-		} catch (NullPointerException e){
-			e.printStackTrace();
-			logger.error("NullPointerException",e);
 		}
-		System.out.println("反序列化成功 ");
 		return object;
 	}
 	/**
@@ -172,14 +166,14 @@ public class HttpClientUtil {
 		try{
 			HttpGet request = new HttpGet(fileURL);
 			CloseableHttpResponse response = httpClient.execute(request,context);
-			System.out.println("status:" + response.getStatusLine().getStatusCode());
+			logger.info("status:" + response.getStatusLine().getStatusCode());
 			File file =new File(path);
 			//如果文件夹不存在则创建
 			if  (!file .exists()  && !file .isDirectory()){
-				//System.out.println("//不存在");
+				//logger.info("//不存在");
 				file.mkdirs();
 			} else{
-				System.out.println("//目录存在");
+				logger.info("//目录存在");
 			}
 			file = new File(path + saveFileName);
 			if(!file.exists() || isReplaceFile){
@@ -196,23 +190,23 @@ public class HttpClientUtil {
 						byte[] temp = new byte[readed];
 						System.arraycopy(buff, 0, temp, 0, readed);
 						os.write(temp);
-						System.out.println("文件下载中....");
+						logger.info("文件下载中....");
 					}
 					is.close();
 					os.close();
-					System.out.println(fileURL + "文件下载成功");
+					logger.info(fileURL + "--文件成功下载至" + path + saveFileName);
+
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
 			else{
-				System.out.println(path);
-				System.out.println("该文件存在！");
+				logger.info(path);
+				logger.info("该文件存在！");
 			}
 			request.releaseConnection();
 		} catch(IllegalArgumentException e){
-			System.out.println("连接超时...");
+			logger.info("连接超时...");
 
 		} catch(Exception e1){
 			e1.printStackTrace();
@@ -225,10 +219,10 @@ public class HttpClientUtil {
 	public static void getCookies(CookieStore cs){
 		List<Cookie> cookies = cs.getCookies();
 		if(cookies == null){
-			System.out.println("该CookiesStore无Cookie");
+			logger.info("该CookiesStore无Cookie");
 		}else{
 			for(int i = 0;i < cookies.size();i++){
-				System.out.println("cookie：" + cookies.get(i).getName() + ":"+ cookies.get(i).getValue()
+				logger.info("cookie：" + cookies.get(i).getName() + ":"+ cookies.get(i).getValue()
 						+ "----过期时间"+ cookies.get(i).getExpiryDate()
 						+ "----Comment"+ cookies.get(i).getComment()
 						+ "----CommentURL"+ cookies.get(i).getCommentURL()
@@ -239,11 +233,11 @@ public class HttpClientUtil {
 		}
 	}
 	public static void getAllHeaders(Header [] headers){
-		System.out.println("------标头开始------");
+		logger.info("------标头开始------");
 		for(int i = 0;i < headers.length;i++){
-			System.out.println(headers[i]);
+			logger.info(headers[i]);
 		}
-		System.out.println("------标头结束------");
+		logger.info("------标头结束------");
 	}
 	/**
 	 * InputStream转换为String
@@ -259,19 +253,26 @@ public class HttpClientUtil {
 	}
 	/**
 	 * unicode转化String
-	 * @param unicode
 	 * @return
      */
-	public static String unicodeToString(String unicode) {
-		StringBuffer string = new StringBuffer();
-		String[] hex = unicode.split("\\\\u");
-		for (int i = 1; i < hex.length; i++) {
-			// 转换出每一个代码点
-			int data = Integer.parseInt(hex[i], 16);
-			// 追加成string
-			string.append((char) data);
+	public static String decodeUnicode(final String dataStr) {
+		int start = 0;
+		int end = 0;
+		final StringBuffer buffer = new StringBuffer();
+		while (start > -1) {
+			end = dataStr.indexOf("\\u", start + 2);
+			String charStr = "";
+			if (end == -1) {
+				charStr = dataStr.substring(start + 2, dataStr.length());
+			} else {
+				charStr = dataStr.substring(start + 2, end);
+			}
+			char letter = (char) Integer.parseInt(charStr, 16); // 16进制parse整形字符串。
+			buffer.append(new Character(letter).toString());
+			start = end;
 		}
-		return string.toString();
+		logger.debug(dataStr);
+		return buffer.toString();
 	}
 	/**
 	 * 设置request请求参数

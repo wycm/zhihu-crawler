@@ -1,6 +1,9 @@
 package com.crawl.zhihu;
 
-import com.crawl.entity.HttpClient;
+import com.crawl.config.Config;
+import com.crawl.httpclient.HttpClient;
+import com.crawl.util.HttpClientUtil;
+import org.apache.http.client.CookieStore;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -15,6 +18,7 @@ public class ZhiHuHttpClient extends HttpClient{
     public ZhiHuHttpClient() {
         initHttpClient();
     }
+
     public static ZhiHuHttpClient getInstance(){
         if(zhiHuHttpClient == null){
             zhiHuHttpClient = new ZhiHuHttpClient();
@@ -26,13 +30,12 @@ public class ZhiHuHttpClient extends HttpClient{
      * 模拟登录知乎，持久化Cookie到本地
      * 不用以后每次都登录
      */
-    public void initHttpClient(){
+    @Override
+    public void initHttpClient() {
         Properties properties = new Properties();
-        try {
-            properties.load(ZhiHuHttpClient.class.getResourceAsStream("/zhihucookies"));
-        } catch (IOException e) {
-
-            e.printStackTrace();
+        if(!antiSerializeCookieStore("/zhihucookies1")){
+            new ModelLogin().login(this, Config.emailOrPhoneNum, Config.password);
         }
     }
+
 }

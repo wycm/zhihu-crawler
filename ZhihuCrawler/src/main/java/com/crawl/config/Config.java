@@ -16,7 +16,14 @@ public class Config {
      * 验证码路径
      */
     public static String verificationCodePath;
-
+    /**
+     * 知乎注册手机号码或有限
+     */
+    public static String emailOrPhoneNum;
+    /**
+     * 知乎密码
+     */
+    public static String password;
     static {
         Properties p = new Properties();
         try {
@@ -26,6 +33,8 @@ public class Config {
         }
         dbEnable = Boolean.parseBoolean(p.getProperty("db.enable"));
         verificationCodePath = p.getProperty("verificationCodePath");
+        emailOrPhoneNum = p.getProperty("zhiHu.emailOrPhoneNum");
+        password = p.getProperty("zhiHu.password");
     }
 
 }

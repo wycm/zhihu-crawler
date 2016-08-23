@@ -85,7 +85,7 @@ public class ModelLogin {
             HttpClientUtil.serializeObject(context.getCookieStore(),"src/main/resources/zhihucookies");
             return true;
         }else{
-            throw new RuntimeException(HttpClientUtil.unicodeToString(loginState));
+            throw new RuntimeException(HttpClientUtil.decodeUnicode(loginState));
         }
     }
     /**
@@ -100,7 +100,7 @@ public class ModelLogin {
         String path = verificationCodePath.substring(0, verificationCodePath.lastIndexOf("/") + 1);
         String fileName = verificationCodePath.substring(verificationCodePath.lastIndexOf("/") + 1);
         HttpClientUtil.downloadFile(httpClient, context, url, path, fileName,true);
-        System.out.println("请输入验证码：");
+        logger.info("请输入 " + verificationCodePath + " 下的验证码：");
         Scanner sc = new Scanner(System.in);
         String yzm = sc.nextLine();
         return yzm;
