@@ -102,6 +102,6 @@ public class ModelLogin {
         ModelLogin ml = new ModelLogin();
         HttpClientContext context = HttpClientUtil.getMyHttpClientContext();
         CloseableHttpClient httpClient = HttpClientUtil.getMyHttpClient();
-        ml.login(httpClient,context,"1057160387@qq.com","wangyang110.");
+        ml.login(httpClient,context,"email","password");
     }
 }
