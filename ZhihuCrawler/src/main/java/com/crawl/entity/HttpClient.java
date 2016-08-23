@@ -3,12 +3,10 @@ package com.crawl.entity;
 import com.crawl.util.HttpClientUtil;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.client.utils.HttpClientUtils;
 import org.apache.http.impl.client.CloseableHttpClient;
 
 import java.io.IOException;
@@ -17,22 +15,21 @@ import java.io.InputStream;
 /**
  * Created by yangwang on 16-8-19.
  */
-public class MyHttpClient {
-    private static MyHttpClient myHttpClient;
-    private CloseableHttpClient closeableHttpClient;
-    private HttpClientContext httpClientContext;
+public class HttpClient {
+    private static HttpClient httpClient;
+    protected CloseableHttpClient closeableHttpClient;
+    protected HttpClientContext httpClientContext;
     private CloseableHttpResponse closeableHttpResponse;
-
-
-    private MyHttpClient(){
+    protected HttpClient(){
         this.closeableHttpClient = HttpClientUtil.getMyHttpClient();
         this.httpClientContext = HttpClientUtil.getMyHttpClientContext();
     }
-    public static MyHttpClient getInstance(){
-        if(myHttpClient == null){
-            myHttpClient = new MyHttpClient();
+
+    public static HttpClient getInstance(){
+        if(httpClient == null){
+            httpClient = new HttpClient();
         }
-        return myHttpClient;
+        return httpClient;
     }
     private CloseableHttpResponse getResponse(HttpRequestBase request){
         try {
@@ -79,5 +76,13 @@ public class MyHttpClient {
             e.printStackTrace();
         }
         return page;
+    }
+
+    public CloseableHttpClient getCloseableHttpClient() {
+        return closeableHttpClient;
+    }
+
+    public HttpClientContext getHttpClientContext() {
+        return httpClientContext;
     }
 }

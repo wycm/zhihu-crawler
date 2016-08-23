@@ -2,6 +2,7 @@ package com.crawl.entity;
 
 /**
  * Created by yangwang on 16-8-19.
+ * 网页
  */
 public class Page {
     private String url;
