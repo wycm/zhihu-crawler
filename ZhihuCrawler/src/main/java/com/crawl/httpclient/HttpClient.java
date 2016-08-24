@@ -86,8 +86,7 @@ public abstract class HttpClient {
             CookieStore cookieStore = (CookieStore) HttpClientUtil.antiSerializeMyHttpClient(name);
             httpClientContext.setCookieStore(cookieStore);
         } catch (Exception e){
-            e.printStackTrace();
-            logger.warn("反序列化Cookie失败", e);
+            logger.warn("反序列化Cookie失败,没有找到Cookie文件");
             return false;
         }
         return true;

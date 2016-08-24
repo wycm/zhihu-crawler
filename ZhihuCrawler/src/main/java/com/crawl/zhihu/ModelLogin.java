@@ -73,7 +73,7 @@ public class ModelLogin {
         loginState = HttpClientUtil.getWebPage(httpClient,context, request, "utf-8", false);//登录
         JSONObject jo = new JSONObject(loginState);
         if(jo.get("r").toString().equals("0")){
-            logger.info("登录成功");
+            logger.info("登录知乎成功");
             getRequest = new HttpGet("https://www.zhihu.com");
             /**
              * 访问首页
@@ -85,7 +85,7 @@ public class ModelLogin {
             HttpClientUtil.serializeObject(context.getCookieStore(),"src/main/resources/zhihucookies");
             return true;
         }else{
-            throw new RuntimeException(HttpClientUtil.decodeUnicode(loginState));
+            throw new RuntimeException(loginState);
         }
     }
     /**

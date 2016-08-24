@@ -33,8 +33,6 @@ import java.util.Map;
  */
 public class HttpClientUtil {
 	private static Logger logger = MyLogger.getMyLogger(HttpClientUtil.class);
-	public static void main(String args []){
-	}
 	/**
 	 *
 	 * @param httpClient HttpClient客户端
@@ -286,5 +284,9 @@ public class HttpClientUtil {
 		}
 		UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formParams, "utf-8");
 		request.setEntity(entity);
+	}
+	public static void main(String args []){
+		String s = "{    \"r\": 1,    \"errcode\": 100000,        \"data\": {\"account\":\"\\u5e10\\u53f7\\u6216\\u5bc6\\u7801\\u9519\\u8bef\"},            \"msg\": \"\\u8be5\\u624b\\u673a\\u53f7\\u5c1a\\u672a\\u6ce8\\u518c\\u77e5\\u4e4e";
+		logger.info(decodeUnicode(s));
 	}
 }
