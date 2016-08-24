@@ -2,12 +2,11 @@ package com.crawl.zhihu;
 
 import com.crawl.config.Config;
 import com.crawl.httpclient.HttpClient;
-import com.crawl.util.HttpClientUtil;
-import org.apache.http.client.CookieStore;
+import com.crawl.zhihu.task.DownloadTask;
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
 import java.util.Properties;
+import java.util.concurrent.*;
 
 /**
  * Created by Administrator on 2016/8/23 0023.
@@ -15,8 +14,17 @@ import java.util.Properties;
 public class ZhiHuHttpClient extends HttpClient{
     Logger logger = Logger.getLogger(ZhiHuHttpClient.class);
     private static ZhiHuHttpClient zhiHuHttpClient;
+    /**
+     * 解析网页执行器
+     */
+    private ExecutorService parseThreadExecutor;
+    /**
+     * 下载网页执行器
+     */
+    private ThreadPoolExecutor downloadThreadExecutor;
     public ZhiHuHttpClient() {
         initHttpClient();
+        intiThreadPool();
     }
 
     public static ZhiHuHttpClient getInstance(){
@@ -33,9 +41,29 @@ public class ZhiHuHttpClient extends HttpClient{
     @Override
     public void initHttpClient() {
         Properties properties = new Properties();
-        if(!antiSerializeCookieStore("/zhihucookies1")){
+        if(!antiSerializeCookieStore("/zhihucookies")){
             new ModelLogin().login(this, Config.emailOrPhoneNum, Config.password);
         }
     }
 
+    /**
+     * 初始化线程池
+     */
+    private void intiThreadPool(){
+        parseThreadExecutor = Executors.newSingleThreadExecutor();
+        downloadThreadExecutor = new ThreadPoolExecutor(5, 5,
+                0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>());
+    }
+    public void startCrawl(String url){
+        downloadThreadExecutor.execute(new DownloadTask(url));
+    }
+
+    public ExecutorService getParseThreadExecutor() {
+        return parseThreadExecutor;
+    }
+
+    public ThreadPoolExecutor getDownloadThreadExecutor() {
+        return downloadThreadExecutor;
+    }
 }

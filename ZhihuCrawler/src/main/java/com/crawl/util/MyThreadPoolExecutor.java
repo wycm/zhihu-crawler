@@ -1,9 +1,6 @@
 package com.crawl.util;
 
 import com.crawl.dao.ConnectionManage;
-import com.crawl.zhihu.user.GetWebPageTask;
-import com.crawl.zhihu.user.ParseWebPageTask;
-import com.crawl.zhihu.user.Storage;
 import org.apache.log4j.Logger;
 
 import java.util.concurrent.BlockingQueue;
@@ -45,8 +42,6 @@ public class MyThreadPoolExecutor extends ThreadPoolExecutor{
     @Override
     public void terminated(){
         long endTime = System.currentTimeMillis();
-        logger.info("获取网页数:" + GetWebPageTask.gwpCount);
-        logger.info("解析网页数:" + ParseWebPageTask.pwpCount);
         ConnectionManage.close();
         logger.info("----总共耗时:" + (endTime - startTime) + "ms");
     }

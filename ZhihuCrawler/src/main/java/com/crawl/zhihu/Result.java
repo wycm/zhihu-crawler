@@ -1,4 +1,4 @@
-package com.crawl.zhihu.client;
+package com.crawl.zhihu;
 
 import com.crawl.entity.User;
 import com.crawl.util.MyLogger;

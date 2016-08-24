@@ -2,7 +2,6 @@ package com.crawl.dao;
 
 import com.crawl.entity.User;
 import com.crawl.util.MyLogger;
-import com.crawl.zhihu.user.ParseWebPageTask;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -89,7 +88,7 @@ public class ZhihuDAO {
         String isContainSql = "select count(*) from user WHERE url='" + u.getUrl() + "'";
         if(isContain(cn,isContainSql)){
 //			cn.close();
-            logger.info("数据库已经存在该用户---" + u.getUrl() + "---当前已获取用户数量为:" + ParseWebPageTask.userCount);
+            logger.info("数据库已经存在该用户---" + u.getUrl() + "---当前已获取用户数量为:");
             return false;
         }
         String colum = "location,business,sex,employment,username,url,agrees,thanks,asks," +
@@ -117,8 +116,6 @@ public class ZhihuDAO {
         pstmt.close();
 //		cn.close();
         u = null;
-        ParseWebPageTask.userCount++;
-        logger.info("插入用户成功---已获取" + ParseWebPageTask.userCount + "用户");
         return true;
     }
 

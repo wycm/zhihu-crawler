@@ -1,26 +1,26 @@
-package com.crawl.zhihu.user;
+package com.crawl.zhihu;
 
+import com.crawl.entity.Page;
 import com.crawl.util.MyLogger;
-import com.crawl.zhihu.client.Result;
 import org.apache.log4j.Logger;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 /**
- * 存放网页内容 仓库
+ * 存放网页 仓库
  * @author wy
  *
  */
 public class Storage {
 	private static Logger logger = MyLogger.getMyLogger(Storage.class);
-	private BlockingQueue<String> queue = null;//阻塞队列，存放网页内容
+	private BlockingQueue<Page> queue = null;//阻塞队列，存放网页内容
 	private Result result = null;
 	public Storage(){
-		queue = new LinkedBlockingQueue<String>();
+		queue = new LinkedBlockingQueue<Page>();
 		result = new Result();
 	}
-	public BlockingQueue<String> getQueue() {
+	public BlockingQueue<Page> getQueue() {
 		return queue;
 	}
 
@@ -32,7 +32,7 @@ public class Storage {
 		this.result = result;
 	}
 
-	public void setQueue(BlockingQueue<String> queue) {
+	public void setQueue(BlockingQueue<Page> queue) {
 		this.queue = queue;
 	}
 
@@ -42,7 +42,7 @@ public class Storage {
 	 * @param s
 	 * @throws InterruptedException
 	 */
-	public void push(String s){
+	public void push(Page s){
 		try {
 			queue.put(s);
 		} catch (InterruptedException e) {
@@ -57,8 +57,8 @@ public class Storage {
 	 * @return
 	 * @throws InterruptedException
 	 */
-	public String pop(){
-		String s = null;
+	public Page pop(){
+		Page s = null;
 		try {
 			s = queue.take();
 		} catch (InterruptedException e) {
