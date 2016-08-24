@@ -1,4 +1,4 @@
-package com.crawl.task;
+package com.crawl.zhihu.task;
 
 import com.crawl.util.MyLogger;
 import com.crawl.zhihu.client.ZhihuHttpClient;

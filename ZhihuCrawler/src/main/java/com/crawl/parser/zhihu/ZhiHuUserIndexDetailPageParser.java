@@ -8,7 +8,7 @@ import com.crawl.parser.DetailPageParser;
  * Created by yangwang on 16-8-24.
  * 知乎用户首页解析
  */
-public class ZhiHuUserIndexDetailPageParse extends DetailPageParser{
+public class ZhiHuUserIndexDetailPageParser extends DetailPageParser{
     @Override
     public User parse(Page page) {
         return null;

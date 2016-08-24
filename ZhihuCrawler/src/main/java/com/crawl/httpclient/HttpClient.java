@@ -64,18 +64,24 @@ public abstract class HttpClient {
         return null;
     }
     public Page getWebPage(String url){
+        return getWebPag(new HttpGet(url));
+    }
+    public Page getWebPag(HttpRequestBase request){
         Page page = new Page();
-        CloseableHttpResponse response = getResponse(new HttpGet(url));
+        CloseableHttpResponse response = getResponse(request);
         page.setStatusCode(response.getStatusLine().getStatusCode());
-        page.setUrl(url);
+        page.setUrl(request.getURI().toString());
         try {
-            page.setHtml(IOUtils.toString(response.getEntity().getContent()));
+            if(page.getStatusCode() == 200){
+                page.setHtml(IOUtils.toString(response.getEntity().getContent()));
+            }
         } catch (IOException e) {
             e.printStackTrace();
+        } finally {
+            request.releaseConnection();
         }
         return page;
     }
-
     /**
      * 反序列化CookiesStore
      * @param name ResourceName

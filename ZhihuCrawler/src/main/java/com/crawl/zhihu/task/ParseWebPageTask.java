@@ -1,4 +1,4 @@
-package com.crawl.task;
+package com.crawl.zhihu.task;
 
 import com.crawl.dao.ConnectionManage;
 import com.crawl.dao.ZhihuDAO;

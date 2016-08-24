@@ -85,6 +85,7 @@ public class ModelLogin {
             HttpClientUtil.serializeObject(context.getCookieStore(),"src/main/resources/zhihucookies");
             return true;
         }else{
+            logger.info("登录知乎失败");
             throw new RuntimeException(HttpClientUtil.decodeUnicode(loginState));
         }
     }
