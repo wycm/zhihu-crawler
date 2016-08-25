@@ -22,8 +22,11 @@ public class ParseTask implements Runnable {
     private static Logger logger = MyLogger.getLogger(ParseTask.class);
     private Page page;
     private static ZhiHuHttpClient zhiHuHttpClient = ZhiHuHttpClient.getInstance();
-    private static AtomicInteger parseUserCount = new AtomicInteger(0);
-
+    /**
+     * 统计用户数量
+     */
+    public static AtomicInteger parseUserCount = new AtomicInteger(0);
+    public static volatile boolean isStopDownload = false;
     public ParseTask(Page page){
         this.page = page;
     }
@@ -38,20 +41,14 @@ public class ParseTask implements Runnable {
              *  包含title标签,用户主页
              */
             User u = ZhiHuUserIndexDetailPageParser.getInstance().parse(page);
-            /**
-             * 获取用户数量达到crawlUserCount
-             * shutdown 下载网页线程
-             */
-            if(parseUserCount.getAndIncrement() >= Config.crawlUserCount){
-                zhiHuHttpClient.getDownloadThreadExecutor().shutdown();
-            }
+            parseUserCount.incrementAndGet();
             logger.info("解析用户成功:" + u.toString());
             for(int i = 0;i < u.getFollowees()/20 + 1;i++) {
                 /**
                  * 当下载网页队列小于100时才获取该用户关注用户
                  * 防止下载网页线程池任务队列过量增长
                  */
-                if (zhiHuHttpClient.getDownloadThreadExecutor().getQueue().size() <= 100) {
+                if (!isStopDownload && zhiHuHttpClient.getDownloadThreadExecutor().getQueue().size() <= 100) {
                     /**
                      * 获取关注用户列表,因为知乎每次最多返回20个关注用户
                      */
@@ -64,9 +61,11 @@ public class ParseTask implements Runnable {
             /**
              * "我关注的人"列表页
              */
-            List<String> userIndexHref = ZhiHuUserFollowingListPageParser.getInstance().parse(page);
-            for(String url : userIndexHref){
-                zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url));
+            if(!isStopDownload && zhiHuHttpClient.getDownloadThreadExecutor().getQueue().size() <= 100){
+                List<String> userIndexHref = ZhiHuUserFollowingListPageParser.getInstance().parse(page);
+                for(String url : userIndexHref){
+                    zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url));
+                }
             }
         }
     }

@@ -10,26 +10,15 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class ThreadPoolMonitor implements Runnable{
     private static Logger logger = MyLogger.getMyLogger(ThreadPoolMonitor.class);
     private ThreadPoolExecutor executor;
-    private volatile boolean run=true;
+    public static volatile boolean isStopMonitor=false;
     private String name = "";
     public ThreadPoolMonitor(ThreadPoolExecutor executor,String name){
         this.executor = executor;
         this.name = name;
     }
-    public void shutdown(){
-        this.run=false;
-    }
-
-    public boolean isRun() {
-        return run;
-    }
-
-    public void setRun(boolean run) {
-        this.run = run;
-    }
 
     public void run(){
-        while(run){
+        while(!isStopMonitor){
             logger.info(name +
                     String.format("[monitor] [%d/%d] Active: %d, Completed: %d, queueSize: %d, Task: %d, isShutdown: %s, isTerminated: %s",
                             this.executor.getPoolSize(),
@@ -40,9 +29,6 @@ public class ThreadPoolMonitor implements Runnable{
                             this.executor.getTaskCount(),
                             this.executor.isShutdown(),
                             this.executor.isTerminated()));
-            if(this.executor.isShutdown() == true){
-                shutdown();
-            }
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

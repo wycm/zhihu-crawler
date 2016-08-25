@@ -8,6 +8,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Administrator on 2016/4/9 0009.
@@ -17,6 +18,7 @@ public class MyThreadPoolExecutor extends ThreadPoolExecutor{
     private static Logger logger = MyLogger.getMyLogger(MyThreadPoolExecutor.class);
     private long startTime;
     private Storage storage;
+    public static AtomicInteger parseUserCount = new AtomicInteger(0);
     public MyThreadPoolExecutor(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue<Runnable> workQueue, RejectedExecutionHandler handler) {
         super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, handler);
         startTime = System.currentTimeMillis();

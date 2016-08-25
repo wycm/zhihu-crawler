@@ -29,9 +29,9 @@ public class Config {
      */
     public static String  startURL;
     /**
-     * 爬取用户数
+     * 下载网页数
      */
-    public static int crawlUserCount;
+    public static int downloadPageCount;
     static {
         Properties p = new Properties();
         try {
@@ -44,7 +44,7 @@ public class Config {
         emailOrPhoneNum = p.getProperty("zhiHu.emailOrPhoneNum");
         password = p.getProperty("zhiHu.password");
         startURL = p.getProperty("startURL");
-        crawlUserCount = Integer.valueOf(p.getProperty("crawlUserCount"));
+        downloadPageCount = Integer.valueOf(p.getProperty("downloadPageCount"));
     }
 
 }

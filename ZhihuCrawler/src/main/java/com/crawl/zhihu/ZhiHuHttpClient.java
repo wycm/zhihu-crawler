@@ -4,6 +4,7 @@ import com.crawl.config.Config;
 import com.crawl.httpclient.HttpClient;
 import com.crawl.util.ThreadPoolMonitor;
 import com.crawl.zhihu.task.DownloadTask;
+import com.crawl.zhihu.task.ParseTask;
 import org.apache.log4j.Logger;
 
 import java.util.Properties;
@@ -65,9 +66,51 @@ public class ZhiHuHttpClient extends HttpClient{
     }
     public void startCrawl(String url){
         downloadThreadExecutor.execute(new DownloadTask(url));
+        manageZhiHuClient();
     }
 
-    public ExecutorService getParseThreadExecutor() {
+    /**
+     * 管理知乎客户端
+     * 关闭整个爬虫
+     */
+    public void manageZhiHuClient(){
+        while (true) {
+            /**
+             * 下载网页数
+             */
+            long downloadPageCount = downloadThreadExecutor.getTaskCount();
+            if (downloadPageCount >= Config.downloadPageCount &&
+                    ! ZhiHuHttpClient.getInstance().getDownloadThreadExecutor().isShutdown()) {
+                ParseTask.isStopDownload = true;
+                /**
+                 * shutdown 下载网页线程池
+                 */
+                ZhiHuHttpClient.getInstance().getDownloadThreadExecutor().shutdown();
+            }
+            if(ZhiHuHttpClient.getInstance().getDownloadThreadExecutor().isTerminated() &&
+                    !ZhiHuHttpClient.getInstance().getParseThreadExecutor().isShutdown()){
+                /**
+                 * 下载网页线程池关闭后，再关闭解析网页线程池
+                 */
+                ZhiHuHttpClient.getInstance().getParseThreadExecutor().shutdown();
+            }
+            if(ZhiHuHttpClient.getInstance().getParseThreadExecutor().isTerminated()){
+                /**
+                 * 关闭线程池Monitor
+                 */
+                ThreadPoolMonitor.isStopMonitor = true;
+                logger.info("--------------爬取结果--------------");
+                logger.info("获取用户数:" +ParseTask.parseUserCount.get());
+                break;
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    public ThreadPoolExecutor getParseThreadExecutor() {
         return parseThreadExecutor;
     }
 

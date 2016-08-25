@@ -8,6 +8,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.log4j.Logger;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 /**
  * 下载网页任务
  * 并将下载成功的Page放到解析任务队列
