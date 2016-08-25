@@ -1,7 +1,6 @@
 package com.crawl.zhihu;
 
 import com.crawl.util.MyLogger;
-import com.crawl.util.Storage;
 import org.apache.log4j.Logger;
 
 import java.util.concurrent.BlockingQueue;

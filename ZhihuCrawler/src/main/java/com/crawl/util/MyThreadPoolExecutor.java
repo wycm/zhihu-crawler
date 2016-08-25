@@ -1,6 +1,7 @@
 package com.crawl.util;
 
 import com.crawl.dao.ConnectionManage;
+import com.crawl.zhihu.Storage;
 import org.apache.log4j.Logger;
 
 import java.util.concurrent.BlockingQueue;
