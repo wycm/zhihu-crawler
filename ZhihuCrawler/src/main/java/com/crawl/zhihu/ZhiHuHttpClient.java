@@ -2,6 +2,7 @@ package com.crawl.zhihu;
 
 import com.crawl.config.Config;
 import com.crawl.httpclient.HttpClient;
+import com.crawl.util.ThreadPoolMonitor;
 import com.crawl.zhihu.task.DownloadTask;
 import org.apache.log4j.Logger;
 
@@ -25,6 +26,7 @@ public class ZhiHuHttpClient extends HttpClient{
     public ZhiHuHttpClient() {
         initHttpClient();
         intiThreadPool();
+        new Thread(new ThreadPoolMonitor(downloadThreadExecutor, "DownloadPage ThreadPool")).start();
     }
 
     public static ZhiHuHttpClient getInstance(){

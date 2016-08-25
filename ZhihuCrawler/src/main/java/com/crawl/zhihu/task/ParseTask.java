@@ -1,5 +1,6 @@
 package com.crawl.zhihu.task;
 
+import com.crawl.config.Config;
 import com.crawl.entity.Page;
 import com.crawl.entity.User;
 import com.crawl.parser.zhihu.ZhiHuUserFollowingListPageParser;
@@ -11,6 +12,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Created by Administrator on 2016/8/24 0024.
@@ -20,6 +22,8 @@ public class ParseTask implements Runnable {
     private static Logger logger = MyLogger.getLogger(ParseTask.class);
     private Page page;
     private static ZhiHuHttpClient zhiHuHttpClient = ZhiHuHttpClient.getInstance();
+    private static AtomicInteger parseUserCount = new AtomicInteger(0);
+
     public ParseTask(Page page){
         this.page = page;
     }
@@ -34,6 +38,9 @@ public class ParseTask implements Runnable {
              *  包含title标签,用户主页
              */
             User u = ZhiHuUserIndexDetailPageParser.getInstance().parse(page);
+            if(parseUserCount.getAndIncrement() == Config.crawlUserCount){
+                zhiHuHttpClient.getDownloadThreadExecutor().shutdown();
+            }
             logger.info("解析用户成功:" + u.toString());
             for(int i = 0;i < u.getFollowees()/20 + 1;i++) {
                 /**

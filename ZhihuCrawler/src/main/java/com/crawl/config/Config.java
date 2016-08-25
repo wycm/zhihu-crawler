@@ -25,9 +25,13 @@ public class Config {
      */
     public static String password;
     /**
-     * 爬虫路口
+     * 爬虫入口
      */
     public static String  startURL;
+    /**
+     * 爬取用户数
+     */
+    public static int crawlUserCount;
     static {
         Properties p = new Properties();
         try {
@@ -40,6 +44,7 @@ public class Config {
         emailOrPhoneNum = p.getProperty("zhiHu.emailOrPhoneNum");
         password = p.getProperty("zhiHu.password");
         startURL = p.getProperty("startURL");
+        crawlUserCount = Integer.valueOf(p.getProperty("crawlUserCount"));
     }
 
 }

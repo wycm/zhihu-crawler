@@ -6,12 +6,11 @@ import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 线程池工具类，监视ThreadPoolExecutor执行情况
- *
  */
 public class ThreadPoolMonitor implements Runnable{
     private static Logger logger = MyLogger.getMyLogger(ThreadPoolMonitor.class);
     private ThreadPoolExecutor executor;
-    private boolean run=true;
+    private volatile boolean run=true;
     private String name = "";
     public ThreadPoolMonitor(ThreadPoolExecutor executor,String name){
         this.executor = executor;
@@ -30,7 +29,6 @@ public class ThreadPoolMonitor implements Runnable{
     }
 
     public void run(){
-        this.executor.getQueue().size();
         while(run){
             logger.info(name +
                     String.format("[monitor] [%d/%d] Active: %d, Completed: %d, queueSize: %d, Task: %d, isShutdown: %s, isTerminated: %s",
@@ -42,6 +40,9 @@ public class ThreadPoolMonitor implements Runnable{
                             this.executor.getTaskCount(),
                             this.executor.isShutdown(),
                             this.executor.isTerminated()));
+            if(this.executor.isShutdown() == true){
+                shutdown();
+            }
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
@@ -49,6 +50,5 @@ public class ThreadPoolMonitor implements Runnable{
                 logger.error("InterruptedException",e);
             }
         }
-
     }
 }
