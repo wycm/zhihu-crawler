@@ -16,17 +16,18 @@ public class ZhiHuHttpClient extends HttpClient{
     Logger logger = Logger.getLogger(ZhiHuHttpClient.class);
     private static ZhiHuHttpClient zhiHuHttpClient;
     /**
-     * 解析网页执行器
+     * 解析网页线程池
      */
-    private ExecutorService parseThreadExecutor;
+    private ThreadPoolExecutor parseThreadExecutor;
     /**
-     * 下载网页执行器
+     * 下载网页线程池
      */
     private ThreadPoolExecutor downloadThreadExecutor;
     public ZhiHuHttpClient() {
         initHttpClient();
         intiThreadPool();
         new Thread(new ThreadPoolMonitor(downloadThreadExecutor, "DownloadPage ThreadPool")).start();
+        new Thread(new ThreadPoolMonitor(parseThreadExecutor, "ParsePage ThreadPool")).start();
     }
 
     public static ZhiHuHttpClient getInstance(){
@@ -52,7 +53,12 @@ public class ZhiHuHttpClient extends HttpClient{
      * 初始化线程池
      */
     private void intiThreadPool(){
-        parseThreadExecutor = Executors.newSingleThreadExecutor();
+        parseThreadExecutor = new ThreadPoolExecutor(1, 1,
+                0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>());
+        /**
+         * corePoolSize设置过大会返回429状态码
+         */
         downloadThreadExecutor = new ThreadPoolExecutor(5, 5,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());

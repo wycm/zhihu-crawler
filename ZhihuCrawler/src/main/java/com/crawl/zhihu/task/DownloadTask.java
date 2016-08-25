@@ -25,7 +25,8 @@ public class DownloadTask implements Runnable{
 		try {
 			Page page = zhiHuHttpClient.getWebPage(url);
 			int status = page.getStatusCode();
-			logger.info("executing request " + page.getUrl() + "   status:" + status);
+
+			logger.info(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
 			if(status == HttpStatus.SC_OK){
 				zhiHuHttpClient.getParseThreadExecutor().execute(new ParseTask(page));
 			}

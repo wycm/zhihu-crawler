@@ -38,13 +38,18 @@ public class ParseTask implements Runnable {
              *  包含title标签,用户主页
              */
             User u = ZhiHuUserIndexDetailPageParser.getInstance().parse(page);
-            if(parseUserCount.getAndIncrement() == Config.crawlUserCount){
+            /**
+             * 获取用户数量达到crawlUserCount
+             * shutdown 下载网页线程
+             */
+            if(parseUserCount.getAndIncrement() >= Config.crawlUserCount){
                 zhiHuHttpClient.getDownloadThreadExecutor().shutdown();
             }
             logger.info("解析用户成功:" + u.toString());
             for(int i = 0;i < u.getFollowees()/20 + 1;i++) {
                 /**
                  * 当下载网页队列小于100时才获取该用户关注用户
+                 * 防止下载网页线程池任务队列过量增长
                  */
                 if (zhiHuHttpClient.getDownloadThreadExecutor().getQueue().size() <= 100) {
                     /**
