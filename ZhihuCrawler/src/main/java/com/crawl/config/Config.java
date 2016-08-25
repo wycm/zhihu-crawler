@@ -5,7 +5,7 @@ import java.util.Properties;
 
 /**
  * Created by Administrator on 2016/8/23 0023.
- *
+ * 加载配置文件
  */
 public class Config {
     /**
