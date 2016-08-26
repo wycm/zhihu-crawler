@@ -57,10 +57,8 @@ public class ZhiHuHttpClient extends HttpClient{
         parseThreadExecutor = new ThreadPoolExecutor(1, 1,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
-        /**
-         * corePoolSize设置过大会返回429状态码
-         */
-        downloadThreadExecutor = new ThreadPoolExecutor(5, 5,
+        downloadThreadExecutor = new ThreadPoolExecutor(Config.downloadThreadSize,
+                Config.downloadThreadSize,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
     }

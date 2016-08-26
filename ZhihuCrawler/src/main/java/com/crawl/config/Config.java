@@ -13,6 +13,10 @@ public class Config {
      */
     public static boolean dbEnable;
     /**
+     * 下载网页线程数
+     */
+    public static int downloadThreadSize;
+    /**
      * 验证码路径
      */
     public static String verificationCodePath;
@@ -45,6 +49,7 @@ public class Config {
         password = p.getProperty("zhiHu.password");
         startURL = p.getProperty("startURL");
         downloadPageCount = Integer.valueOf(p.getProperty("downloadPageCount"));
+        downloadThreadSize = Integer.valueOf(p.getProperty("downloadThreadSize"));
     }
 
 }
