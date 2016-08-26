@@ -1,12 +1,15 @@
 package com.crawl.zhihu;
 
 import com.crawl.config.Config;
+import com.crawl.dao.ConnectionManage;
+import com.crawl.dao.ZhiHuDAO;
 import com.crawl.httpclient.HttpClient;
 import com.crawl.util.ThreadPoolMonitor;
 import com.crawl.zhihu.task.DownloadTask;
 import com.crawl.zhihu.task.ParseTask;
 import org.apache.log4j.Logger;
 
+import java.sql.Connection;
 import java.util.Properties;
 import java.util.concurrent.*;
 
@@ -15,6 +18,12 @@ import java.util.concurrent.*;
  */
 public class ZhiHuHttpClient extends HttpClient{
     Logger logger = Logger.getLogger(ZhiHuHttpClient.class);
+    private static class ZhiHuHttpClientHolder {
+        private static final ZhiHuHttpClient INSTANCE = new ZhiHuHttpClient();
+    }
+    public static final ZhiHuHttpClient getInstance(){
+        return ZhiHuHttpClientHolder.INSTANCE;
+    }
     private static ZhiHuHttpClient zhiHuHttpClient;
     /**
      * 解析网页线程池
@@ -30,13 +39,6 @@ public class ZhiHuHttpClient extends HttpClient{
         new Thread(new ThreadPoolMonitor(downloadThreadExecutor, "DownloadPage ThreadPool")).start();
         new Thread(new ThreadPoolMonitor(parseThreadExecutor, "ParsePage ThreadPool")).start();
     }
-
-    public static ZhiHuHttpClient getInstance(){
-        if(zhiHuHttpClient == null){
-            zhiHuHttpClient = new ZhiHuHttpClient();
-        }
-        return zhiHuHttpClient;
-    }
     /**
      * 初始化知乎客户端
      * 模拟登录知乎，持久化Cookie到本地
@@ -47,6 +49,9 @@ public class ZhiHuHttpClient extends HttpClient{
         Properties properties = new Properties();
         if(!antiSerializeCookieStore("/zhihucookies")){
             new ModelLogin().login(this, Config.emailOrPhoneNum, Config.password);
+        }
+        if(Config.dbEnable){
+            ZhiHuDAO.DBTablesInit(ConnectionManage.getConnection());
         }
     }
 

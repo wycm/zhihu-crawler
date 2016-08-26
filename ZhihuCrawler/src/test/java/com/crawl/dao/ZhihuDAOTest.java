@@ -11,6 +11,6 @@ public class ZhihuDAOTest {
     @Test
     public void testDBTablesInit(){
         Connection cn = ConnectionManage.getConnection();
-        ZhihuDAO.DBTablesInit(cn);
+        ZhiHuDAO.DBTablesInit(cn);
     }
 }
