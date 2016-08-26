@@ -5,7 +5,7 @@
 暂时还没有加新功能，2.0版本运行非常简单，直接配置。
 <br>
 ##运行方式
-<p>首先配置[config.properties](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/resources/config.properties) 文件</p>
+<p>首先配置[config.properties](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/resources/config.properties)文件</p>
 <p>直接执行[Main.java](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/java/com/crawl/Main.java)就可以跑起来</p>
 首次运行，会模拟登录，需要手动输入验证码，登录成功后，会自动序列化Cookie到[resources](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/resources),以后都可以不用登录。
 ##注意
