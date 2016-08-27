@@ -11,9 +11,9 @@
 由于知乎现在有反爬虫机制，如果访问频繁账号会封禁一段时间，不过可以通过发送邮件的方式手动解封的。
 我之前跑5个下载线程就被封了。
 现在默认下载线程数是3，可以通过 [config.properties](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/resources/config.properties) 配置文件的`downloadThreadSize`来修改。
-最好还是注册一个小号来跑吧。这个反爬虫机制，暂时我也没有比较好的解决方式。
+最好还是注册一个小号来跑吧。如果确实追求效率，那就多注册几个账号跑吧。
 ##TODO
-添加数据库支持
+支持分布式
 ##问题
-有什么疑问，都可以问我或者提issue
+有什么疑问，欢迎提issue
 
