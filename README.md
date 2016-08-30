@@ -1,13 +1,19 @@
-﻿基于JAVA的知乎爬虫
-<p>README</p>
-<p>2016.8.26更新</p>
-<p>当前为2.0版本,和1.0版本有很大的不一样,还在更新中...</p>
-<p>为啥会更新呢，自我感觉1.0版本的代码写的太渣，可读性太差了，重构了下，
-暂时还没有加新功能，2.0版本运行起来比较方便。</p>
-<p></p>
-<p>爬虫入口:Main.java</p>
-<p>运行方式：首先在Config.properties配置文件配置相关属性，然后运行Main.java就可以跑起来了</p>
-<p>
-2016.8.26 更新 --待续
-</p>
-<p>有问题，欢迎提出，也可以知乎私信我...</p>
+﻿知乎爬虫
+====  
+当前为2.0版本,和1.0版本有很大的不一样<br>
+为啥会更新呢，1.0版本的代码写的比较乱，可读性太差了，重构了下。<br>
+暂时还没有加新功能，2.0版本运行非常简单，直接配置。<br>
+##运行方式
+首先配置 [config.properties](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/resources/config.properties) 文件<br>
+直接执行 [Main.java](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/java/com/crawl/Main.java) 就可以跑起来<br>
+首次运行，会模拟登录，需要手动输入验证码，登录成功后，会自动序列化Cookie到[resources](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/resources),以后都可以不用登录。
+##注意
+由于知乎现在有反爬虫机制，如果访问频繁账号会封禁一段时间，不过可以通过发送邮件的方式手动解封的。
+我之前跑5个下载线程就被封了。
+现在默认下载线程数是3，可以通过 [config.properties](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/resources/config.properties) 配置文件的`downloadThreadSize`来修改。
+最好还是注册一个小号来跑吧。如果确实追求效率，那就多注册几个账号跑吧。
+##TODO
+支持分布式
+##问题
+有什么疑问，欢迎提issue
+
