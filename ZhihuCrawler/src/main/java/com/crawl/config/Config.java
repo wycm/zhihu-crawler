@@ -61,6 +61,11 @@ public class Config {
      * 创建user表语句
      */
     public static String createUserTable;
+
+    /**
+     * cookie路径
+     */
+    public static String cookiePath;
     static {
         Properties p = new Properties();
         try {
@@ -75,6 +80,7 @@ public class Config {
         startURL = p.getProperty("startURL");
         downloadPageCount = Integer.valueOf(p.getProperty("downloadPageCount"));
         downloadThreadSize = Integer.valueOf(p.getProperty("downloadThreadSize"));
+        cookiePath = p.getProperty("cookiePath");
         if (dbEnable){
             dbName = p.getProperty("db.name");
             dbHost = p.getProperty("db.host");

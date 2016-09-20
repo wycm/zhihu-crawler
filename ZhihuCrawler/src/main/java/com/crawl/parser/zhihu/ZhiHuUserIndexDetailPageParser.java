@@ -12,7 +12,8 @@ import org.jsoup.nodes.Element;
 
 /**
  * Created by yangwang on 16-8-24.
- * 知乎用户首页解析
+ * https://www.zhihu.com/people/wo-yan-chen-mo/followees
+ * followess页面解析出用户详细信息
  */
 public class ZhiHuUserIndexDetailPageParser extends DetailPageParser{
     Logger logger = MyLogger.getLogger(ZhiHuUserIndexDetailPageParser.class);
@@ -46,6 +47,9 @@ public class ZhiHuUserIndexDetailPageParser extends DetailPageParser{
         u.setThanks(Integer.valueOf(doc.select(".zm-profile-header-user-thanks strong").first().text()));//感谢数
         u.setFollowees(Integer.valueOf(doc.select(".zm-profile-side-following strong").first().text()));//关注人数
         u.setFollowers(Integer.valueOf(doc.select(".zm-profile-side-following strong").get(1).text()));//关注者
+        u.setAsks(Integer.valueOf(doc.select("div.profile-navbar a[href$=asks] span").first().text()));//提问数
+        u.setAnswers(Integer.valueOf(doc.select("div.profile-navbar a[href$=answers] span").first().text()));//回答数
+        u.setPosts(Integer.valueOf(doc.select("div.profile-navbar a[href$=posts] span").first().text()));//文章数
         try {
             u.setHashId(doc.select(".zm-profile-header-op-btns.clearfix button").first().attr("data-id"));
         }catch (NullPointerException e){

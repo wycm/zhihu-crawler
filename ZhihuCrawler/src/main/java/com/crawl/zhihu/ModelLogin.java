@@ -82,7 +82,7 @@ public class ModelLogin {
             /**
              * 序列化Cookies
              */
-            HttpClientUtil.serializeObject(context.getCookieStore(),"src/main/resources/zhihucookies");
+            HttpClientUtil.serializeObject(context.getCookieStore(), Config.cookiePath);
             return true;
         }else{
             logger.info("登录知乎失败");

@@ -9,7 +9,6 @@ import com.crawl.zhihu.task.DownloadTask;
 import com.crawl.zhihu.task.ParseTask;
 import org.apache.log4j.Logger;
 
-import java.sql.Connection;
 import java.util.Properties;
 import java.util.concurrent.*;
 
@@ -47,7 +46,7 @@ public class ZhiHuHttpClient extends HttpClient{
     @Override
     public void initHttpClient() {
         Properties properties = new Properties();
-        if(!antiSerializeCookieStore("/zhihucookies")){
+        if(!deserializeCookieStore(Config.cookiePath)){
             new ModelLogin().login(this, Config.emailOrPhoneNum, Config.password);
         }
         if(Config.dbEnable){

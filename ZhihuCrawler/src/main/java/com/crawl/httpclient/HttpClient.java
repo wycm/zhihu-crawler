@@ -84,12 +84,11 @@ public abstract class HttpClient {
     }
     /**
      * 反序列化CookiesStore
-     * @param name ResourceName
      * @return
      */
-    public boolean antiSerializeCookieStore(String name){
+    public boolean deserializeCookieStore(String path){
         try {
-            CookieStore cookieStore = (CookieStore) HttpClientUtil.antiSerializeMyHttpClient(name);
+            CookieStore cookieStore = (CookieStore) HttpClientUtil.deserializeMyHttpClient(path);
             httpClientContext.setCookieStore(cookieStore);
         } catch (Exception e){
             logger.warn("反序列化Cookie失败,没有找到Cookie文件");

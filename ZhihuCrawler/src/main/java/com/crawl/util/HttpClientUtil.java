@@ -100,11 +100,13 @@ public class HttpClientUtil {
 	}
 	/**
 	 * 反序列化对象
-	 * @param name
+	 * @param path
 	 * @throws Exception
 	 */
-	public static Object antiSerializeMyHttpClient(String name) throws NullPointerException{
-		InputStream fis = HttpClientUtil.class.getResourceAsStream(name);
+	public static Object deserializeMyHttpClient(String path) throws NullPointerException, FileNotFoundException {
+//		InputStream fis = HttpClientUtil.class.getResourceAsStream(name);
+        File file = new File(path);
+		InputStream fis = new FileInputStream(file);
 		ObjectInputStream ois = null;
 		Object object = null;
 		try {
