@@ -4,8 +4,8 @@
 为啥会更新呢，1.0版本的代码写的比较乱，重构了下。<br>
 暂时还没有加新功能，2.0版本运行非常简单，直接配置。<br>
 ##运行方式
-这是一个maven工程，需要maven的支持。
-1.导入工程。
+0.这是一个maven工程，需要maven的支持。<br>
+1.导入工程。<br>
 2.配置 [config.properties](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/resources/config.properties) 文件<br>
 3.执行 [Main.java](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/java/com/crawl/Main.java) 就可以跑起来<br>
 4.首次运行，会模拟登录，需要手动输入验证码，登录成功后，会自动序列化Cookie到[resources](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/resources),以后都可以不用登录。
