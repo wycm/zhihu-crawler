@@ -50,6 +50,12 @@ public class ZhiHuUserIndexDetailPageParser extends DetailPageParser{
         u.setAsks(Integer.valueOf(doc.select("div.profile-navbar a[href$=asks] span").first().text()));//提问数
         u.setAnswers(Integer.valueOf(doc.select("div.profile-navbar a[href$=answers] span").first().text()));//回答数
         u.setPosts(Integer.valueOf(doc.select("div.profile-navbar a[href$=posts] span").first().text()));//文章数
+        if(doc.select("div.zm-profile-header-user-describe span.gender i[class*=female]").size() > 0){
+            u.setSex("female");
+        }
+        else if (doc.select("div.zm-profile-header-user-describe span.gender i[class*=male]").size() > 0){
+            u.setSex("male");
+        }
         try {
             u.setHashId(doc.select(".zm-profile-header-op-btns.clearfix button").first().attr("data-id"));
         }catch (NullPointerException e){
