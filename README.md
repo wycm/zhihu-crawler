@@ -3,14 +3,22 @@
 2.0版本,和1.0版本有很大的不一样<br>
 为啥会更新呢，1.0版本的代码写的比较乱，重构了下。该分支已删除<br>
 暂时还没有加新功能，2.0版本运行非常简单，直接配置。<br>
-##maven start
-0.git clone https://github.com/wycm/zhihu-crawler 克隆项目到本地
-1.这是一个maven工程，需要maven的支持<br>
-2.eclipse导入步骤(我用的eclipse_kepler版本，自带maven)，File->Import->Maven->Existing Maven Projects->选择刚刚clone的zhihu-crawler目录->导入成功<br>
-3.idea导入步骤,File->Open->选择刚刚clone的zhihu-crawler目录->导入成功
-4.配置 [config.properties](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/config.properties) 文件,账号密码<br>
-5.执行 [Main.java](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/java/com/crawl/Main.java) 就可以跑起来<br>
-6.首次运行，会模拟登录，需要手动输入验证码，登录成功后，会自动序列化Cookie到[resources](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/resources),以后都可以不用登录。
+##工程导入
+    git clone https://github.com/wycm/zhihu-crawler 克隆项目到本地<br>
+  **maven**    
+    0.eclipse导入步骤(我用的eclipse_kepler版本，自带maven)，File->Import->Maven->Existing Maven Projects->选择刚刚clone的zhihu-crawler目录->导入成功<br>
+    1.idea导入步骤,File->Open->选择刚刚clone的zhihu-crawler目录->导入成功<br>
+  **非maven（eclipse）**
+    0.创建一个名字为zhihu-new-crawler（这个随便命名）的普通工程<br>
+    1.拷贝刚刚clone的zhihu-crawler/src/main/java/com目录到zhihu-new-crawler/src目录下<br>
+    2.右键工程->Build Path->Add External Archives...->导入zhihu-crawler/lib下的所有jar包<br>
+    3.将zhihu-crawler/src/main/resources目录下的[config.properties](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/config.properties)和[log4j.properties](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/log4j.properties)拷贝至src目录下<br>
+    4.工程结构如下图,待更新<br>
+    
+##start
+1.配置 [config.properties](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/config.properties) 文件,账号密码<br>
+2.执行 [Main.java](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/java/com/crawl/Main.java) 就可以跑起来<br>
+3.首次运行，会模拟登录，需要手动输入验证码，登录成功后，会自动序列化Cookie到[resources](https://github.com/wycm/mycrawler/blob/2.0/ZhihuCrawler/src/main/resources),以后都可以不用登录。
 ##注意
 由于知乎现在有反爬虫机制，如果访问频繁账号会封禁一段时间，不过可以通过发送邮件的方式手动解封的。
 跑5个下载线程就账号可能被封。
