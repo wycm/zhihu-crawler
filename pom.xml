@@ -2,10 +2,10 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.crawl</groupId>
-  <artifactId>ZhihuCrawler</artifactId>
+  <artifactId>zhihu-crawler</artifactId>
   <packaging>jar</packaging>
   <version>1.0</version>
-  <name>ZhihuCrawler</name>
+  <name>zhihu-crawler</name>
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
@@ -52,8 +52,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
-          <source>1.6</source>
-          <target>1.6</target>
+          <source>1.7</source>
+          <target>1.7</target>
         </configuration>
       </plugin>
     </plugins>
