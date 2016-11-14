@@ -2,5 +2,9 @@
 .idea/
 *.iml
 
-zhihucookies
 target/
+.classpath
+.project
+.settings/
+
+zhihucookies
