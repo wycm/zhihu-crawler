@@ -9,7 +9,9 @@
 * **eclipse**导入步骤(eclipse_kepler版本，自带maven)，File->Import->Maven->Existing Maven Projects->选择刚刚clone的zhihu-crawler目录->导入成功
 * **idea**导入步骤,File->Open->选择刚刚clone的zhihu-crawler目录->导入成功
 
-##工程导入(不支持maven)
+##工程导入(不使用maven)
+* eclipse或myeclipse都可以
+* git clone https://github.com/wycm/zhihu-crawler 克隆项目到本地
 * 创建一个名字为zhihu-new-crawler（这个随便命名）的普通工程
 * 拷贝刚刚clone的zhihu-crawler/src/main/java/com目录到zhihu-new-crawler/src目录下
 * 右键工程->Build Path->Add External Archives...->导入zhihu-crawler/lib下的所有jar包
