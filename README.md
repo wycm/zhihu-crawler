@@ -4,11 +4,11 @@
 为啥会更新呢，1.0版本的代码写的比较乱，重构了下。该分支已删除<br>
 暂时还没有加新功能，2.0版本运行非常简单，直接配置。<br>
 ##工程导入
-    git clone https://github.com/wycm/zhihu-crawler 克隆项目到本地<br>
-  **maven**    
+    git clone https://github.com/wycm/zhihu-crawler 克隆项目到本地
+  ###maven    
     0.eclipse导入步骤(我用的eclipse_kepler版本，自带maven)，File->Import->Maven->Existing Maven Projects->选择刚刚clone的zhihu-crawler目录->导入成功<br>
-    1.idea导入步骤,File->Open->选择刚刚clone的zhihu-crawler目录->导入成功<br>
-  **非maven（eclipse）**
+    1.idea导入步骤,File->Open->选择刚刚clone的zhihu-crawler目录->导入成功<br><br>
+  ###非maven(eclipse)
     0.创建一个名字为zhihu-new-crawler（这个随便命名）的普通工程<br>
     1.拷贝刚刚clone的zhihu-crawler/src/main/java/com目录到zhihu-new-crawler/src目录下<br>
     2.右键工程->Build Path->Add External Archives...->导入zhihu-crawler/lib下的所有jar包<br>
