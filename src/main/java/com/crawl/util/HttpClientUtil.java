@@ -32,7 +32,7 @@ import java.util.Map;
  * HttpClient工具类
  */
 public class HttpClientUtil {
-	private static Logger logger = MyLogger.getMyLogger(HttpClientUtil.class);
+	private static Logger logger = SimpleLogger.getSimpleLogger(HttpClientUtil.class);
 	/**
 	 *
 	 * @param httpClient HttpClient客户端

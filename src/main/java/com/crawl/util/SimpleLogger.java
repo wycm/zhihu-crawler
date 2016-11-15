@@ -7,15 +7,15 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.util.Properties;
 
-public class MyLogger extends Logger{
-    protected MyLogger(String name) {
+public class SimpleLogger extends Logger{
+    protected SimpleLogger(String name) {
         super(name);
     }
     private static Properties setLogProperty(){
         Properties p = new Properties();
         String ip = null;
         try {
-            p.load(MyLogger.class.getResourceAsStream("/log4j.properties"));
+            p.load(SimpleLogger.class.getResourceAsStream("/log4j.properties"));
             InetAddress addr = InetAddress.getLocalHost();
             ip = addr.getHostAddress().toString(); //获取本机ip
         } catch (IOException e) {
@@ -33,7 +33,7 @@ public class MyLogger extends Logger{
         }
         return p;
     }
-    public static Logger getMyLogger(Class<?> c){
+    public static Logger getSimpleLogger(Class<?> c){
         Logger logger = Logger.getLogger(c);
         PropertyConfigurator.configure(setLogProperty());
         return logger;

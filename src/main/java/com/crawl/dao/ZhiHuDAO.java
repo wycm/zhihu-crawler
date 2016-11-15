@@ -1,7 +1,7 @@
 package com.crawl.dao;
 
 import com.crawl.entity.User;
-import com.crawl.util.MyLogger;
+import com.crawl.util.SimpleLogger;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -12,7 +12,7 @@ import java.util.Properties;
  *
  */
 public class ZhiHuDAO {
-    private static Logger logger = MyLogger.getMyLogger(ZhiHuDAO.class);
+    private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuDAO.class);
 
     /**
      * 数据库表初始化，创建数据库表。

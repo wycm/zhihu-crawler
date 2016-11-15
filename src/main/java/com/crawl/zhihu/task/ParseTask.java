@@ -1,14 +1,13 @@
 package com.crawl.zhihu.task;
 
 import com.crawl.config.Config;
-import com.crawl.dao.ConnectionManage;
 import com.crawl.dao.ZhiHuDAO;
 import com.crawl.entity.Page;
 import com.crawl.entity.User;
 import com.crawl.parser.zhihu.ZhiHuUserFollowingListPageParser;
 import com.crawl.parser.zhihu.ZhiHuUserIndexDetailPageParser;
 import com.crawl.util.Md5Util;
-import com.crawl.util.MyLogger;
+import com.crawl.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -22,7 +21,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 解析网页任务
  */
 public class ParseTask implements Runnable {
-    private static Logger logger = MyLogger.getLogger(ParseTask.class);
+    private static Logger logger = SimpleLogger.getSimpleLogger(ParseTask.class);
     private Page page;
     private static ZhiHuHttpClient zhiHuHttpClient = ZhiHuHttpClient.getInstance();
     /**

@@ -3,7 +3,7 @@ package com.crawl.parser.zhihu;
 import com.crawl.entity.Page;
 import com.crawl.entity.User;
 import com.crawl.parser.DetailPageParser;
-import com.crawl.util.MyLogger;
+import com.crawl.util.SimpleLogger;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,7 +16,7 @@ import org.jsoup.nodes.Element;
  * followess页面解析出用户详细信息
  */
 public class ZhiHuUserIndexDetailPageParser extends DetailPageParser{
-    Logger logger = MyLogger.getLogger(ZhiHuUserIndexDetailPageParser.class);
+    Logger logger = SimpleLogger.getSimpleLogger(ZhiHuUserIndexDetailPageParser.class);
     private static ZhiHuUserIndexDetailPageParser zhiHuUserIndexDetailPageParser;
     public static ZhiHuUserIndexDetailPageParser getInstance(){
         if(zhiHuUserIndexDetailPageParser == null){

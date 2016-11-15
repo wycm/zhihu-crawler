@@ -2,7 +2,7 @@ package com.crawl.httpclient;
 
 import com.crawl.entity.Page;
 import com.crawl.util.HttpClientUtil;
-import com.crawl.util.MyLogger;
+import com.crawl.util.SimpleLogger;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.CookieStore;
@@ -20,7 +20,7 @@ import java.io.InputStream;
  * Created by yangwang on 16-8-19.
  */
 public abstract class HttpClient {
-    private Logger logger = MyLogger.getLogger(HttpClient.class);
+    private Logger logger = SimpleLogger.getSimpleLogger(HttpClient.class);
     private static HttpClient httpClient;
     protected CloseableHttpClient closeableHttpClient;
     protected HttpClientContext httpClientContext;

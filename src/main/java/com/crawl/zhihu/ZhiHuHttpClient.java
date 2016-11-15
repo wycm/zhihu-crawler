@@ -4,6 +4,7 @@ import com.crawl.config.Config;
 import com.crawl.dao.ConnectionManage;
 import com.crawl.dao.ZhiHuDAO;
 import com.crawl.httpclient.HttpClient;
+import com.crawl.util.SimpleLogger;
 import com.crawl.util.ThreadPoolMonitor;
 import com.crawl.zhihu.task.DownloadTask;
 import com.crawl.zhihu.task.ParseTask;
@@ -16,7 +17,7 @@ import java.util.concurrent.*;
  * Created by Administrator on 2016/8/23 0023.
  */
 public class ZhiHuHttpClient extends HttpClient{
-    Logger logger = Logger.getLogger(ZhiHuHttpClient.class);
+    private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuHttpClient.class);
     private static class ZhiHuHttpClientHolder {
         private static final ZhiHuHttpClient INSTANCE = new ZhiHuHttpClient();
     }

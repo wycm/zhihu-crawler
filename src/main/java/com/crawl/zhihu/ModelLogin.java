@@ -2,7 +2,7 @@ package com.crawl.zhihu;
 
 import com.crawl.config.Config;
 import com.crawl.util.HttpClientUtil;
-import com.crawl.util.MyLogger;
+import com.crawl.util.SimpleLogger;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -22,7 +22,7 @@ import java.util.Scanner;
  * 模拟登录知乎
  */
 public class ModelLogin {
-    private static Logger logger = MyLogger.getMyLogger(ModelLogin.class);
+    private static Logger logger = SimpleLogger.getSimpleLogger(ModelLogin.class);
     //知乎首页
     final private static String INDEX_URL = "https://www.zhihu.com";
     //邮箱登录地址
