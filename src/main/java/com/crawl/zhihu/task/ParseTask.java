@@ -4,6 +4,8 @@ import com.crawl.config.Config;
 import com.crawl.dao.ZhiHuDAO;
 import com.crawl.entity.Page;
 import com.crawl.entity.User;
+import com.crawl.parser.DetailPageParser;
+import com.crawl.parser.zhihu.ZhiHuNewUserIndexDetailPageParser;
 import com.crawl.parser.zhihu.ZhiHuUserFollowingListPageParser;
 import com.crawl.parser.zhihu.ZhiHuUserIndexDetailPageParser;
 import com.crawl.util.Md5Util;
@@ -42,7 +44,16 @@ public class ParseTask implements Runnable {
             /**
              *  包含title标签,用户主页
              */
-            User u = ZhiHuUserIndexDetailPageParser.getInstance().parse(page);
+            DetailPageParser parser = null;
+            if (doc.select("div[class=UserCover]").size() > 0){
+                //新版主页
+                parser = ZhiHuNewUserIndexDetailPageParser.getInstance();
+            }
+            else {
+             //旧版主页
+                parser = ZhiHuUserIndexDetailPageParser.getInstance();
+            }
+            User u = parser.parse(page);
             if(Config.dbEnable){
                 ZhiHuDAO.insetToDB(u);
             }
