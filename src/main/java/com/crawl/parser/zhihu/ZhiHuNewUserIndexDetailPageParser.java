@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 /**
  * Created by wy on 11/28/2016.
- * https://www.zhihu.com/people/wo-yan-chen-mo/followees
+ * https://www.zhihu.com/people/wo-yan-chen-mo/following
  * 新版followess页面解析出用户详细信息
  */
 public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
@@ -35,7 +35,7 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
         user.setEducation(getUserInfo(doc, "education"));//教育
         // TODO: 11/28/2016
         String s = doc.select("[data-state]").first().toString();
-        user.setHashId(getHashId(s));
+        user.setHashId(getHashId(page.getUrl(), s));
         return user;
     }
     private String getUserInfo(Document doc, String infoName){
@@ -50,9 +50,17 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
         }
         return "";
     }
-    private String getHashId(String dataState){
-        Pattern pattern = Pattern.compile(",&quot;id&quot;:&quot;([a-z0-9]{32})&quot;,&quot;");
-        Matcher matcher = pattern.matcher(dataState);
+    //解析出当前用户的hashId
+    private String getHashId(String url, String dataState){
+        Pattern pattern = Pattern.compile("https://www.zhihu.com/people/(.*)/(following|followees)");
+        Matcher matcher = pattern.matcher(url);
+        String useId = null;
+        if(matcher.find()){
+            useId = matcher.group(1);
+        }
+        pattern = Pattern.compile("&quot;" + useId + "&quot;.*&quot;id&quot;:&quot;([a-z0-9]{32}).*&quot;isActive&quot;:1");
+        matcher = pattern.matcher(dataState);
+//        System.out.println(matcher.start());
         if(matcher.find()){
             String hashId = matcher.group(1);
             return hashId;

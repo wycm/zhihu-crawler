@@ -15,7 +15,7 @@ public class ZhiHuNewUserIndexDetailPageParserTest extends AbstractUserIndexDeta
         /**
          * 新版本页面
          */
-        String url = "https://www.zhihu.com/people/excited-vczh/answers";
+        String url = "https://www.zhihu.com/people/cheng-yi-nan/following";
         DetailPageParser parser = ZhiHuNewUserIndexDetailPageParser.getInstance();
         super.testParse(url, parser);
     }
