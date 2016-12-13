@@ -1,14 +1,19 @@
 package com.crawl.parser.zhihu;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.crawl.entity.Page;
 import com.crawl.entity.User;
 import com.crawl.parser.DetailPageParser;
+import com.jayway.jsonpath.JsonPath;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
-
+import com.alibaba.fastjson.JSONObject;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -37,7 +42,7 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
         user.setUrl("https://www.zhihu.com/people/" + userId);//用户主页
         user.setAgrees(getAnswersInfo(page.getHtml(), "获得 ([0-9]+) 次赞同"));//赞同数
         user.setThanks(getAnswersInfo(page.getHtml(), "获得 ([0-9]+) 次感谢"));//感谢数
-        user.setFollowees(Integer.valueOf(doc.select("a[href$=following] [class=Profile-followStatusValue]").first().text()));//关注人数
+//        user.setFollowees(Integer.valueOf(doc.select("a[href$=following] [class=Profile-followStatusValue]").first().text()));//关注人数
         user.setFollowers(Integer.valueOf(doc.select("a[href$=followers] [class=Profile-followStatusValue]").first().text()));//关注者
         user.setAsks(getAnswersInfo(page.getHtml(), "提问<span class=\"Tabs-meta\">([0-9]+)</span>"));//提问数
         user.setAnswers(getAnswersInfo(page.getHtml(), "回答<span class=\"Tabs-meta\">([0-9]+)</span>"));//回答数
@@ -50,7 +55,31 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
         }
         String s = doc.select("[data-state]").first().toString();
         user.setHashId(getHashId(userId, s));
+        getUserByJson(user, userId, doc.select("[data-state]").first().attr("data-state"));
         return user;
+    }
+    private void getUserByJson(User user, String userId, String dataStateJson){
+//        String userStr = JsonPath.parse(dataStateJson).read("$.entities.users." + userId);
+        Object object = JSON.parse(dataStateJson);
+        JSONObject entities = (JSONObject) ((JSONObject)((JSONObject)object).get("entities")).get("users");
+        JSONObject userMap = (JSONObject) ((JSONObject)((JSONObject)((JSONObject)object).get("entities")).get("users")).get(userId);
+        setUserInfoByJsonPth(user, "followees", dataStateJson, "$.entities.users." + userId + ".followingCount");
+//        user.setFollowees((Integer) map.get("followingCount"));//关注数
+//        user.setAgrees((Integer) map.get("voteupCount"));//赞同数
+//        user.setUsername((String) map.get("name"));//用户名;
+        JSONArray employments = userMap.getJSONArray("employments");
+        if(employments.size() > 0){
+            user.setEmployment(((JSONObject)((JSONObject)employments.get(0)).get("company")).get("name").toString());
+            user.setPosition(((JSONObject)((JSONObject)employments.get(0)).get("job")).get("name").toString());
+        }
+    }
+    private void setUserInfoByJsonPth(User user, String field, String json, String jsonPath){
+        try {
+            Object o = JsonPath.parse(json).read(jsonPath);
+            user.getClass().getDeclaredField(field).set(user, o);
+        } catch (Exception e){
+
+        }
     }
     private void setUserInfo(Document doc, User u, String infoName){
         Element element = doc.select("[class=Icon Icon--" + infoName + "]").first();
