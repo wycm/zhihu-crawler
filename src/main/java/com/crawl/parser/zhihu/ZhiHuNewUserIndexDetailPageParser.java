@@ -63,14 +63,14 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
         Object object = JSON.parse(dataStateJson);
         JSONObject entities = (JSONObject) ((JSONObject)((JSONObject)object).get("entities")).get("users");
         JSONObject userMap = (JSONObject) ((JSONObject)((JSONObject)((JSONObject)object).get("entities")).get("users")).get(userId);
-        setUserInfoByJsonPth(user, "followees", dataStateJson, "$.entities.users." + userId + ".followingCount");
+//        setUserInfoByJsonPth(user, "followees", dataStateJson, "$.entities.users." + userId + ".followingCount");
 //        user.setFollowees((Integer) map.get("followingCount"));//关注数
 //        user.setAgrees((Integer) map.get("voteupCount"));//赞同数
 //        user.setUsername((String) map.get("name"));//用户名;
-        JSONArray employments = userMap.getJSONArray("employments");
-        if(employments.size() > 0){
-            user.setEmployment(((JSONObject)((JSONObject)employments.get(0)).get("company")).get("name").toString());
-            user.setPosition(((JSONObject)((JSONObject)employments.get(0)).get("job")).get("name").toString());
+//        JSONArray employments = userMap.getJSONArray("employments");
+//        if(employments.size() > 0){
+//            user.setEmployment(((JSONObject)((JSONObject)employments.get(0)).get("company")).get("name").toString());
+//            user.setPosition(((JSONObject)((JSONObject)employments.get(0)).get("job")).get("name").toString());
         }
     }
     private void setUserInfoByJsonPth(User user, String field, String json, String jsonPath){
