@@ -45,7 +45,7 @@ public class ParseTask implements Runnable {
              *  包含title标签,用户主页
              */
             DetailPageParser parser = null;
-            if (doc.select("div[class=UserCover]").size() > 0){
+            if (doc.select("div[id=ProfileHeader]").size() > 0){
                 //新版主页
                 parser = ZhiHuNewUserIndexDetailPageParser.getInstance();
             }
