@@ -6,7 +6,7 @@ public class Md5Util {
 	public static String Convert2Md5(String password){
 		MessageDigest md5 = null;  
         try{  
-            md5 = MessageDigest.getInstance("MD5");  
+            md5 = MessageDigest.getInstance("MD5");
         }catch (Exception e){  
             System.out.println(e.toString());  
             e.printStackTrace();  
