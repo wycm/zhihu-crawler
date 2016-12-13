@@ -6,12 +6,15 @@ import com.crawl.entity.Page;
 import com.crawl.entity.User;
 import com.crawl.parser.DetailPageParser;
 import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 import com.alibaba.fastjson.JSONObject;
+
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -42,7 +45,7 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
         user.setUrl("https://www.zhihu.com/people/" + userId);//用户主页
         user.setAgrees(getAnswersInfo(page.getHtml(), "获得 ([0-9]+) 次赞同"));//赞同数
         user.setThanks(getAnswersInfo(page.getHtml(), "获得 ([0-9]+) 次感谢"));//感谢数
-//        user.setFollowees(Integer.valueOf(doc.select("a[href$=following] [class=Profile-followStatusValue]").first().text()));//关注人数
+        user.setFollowees(Integer.valueOf(doc.select("a[href$=following] [class=Profile-followStatusValue]").first().text()));//关注人数
         user.setFollowers(Integer.valueOf(doc.select("a[href$=followers] [class=Profile-followStatusValue]").first().text()));//关注者
         user.setAsks(getAnswersInfo(page.getHtml(), "提问<span class=\"Tabs-meta\">([0-9]+)</span>"));//提问数
         user.setAnswers(getAnswersInfo(page.getHtml(), "回答<span class=\"Tabs-meta\">([0-9]+)</span>"));//回答数
@@ -59,26 +62,32 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
         return user;
     }
     private void getUserByJson(User user, String userId, String dataStateJson){
-//        String userStr = JsonPath.parse(dataStateJson).read("$.entities.users." + userId);
-        Object object = JSON.parse(dataStateJson);
-        JSONObject entities = (JSONObject) ((JSONObject)((JSONObject)object).get("entities")).get("users");
-        JSONObject userMap = (JSONObject) ((JSONObject)((JSONObject)((JSONObject)object).get("entities")).get("users")).get(userId);
-//        setUserInfoByJsonPth(user, "followees", dataStateJson, "$.entities.users." + userId + ".followingCount");
-//        user.setFollowees((Integer) map.get("followingCount"));//关注数
-//        user.setAgrees((Integer) map.get("voteupCount"));//赞同数
-//        user.setUsername((String) map.get("name"));//用户名;
-//        JSONArray employments = userMap.getJSONArray("employments");
-//        if(employments.size() > 0){
-//            user.setEmployment(((JSONObject)((JSONObject)employments.get(0)).get("company")).get("name").toString());
-//            user.setPosition(((JSONObject)((JSONObject)employments.get(0)).get("job")).get("name").toString());
-//        }
+        setUserInfoByJsonPth(user, "followees", dataStateJson, "$.entities.users." + userId + ".followingCount");
+        setUserInfoByJsonPth(user, "location", dataStateJson, "$.entities.users." + userId + ".locations[0].name");
+        setUserInfoByJsonPth(user, "business", dataStateJson, "$.entities.users." + userId + ".business.name");
+        setUserInfoByJsonPth(user, "employment", dataStateJson, "$.entities.users." + userId + ".employments[0].company.name");
+        setUserInfoByJsonPth(user, "position", dataStateJson, "$.entities.users." + userId + ".employments[0].job.name");
+        setUserInfoByJsonPth(user, "education", dataStateJson, "$.entities.users." + userId + ".education[0].school.name");
+        //// TODO: 12/13/2016  
     }
-    private void setUserInfoByJsonPth(User user, String field, String json, String jsonPath){
+
+    /**
+     * 通过jsonPath获取值，并通过反射直接注入到user中
+     * @param user
+     * @param fieldName
+     * @param json
+     * @param jsonPath
+     */
+    private void setUserInfoByJsonPth(User user, String fieldName, String json, String jsonPath){
         try {
             Object o = JsonPath.parse(json).read(jsonPath);
-            user.getClass().getDeclaredField(field).set(user, o);
+            Field field = user.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(user, o);
+        } catch (PathNotFoundException e1) {
+            //no results
         } catch (Exception e){
-
+            e.printStackTrace();
         }
     }
     private void setUserInfo(Document doc, User u, String infoName){
