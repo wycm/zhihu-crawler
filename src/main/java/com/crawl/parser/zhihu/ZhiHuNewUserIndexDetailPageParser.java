@@ -71,7 +71,7 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
 //        if(employments.size() > 0){
 //            user.setEmployment(((JSONObject)((JSONObject)employments.get(0)).get("company")).get("name").toString());
 //            user.setPosition(((JSONObject)((JSONObject)employments.get(0)).get("job")).get("name").toString());
-        }
+//        }
     }
     private void setUserInfoByJsonPth(User user, String field, String json, String jsonPath){
         try {
