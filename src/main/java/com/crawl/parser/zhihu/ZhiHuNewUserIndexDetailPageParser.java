@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 /**
  * Created by wy on 11/28/2016.
  * https://www.zhihu.com/people/wo-yan-chen-mo/following
- * 新版followess页面解析出用户详细信息
+ * 新版following页面解析出用户详细信息
  */
 public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
     private static ZhiHuNewUserIndexDetailPageParser zhiHuNewUserIndexDetailPageParser;
