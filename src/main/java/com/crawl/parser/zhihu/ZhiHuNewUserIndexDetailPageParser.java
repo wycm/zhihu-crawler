@@ -3,12 +3,10 @@ package com.crawl.parser.zhihu;
 import com.crawl.entity.Page;
 import com.crawl.entity.User;
 import com.crawl.parser.DetailPageParser;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.nodes.Node;
-import org.jsoup.nodes.TextNode;
-
 
 import java.lang.reflect.Field;
 import java.util.regex.Matcher;
