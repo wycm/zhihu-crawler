@@ -35,25 +35,26 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
         return user;
     }
     private void getUserByJson(User user, String userId, String dataStateJson){
-        setUserInfoByJsonPth(user, "username", dataStateJson, "$.entities.users." + userId + ".name");//username
-        setUserInfoByJsonPth(user, "hashId", dataStateJson, "$.entities.users." + userId + ".id");//hashId
-        setUserInfoByJsonPth(user, "followees", dataStateJson, "$.entities.users." + userId + ".followingCount");//关注人数
-        setUserInfoByJsonPth(user, "location", dataStateJson, "$.entities.users." + userId + ".locations[0].name");//位置
-        setUserInfoByJsonPth(user, "business", dataStateJson, "$.entities.users." + userId + ".business.name");//行业
-        setUserInfoByJsonPth(user, "employment", dataStateJson, "$.entities.users." + userId + ".employments[0].company.name");//公司
-        setUserInfoByJsonPth(user, "position", dataStateJson, "$.entities.users." + userId + ".employments[0].job.name");//职位
-        setUserInfoByJsonPth(user, "education", dataStateJson, "$.entities.users." + userId + ".education[0].school.name");//学校
-        setUserInfoByJsonPth(user, "answers", dataStateJson, "$.entities.users." + userId + ".answerCount");//回答数
-        setUserInfoByJsonPth(user, "asks", dataStateJson, "$.entities.users." + userId + ".questionCount");//提问数
-        setUserInfoByJsonPth(user, "Posts", dataStateJson, "$.entities.users." + userId + ".articlesCount");//文章数
-        setUserInfoByJsonPth(user, "followers", dataStateJson, "$.entities.users." + userId + ".followerCount");//粉丝数
-        setUserInfoByJsonPth(user, "agrees", dataStateJson, "$.entities.users." + userId + ".voteupCount");//赞同数
-        setUserInfoByJsonPth(user, "thanks", dataStateJson, "$.entities.users." + userId + ".thankedCount");//感谢数
-        setUserInfoByJsonPth(user, "gender", dataStateJson, "$.entities.users." + userId + ".gender");//性别
+        String commonJsonPath = "$.entities.users." + userId;
+        setUserInfoByJsonPth(user, "username", dataStateJson, commonJsonPath + ".name");//username
+        setUserInfoByJsonPth(user, "hashId", dataStateJson, commonJsonPath + ".id");//hashId
+        setUserInfoByJsonPth(user, "followees", dataStateJson, commonJsonPath + ".followingCount");//关注人数
+        setUserInfoByJsonPth(user, "location", dataStateJson, commonJsonPath + ".locations[0].name");//位置
+        setUserInfoByJsonPth(user, "business", dataStateJson, commonJsonPath + ".business.name");//行业
+        setUserInfoByJsonPth(user, "employment", dataStateJson, commonJsonPath + ".employments[0].company.name");//公司
+        setUserInfoByJsonPth(user, "position", dataStateJson, commonJsonPath + ".employments[0].job.name");//职位
+        setUserInfoByJsonPth(user, "education", dataStateJson, commonJsonPath + ".education[0].school.name");//学校
+        setUserInfoByJsonPth(user, "answers", dataStateJson, commonJsonPath + ".answerCount");//回答数
+        setUserInfoByJsonPth(user, "asks", dataStateJson, commonJsonPath + ".questionCount");//提问数
+        setUserInfoByJsonPth(user, "posts", dataStateJson, commonJsonPath + ".articlesCount");//文章数
+        setUserInfoByJsonPth(user, "followers", dataStateJson, commonJsonPath + ".followerCount");//粉丝数
+        setUserInfoByJsonPth(user, "agrees", dataStateJson, commonJsonPath + ".voteupCount");//赞同数
+        setUserInfoByJsonPth(user, "thanks", dataStateJson, commonJsonPath + ".thankedCount");//感谢数
+//        setUserInfoByJsonPth(user, "sex", dataStateJson, commonJsonPath + ".gender");//性别
     }
 
     /**
-     * 通过jsonPath获取值，并通过反射直接注入到user中
+     * jsonPath获取值，并通过反射直接注入到user中
      * @param user
      * @param fieldName
      * @param json
