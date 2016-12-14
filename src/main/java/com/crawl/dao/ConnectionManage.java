@@ -49,7 +49,7 @@ public class ConnectionManage{
 		try{
 			Class.forName("org.gjt.mm.mysql.Driver") ;//加载驱动
 			con = DriverManager.getConnection(url,user,password);//建立mysql的连接
-			logger.info("success!");
+			logger.debug("success!");
 		}
 		catch(MySQLSyntaxErrorException e){
 			logger.error("数据库不存在..请先手动创建创建数据库:" + dbName);

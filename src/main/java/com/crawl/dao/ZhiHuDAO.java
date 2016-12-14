@@ -88,7 +88,7 @@ public class ZhiHuDAO {
         Connection cn = ConnectionManage.getConnection();
         try {
             if(isContain(cn,isContainSql)){
-                logger.debug("数据库已经存在该用户---" + u.getUrl());
+                logger.debug("数据库已经存在该用户---" + u.getUsername());
                 return false;
             }
             String colum = "location,business,sex,employment,username,url,agrees,thanks,asks," +
@@ -115,6 +115,7 @@ public class ZhiHuDAO {
             pstmt.executeUpdate();
             pstmt.close();
             cn.close();
+            logger.info("user插入数据库成功---" + u.getUsername());
         } catch (SQLException e) {
             e.printStackTrace();
         }
