@@ -55,7 +55,7 @@ public class ParseTask implements Runnable {
             }
             User u = parser.parse(page);
             if(Config.dbEnable){
-                ZhiHuDAO.insetToDB(u);
+                ZhiHuDAO.insertToDB(u);
             }
             parseUserCount.incrementAndGet();
             logger.info("解析用户成功:" + u.toString());

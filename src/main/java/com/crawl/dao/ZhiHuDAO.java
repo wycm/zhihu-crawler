@@ -83,12 +83,12 @@ public class ZhiHuDAO {
      * @param u
      * @throws SQLException
      */
-    public synchronized static boolean insetToDB(User u){
+    public synchronized static boolean insertToDB(User u){
         String isContainSql = "select count(*) from user WHERE url='" + u.getUrl() + "'";
         Connection cn = ConnectionManage.getConnection();
         try {
             if(isContain(cn,isContainSql)){
-                logger.info("数据库已经存在该用户---" + u.getUrl() + "---当前已获取用户数量为:");
+                logger.debug("数据库已经存在该用户---" + u.getUrl());
                 return false;
             }
             String colum = "location,business,sex,employment,username,url,agrees,thanks,asks," +
@@ -132,7 +132,7 @@ public class ZhiHuDAO {
         Connection cn = ConnectionManage.getConnection();
         try {
             if(isContain(cn,isContainSql)){
-                logger.info("数据库已经存在该url---" + md5Href);
+                logger.debug("数据库已经存在该url---" + md5Href);
                 return false;
             }
             String sql = "insert into href (href) values( ?)";
@@ -145,7 +145,7 @@ public class ZhiHuDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        logger.info("url插入成功---");
+        logger.debug("url插入成功---");
         return true;
     }
 
