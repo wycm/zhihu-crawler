@@ -35,6 +35,7 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
         return user;
     }
     private void getUserByJson(User user, String userId, String dataStateJson){
+        userId = "['" + userId + "']";//转义
         String commonJsonPath = "$.entities.users." + userId;
         setUserInfoByJsonPth(user, "username", dataStateJson, commonJsonPath + ".name");//username
         setUserInfoByJsonPth(user, "hashId", dataStateJson, commonJsonPath + ".id");//hashId
@@ -43,14 +44,20 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
         setUserInfoByJsonPth(user, "business", dataStateJson, commonJsonPath + ".business.name");//行业
         setUserInfoByJsonPth(user, "employment", dataStateJson, commonJsonPath + ".employments[0].company.name");//公司
         setUserInfoByJsonPth(user, "position", dataStateJson, commonJsonPath + ".employments[0].job.name");//职位
-        setUserInfoByJsonPth(user, "education", dataStateJson, commonJsonPath + ".education[0].school.name");//学校
+        setUserInfoByJsonPth(user, "education", dataStateJson, commonJsonPath + ".educations[0].school.name");//学校
         setUserInfoByJsonPth(user, "answers", dataStateJson, commonJsonPath + ".answerCount");//回答数
         setUserInfoByJsonPth(user, "asks", dataStateJson, commonJsonPath + ".questionCount");//提问数
         setUserInfoByJsonPth(user, "posts", dataStateJson, commonJsonPath + ".articlesCount");//文章数
         setUserInfoByJsonPth(user, "followers", dataStateJson, commonJsonPath + ".followerCount");//粉丝数
         setUserInfoByJsonPth(user, "agrees", dataStateJson, commonJsonPath + ".voteupCount");//赞同数
         setUserInfoByJsonPth(user, "thanks", dataStateJson, commonJsonPath + ".thankedCount");//感谢数
-//        setUserInfoByJsonPth(user, "sex", dataStateJson, commonJsonPath + ".gender");//性别
+        Integer gender = JsonPath.parse(dataStateJson).read(commonJsonPath + ".gender");
+        if (gender != null && gender == 1){
+            user.setSex("male");
+        }
+        else if(gender != null && gender == 0){
+            user.setSex("female");
+        }
     }
 
     /**
