@@ -9,6 +9,7 @@ import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
 
+
 import java.lang.reflect.Field;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -31,76 +32,47 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
         Document doc = Jsoup.parse(page.getHtml());
         User user = new User();
         String userId = getUserId(page.getUrl());
-        user.setUsername(doc.select("span[class=ProfileHeader-name]").first().text());//用户名
-        setUserInfo(doc, user, "location");//位置&行业
-        setUserInfo(doc, user, "company");//公司&职位
-        setUserInfo(doc, user, "education");//教育
         user.setUrl("https://www.zhihu.com/people/" + userId);//用户主页
-        user.setAgrees(getAnswersInfo(page.getHtml(), "获得 ([0-9]+) 次赞同"));//赞同数
-        user.setThanks(getAnswersInfo(page.getHtml(), "获得 ([0-9]+) 次感谢"));//感谢数
-        user.setFollowees(Integer.valueOf(doc.select("a[href$=following] [class=Profile-followStatusValue]").first().text()));//关注人数
-        user.setFollowers(Integer.valueOf(doc.select("a[href$=followers] [class=Profile-followStatusValue]").first().text()));//关注者
-        user.setAsks(getAnswersInfo(page.getHtml(), "提问<span class=\"Tabs-meta\">([0-9]+)</span>"));//提问数
-        user.setAnswers(getAnswersInfo(page.getHtml(), "回答<span class=\"Tabs-meta\">([0-9]+)</span>"));//回答数
-        user.setPosts(getAnswersInfo(page.getHtml(), "文章<span class=\"Tabs-meta\">([0-9]+)</span>"));//文章数
-        if(doc.select("[class=Icon Icon--male]").size() > 0){
-            user.setSex("male");
-        }
-        else if (doc.select("[class=Icon Icon--male]").size() > 0){
-            user.setSex("female");
-        }
-        String s = doc.select("[data-state]").first().toString();
-        user.setHashId(getHashId(userId, s));
+        getUserByJson(user, userId, doc.select("[data-state]").first().attr("data-state"));
         return user;
     }
-
-    private void setUserInfo(Document doc, User u, String infoName){
-        Element element = doc.select("[class=Icon Icon--" + infoName + "]").first();
-        if(element == null){
-            return ;
-        }
-        int i = element.parent().siblingIndex();
-        Node node = element.parent().parent().childNode(i + 1);
-        if(node instanceof TextNode){
-            if (infoName.equals("location")){
-                u.setLocation(node.toString());
-                int childNodeSize = element.parent().parent().childNodeSize();
-                if (childNodeSize <= (i + 1 + 2)){
-                    return;
-                }
-                Node businessNode = element.parent().parent().childNode(i + 1 + 2);
-                if(businessNode instanceof TextNode){
-                    u.setBusiness(businessNode.toString());
-                }
-            }
-            else if(infoName.equals("company")){
-                u.setEmployment(node.toString());
-                int childNodeSize = element.parent().parent().childNodeSize();
-                if (childNodeSize <= (i + 1 + 2)){
-                    return;
-                }
-                Node positionNode = element.parent().parent().childNode(i + 1 + 2);
-                if(positionNode instanceof TextNode){
-                    u.setPosition(positionNode.toString());
-                }
-            }
-            else if(infoName.equals("education")){
-                u.setEducation(node.toString());
-            }
-
-        }
+    private void getUserByJson(User user, String userId, String dataStateJson){
+        String commonJsonPath = "$.entities.users." + userId;
+        setUserInfoByJsonPth(user, "username", dataStateJson, commonJsonPath + ".name");//username
+        setUserInfoByJsonPth(user, "hashId", dataStateJson, commonJsonPath + ".id");//hashId
+        setUserInfoByJsonPth(user, "followees", dataStateJson, commonJsonPath + ".followingCount");//关注人数
+        setUserInfoByJsonPth(user, "location", dataStateJson, commonJsonPath + ".locations[0].name");//位置
+        setUserInfoByJsonPth(user, "business", dataStateJson, commonJsonPath + ".business.name");//行业
+        setUserInfoByJsonPth(user, "employment", dataStateJson, commonJsonPath + ".employments[0].company.name");//公司
+        setUserInfoByJsonPth(user, "position", dataStateJson, commonJsonPath + ".employments[0].job.name");//职位
+        setUserInfoByJsonPth(user, "education", dataStateJson, commonJsonPath + ".education[0].school.name");//学校
+        setUserInfoByJsonPth(user, "answers", dataStateJson, commonJsonPath + ".answerCount");//回答数
+        setUserInfoByJsonPth(user, "asks", dataStateJson, commonJsonPath + ".questionCount");//提问数
+        setUserInfoByJsonPth(user, "posts", dataStateJson, commonJsonPath + ".articlesCount");//文章数
+        setUserInfoByJsonPth(user, "followers", dataStateJson, commonJsonPath + ".followerCount");//粉丝数
+        setUserInfoByJsonPth(user, "agrees", dataStateJson, commonJsonPath + ".voteupCount");//赞同数
+        setUserInfoByJsonPth(user, "thanks", dataStateJson, commonJsonPath + ".thankedCount");//感谢数
+//        setUserInfoByJsonPth(user, "sex", dataStateJson, commonJsonPath + ".gender");//性别
     }
-    //解析出当前用户的hashId
-    private String getHashId(String userId, String dataState){
 
-        Pattern pattern = Pattern.compile("&quot;" + userId + "&quot;.*&quot;id&quot;:&quot;([a-z0-9]{32}).*&quot;isActive&quot;:1");
-        Matcher matcher = pattern.matcher(dataState);
-//        System.out.println(matcher.start());
-        if(matcher.find()){
-            String hashId = matcher.group(1);
-            return hashId;
+    /**
+     * jsonPath获取值，并通过反射直接注入到user中
+     * @param user
+     * @param fieldName
+     * @param json
+     * @param jsonPath
+     */
+    private void setUserInfoByJsonPth(User user, String fieldName, String json, String jsonPath){
+        try {
+            Object o = JsonPath.parse(json).read(jsonPath);
+            Field field = user.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(user, o);
+        } catch (PathNotFoundException e1) {
+            //no results
+        } catch (Exception e){
+            e.printStackTrace();
         }
-        throw new RuntimeException("not find HashId");
     }
 
     /**
@@ -117,19 +89,5 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
             return userId;
         }
         throw new RuntimeException("not parse userId");
-    }
-
-    /**
-     * 解析用户答案相关信息
-     * @return
-     */
-    private int getAnswersInfo(String  html, String patternStr){
-        Pattern pattern = Pattern.compile(patternStr);
-        Matcher matcher = pattern.matcher(html);
-        if(matcher.find()){
-            String s = matcher.group(1);
-            return Integer.valueOf(s);
-        }
-        return 0;
     }
 }
