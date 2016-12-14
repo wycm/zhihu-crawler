@@ -54,11 +54,11 @@ public class ParseTask implements Runnable {
                 parser = ZhiHuUserIndexDetailPageParser.getInstance();
             }
             User u = parser.parse(page);
+            logger.info("解析用户成功:" + u.toString());
             if(Config.dbEnable){
                 ZhiHuDAO.insertToDB(u);
             }
             parseUserCount.incrementAndGet();
-            logger.info("解析用户成功:" + u.toString());
             for(int i = 0;i < u.getFollowees()/20 + 1;i++) {
                 /**
                  * 当下载网页队列小于100时才获取该用户关注用户
