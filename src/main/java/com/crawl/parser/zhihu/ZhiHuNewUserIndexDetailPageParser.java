@@ -1,14 +1,22 @@
 package com.crawl.parser.zhihu;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import com.crawl.entity.Page;
 import com.crawl.entity.User;
 import com.crawl.parser.DetailPageParser;
+import com.jayway.jsonpath.JsonPath;
+import com.jayway.jsonpath.PathNotFoundException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
+import com.alibaba.fastjson.JSONObject;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -50,7 +58,37 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
         }
         String s = doc.select("[data-state]").first().toString();
         user.setHashId(getHashId(userId, s));
+        getUserByJson(user, userId, doc.select("[data-state]").first().attr("data-state"));
         return user;
+    }
+    private void getUserByJson(User user, String userId, String dataStateJson){
+        setUserInfoByJsonPth(user, "followees", dataStateJson, "$.entities.users." + userId + ".followingCount");
+        setUserInfoByJsonPth(user, "location", dataStateJson, "$.entities.users." + userId + ".locations[0].name");
+        setUserInfoByJsonPth(user, "business", dataStateJson, "$.entities.users." + userId + ".business.name");
+        setUserInfoByJsonPth(user, "employment", dataStateJson, "$.entities.users." + userId + ".employments[0].company.name");
+        setUserInfoByJsonPth(user, "position", dataStateJson, "$.entities.users." + userId + ".employments[0].job.name");
+        setUserInfoByJsonPth(user, "education", dataStateJson, "$.entities.users." + userId + ".education[0].school.name");
+        //// TODO: 12/13/2016  
+    }
+
+    /**
+     * 通过jsonPath获取值，并通过反射直接注入到user中
+     * @param user
+     * @param fieldName
+     * @param json
+     * @param jsonPath
+     */
+    private void setUserInfoByJsonPth(User user, String fieldName, String json, String jsonPath){
+        try {
+            Object o = JsonPath.parse(json).read(jsonPath);
+            Field field = user.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(user, o);
+        } catch (PathNotFoundException e1) {
+            //no results
+        } catch (Exception e){
+            e.printStackTrace();
+        }
     }
     private void setUserInfo(Document doc, User u, String infoName){
         Element element = doc.select("[class=Icon Icon--" + infoName + "]").first();
