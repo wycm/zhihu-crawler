@@ -1,7 +1,5 @@
 package com.crawl.parser.zhihu;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.crawl.entity.Page;
 import com.crawl.entity.User;
 import com.crawl.parser.DetailPageParser;
@@ -12,7 +10,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.nodes.Node;
 import org.jsoup.nodes.TextNode;
-import com.alibaba.fastjson.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
