@@ -1,5 +1,6 @@
 package com.crawl.util;
 
+import com.crawl.httpclient.HttpClient;
 import org.apache.commons.io.IOUtils;
 import org.apache.http.*;
 import org.apache.http.client.CookieStore;
@@ -28,6 +29,8 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.log4j.Logger;
 
@@ -48,7 +51,7 @@ import java.util.Map;
 public class HttpClientUtil {
 	private static Logger logger = SimpleLogger.getSimpleLogger(HttpClientUtil.class);
 	private static CloseableHttpClient httpClient;
-	private final static HttpClientContext httpClientContext = HttpClientContext.create();
+	private final static BasicHttpContext basicHttpContext = new BasicHttpContext();
 	private final static String userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36";
 	private static HttpHost proxy;
 	private static RequestConfig requestConfig;
@@ -153,7 +156,7 @@ public class HttpClientUtil {
 	}
 	private static CloseableHttpResponse getResponse(HttpRequestBase request) throws IOException {
 		request.setConfig(requestConfig);
-		return httpClient.execute(request, httpClientContext);
+		return httpClient.execute(request, basicHttpContext);
 	}
 	public static CloseableHttpResponse getResponse(String url) throws IOException {
 		HttpGet request = new HttpGet(url);
@@ -336,8 +339,8 @@ public class HttpClientUtil {
 		}
 		request.setEntity(entity);
 	}
-	public static HttpClientContext getHttpClientContext(){
-		return httpClientContext;
+	public static HttpContext getHttpContext(){
+		return basicHttpContext;
 	}
 	public static void main(String args []){
 		String s = "{    \"r\": 1,    \"errcode\": 100000,        \"data\": {\"account\":\"\\u5e10\\u53f7\\u6216\\u5bc6\\u7801\\u9519\\u8bef\"},            \"msg\": \"\\u8be5\\u624b\\u673a\\u53f7\\u5c1a\\u672a\\u6ce8\\u518c\\u77e5\\u4e4e";

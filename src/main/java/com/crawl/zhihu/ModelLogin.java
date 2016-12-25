@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HttpContext;
 import org.apache.log4j.Logger;
 import org.json.JSONObject;
 
@@ -65,7 +66,7 @@ public class ModelLogin {
             /**
              * 序列化Cookies
              */
-            HttpClientUtil.serializeObject(HttpClientUtil.getHttpClientContext().getCookieStore(), Config.cookiePath);
+            HttpClientUtil.serializeObject(HttpClientUtil.getHttpContext().getAttribute(HttpClientContext.COOKIE_STORE), Config.cookiePath);
             return true;
         }else{
             logger.info("登录知乎失败");

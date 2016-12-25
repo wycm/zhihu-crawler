@@ -28,8 +28,8 @@ public class ZhiHuUserFollowingListPageParser extends ListPageParser{
         Document doc = Jsoup.parse(page.getHtml());
         Elements es = doc.select(".zm-list-content-medium .zm-list-content-title a");
         for(Element temp:es){
-//            String userIndex = temp.attr("href") + "/followees";
-            String userIndex = temp.attr("href") + "/following";
+            String userIndex = temp.attr("href") + "/followees";
+//            String userIndex = temp.attr("href") + "/following";
             list.add(userIndex);
         }
         return list;
