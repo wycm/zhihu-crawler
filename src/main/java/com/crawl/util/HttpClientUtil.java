@@ -11,45 +11,119 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.config.ConnectionConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
+import org.apache.http.config.SocketConfig;
 import org.apache.http.conn.HttpHostConnectException;
+import org.apache.http.conn.socket.ConnectionSocketFactory;
+import org.apache.http.conn.socket.PlainConnectionSocketFactory;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.cookie.Cookie;
-import org.apache.http.cookie.CookieSpecProvider;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.impl.cookie.BestMatchSpecFactory;
-import org.apache.http.impl.cookie.BrowserCompatSpecFactory;
+import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
+import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.log4j.Logger;
 
+import javax.net.ssl.SSLContext;
 import java.io.*;
+import java.nio.charset.CodingErrorAction;
+import java.security.KeyStore;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 
 /**
  * HttpClient工具类
  */
 public class HttpClientUtil {
 	private static Logger logger = SimpleLogger.getSimpleLogger(HttpClientUtil.class);
+	private static CloseableHttpClient httpClient;
+	private final static HttpClientContext httpClientContext = HttpClientContext.create();
+	private final static String userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36";
+	private static HttpHost proxy;
+	private static RequestConfig requestConfig;
+
+	static{
+		init();
+	}
+	private static void init() {
+        try {
+            SSLContext sslContext =
+                    SSLContexts.custom()
+                            .loadTrustMaterial(KeyStore.getInstance(KeyStore.getDefaultType()), new TrustStrategy() {
+                                @Override
+                                public boolean isTrusted(X509Certificate[] chain, String authType)
+                                        throws CertificateException {
+                                    return true;
+                                }
+                            }).build();
+            SSLConnectionSocketFactory sslSFactory =
+                    new SSLConnectionSocketFactory(sslContext);
+            Registry<ConnectionSocketFactory> socketFactoryRegistry =
+                    RegistryBuilder.<ConnectionSocketFactory>create()
+                            .register("http", PlainConnectionSocketFactory.INSTANCE).register("https", sslSFactory)
+                            .build();
+
+            PoolingHttpClientConnectionManager connManager =
+                    new PoolingHttpClientConnectionManager(socketFactoryRegistry);
+
+            SocketConfig socketConfig = SocketConfig.custom().setTcpNoDelay(true).build();
+            connManager.setDefaultSocketConfig(socketConfig);
+
+            ConnectionConfig connectionConfig =
+                    ConnectionConfig.custom().setMalformedInputAction(CodingErrorAction.IGNORE)
+                            .setUnmappableInputAction(CodingErrorAction.IGNORE).setCharset(Consts.UTF_8).build();
+            connManager.setDefaultConnectionConfig(connectionConfig);
+            connManager.setMaxTotal(300);
+            connManager.setDefaultMaxPerRoute(100);
+            HttpClientBuilder httpClientBuilder =
+                    HttpClients.custom().setConnectionManager(connManager)
+                            .setDefaultCookieStore(new BasicCookieStore()).setUserAgent(userAgent);
+            if (proxy != null) {
+                httpClientBuilder.setRoutePlanner(new DefaultProxyRoutePlanner(proxy)).build();
+            }
+            httpClient = httpClientBuilder.build();
+
+            requestConfig = RequestConfig.custom().setSocketTimeout(10000).
+					setConnectTimeout(10000).
+					setConnectionRequestTimeout(10000).
+					setCookieSpec(CookieSpecs.STANDARD).
+					build();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+        }
+    }
+
+	public static String getWebPage(String url){
+		HttpGet request = new HttpGet(url);
+		return getWebPage(request, "utf-8", false);
+	}
+	public static String postRequest(String postUrl, Map<String, String> params){
+		HttpPost post = new HttpPost(postUrl);
+		setHttpPostParams(post, params);
+		return getWebPage(post, "utf-8", false);
+	}
 	/**
-	 *
-	 * @param httpClient HttpClient客户端
-	 * @param context 上下文
-	 * @param request 请求
 	 * @param encoding 字符编码
 	 * @param isPrintConsole 是否打印到控制台
      * @return 网页内容
      */
-	public static String getWebPage(CloseableHttpClient httpClient
-			, HttpClientContext context
-			, HttpRequestBase request
+	public static String getWebPage(HttpRequestBase request
 			, String encoding
 			, boolean isPrintConsole){
 		CloseableHttpResponse response = null;
 		try {
-			response = httpClient.execute(request,context);
+			response = getResponse(request);
 		} catch (HttpHostConnectException e){
 			e.printStackTrace();
 			logger.error("HttpHostConnectException",e);
@@ -76,6 +150,14 @@ public class HttpClientUtil {
 		}
 		request.releaseConnection();
 		return webPage.toString();
+	}
+	private static CloseableHttpResponse getResponse(HttpRequestBase request) throws IOException {
+		request.setConfig(requestConfig);
+		return httpClient.execute(request, httpClientContext);
+	}
+	public static CloseableHttpResponse getResponse(String url) throws IOException {
+		HttpGet request = new HttpGet(url);
+		return getResponse(request);
 	}
 	/**
 	 * 序列化对象
@@ -105,7 +187,7 @@ public class HttpClientUtil {
 	 */
 	public static Object deserializeMyHttpClient(String path) throws NullPointerException, FileNotFoundException {
 //		InputStream fis = HttpClientUtil.class.getResourceAsStream(name);
-        File file = new File(path);
+		File file = new File(path);
 		InputStream fis = new FileInputStream(file);
 		ObjectInputStream ois = null;
 		Object object = null;
@@ -121,35 +203,7 @@ public class HttpClientUtil {
 		}
 		return object;
 	}
-	/**
-	 * 设置Cookies策略
-	 * @return CloseableHttpClient
-	 */
-	public static CloseableHttpClient getMyHttpClient(){
-		CloseableHttpClient httpClient = null;
-		RequestConfig globalConfig = RequestConfig.custom()
-				.setCookieSpec(CookieSpecs.BROWSER_COMPATIBILITY)
-				.build();
-		httpClient = HttpClients.custom()
-				.setDefaultRequestConfig(globalConfig)
-				.build();
-		return httpClient;
-	}
-	/**
-	 * 设置上下文
-	 * @return HttpClientContext
-	 */
-	public static HttpClientContext getMyHttpClientContext(){
-		HttpClientContext context = null;
-		context = HttpClientContext.create();
-		Registry<CookieSpecProvider> registry = RegistryBuilder
-				.<CookieSpecProvider> create()
-				.register(CookieSpecs.BEST_MATCH, new BestMatchSpecFactory())
-				.register(CookieSpecs.BROWSER_COMPATIBILITY,
-						new BrowserCompatSpecFactory()).build();
-		context.setCookieSpecRegistry(registry);
-		return context;
-	}
+
 	/**
 	 * 下载图片
 	 * @param fileURL 文件地址
@@ -157,20 +211,16 @@ public class HttpClientUtil {
 	 * @param saveFileName 文件名，包括后缀名
 	 * @param isReplaceFile 若存在文件时，是否还需要下载文件
 	 */
-	public static void downloadFile(CloseableHttpClient httpClient
-			, HttpClientContext context
-			, String fileURL
+	public static void downloadFile(String fileURL
 			, String path
 			, String saveFileName
 			, Boolean isReplaceFile){
 		try{
-			HttpGet request = new HttpGet(fileURL);
-			CloseableHttpResponse response = httpClient.execute(request,context);
+			CloseableHttpResponse response = getResponse(fileURL);
 			logger.info("status:" + response.getStatusLine().getStatusCode());
 			File file =new File(path);
 			//如果文件夹不存在则创建
 			if  (!file .exists()  && !file .isDirectory()){
-				//logger.info("//不存在");
 				file.mkdirs();
 			} else{
 				logger.info("//目录存在");
@@ -195,7 +245,6 @@ public class HttpClientUtil {
 					is.close();
 					os.close();
 					logger.info(fileURL + "--文件成功下载至" + path + saveFileName);
-
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -204,10 +253,9 @@ public class HttpClientUtil {
 				logger.info(path);
 				logger.info("该文件存在！");
 			}
-			request.releaseConnection();
+			response.close();
 		} catch(IllegalArgumentException e){
 			logger.info("连接超时...");
-
 		} catch(Exception e1){
 			e1.printStackTrace();
 		}
@@ -231,13 +279,6 @@ public class HttpClientUtil {
 				);
 			}
 		}
-	}
-	public static void getAllHeaders(Header [] headers){
-		logger.info("------标头开始------");
-		for(int i = 0;i < headers.length;i++){
-			logger.info(headers[i]);
-		}
-		logger.info("------标头结束------");
 	}
 	/**
 	 * InputStream转换为String
@@ -282,13 +323,21 @@ public class HttpClientUtil {
 	 * @param request
 	 * @param params
      */
-	public static void setHttpPostParams(HttpPost request,Map<String,String> params) throws UnsupportedEncodingException {
+	public static void setHttpPostParams(HttpPost request,Map<String,String> params){
 		List<NameValuePair> formParams = new ArrayList<NameValuePair>();
 		for (String key : params.keySet()) {
 			formParams.add(new BasicNameValuePair(key,params.get(key)));
 		}
-		UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formParams, "utf-8");
+		UrlEncodedFormEntity entity = null;
+		try {
+			entity = new UrlEncodedFormEntity(formParams, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		request.setEntity(entity);
+	}
+	public static HttpClientContext getHttpClientContext(){
+		return httpClientContext;
 	}
 	public static void main(String args []){
 		String s = "{    \"r\": 1,    \"errcode\": 100000,        \"data\": {\"account\":\"\\u5e10\\u53f7\\u6216\\u5bc6\\u7801\\u9519\\u8bef\"},            \"msg\": \"\\u8be5\\u624b\\u673a\\u53f7\\u5c1a\\u672a\\u6ce8\\u518c\\u77e5\\u4e4e";

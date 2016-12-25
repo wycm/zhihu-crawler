@@ -15,38 +15,17 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLEncoder;
 
 /**
  * Created by yangwang on 16-8-19.
  */
 public abstract class HttpClient {
     private Logger logger = SimpleLogger.getSimpleLogger(HttpClient.class);
-    private static HttpClient httpClient;
-    protected CloseableHttpClient closeableHttpClient;
-    protected HttpClientContext httpClientContext;
-    private CloseableHttpResponse closeableHttpResponse;
-    protected HttpClient(){
-        this.closeableHttpClient = HttpClientUtil.getMyHttpClient();
-        this.httpClientContext = HttpClientUtil.getMyHttpClientContext();
-    }
-    private CloseableHttpResponse getResponse(HttpRequestBase request){
-        try {
-            closeableHttpResponse = closeableHttpClient.execute(request, httpClientContext);
-            return closeableHttpResponse;
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
     public InputStream getWebPageInputStream(String url){
-        HttpGet httpGet = new HttpGet(url);
-        return getWebPageInputStream(httpGet);
-    }
-
-    public InputStream getWebPageInputStream(HttpRequestBase request){
         try {
-            HttpEntity httpEntity = getResponse(request).getEntity();
-            return httpEntity.getContent();
+            CloseableHttpResponse response = HttpClientUtil.getResponse(url);
+            return response.getEntity().getContent();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -64,13 +43,15 @@ public abstract class HttpClient {
         return null;
     }
     public Page getWebPage(String url){
-        return getWebPag(new HttpGet(url));
-    }
-    public Page getWebPag(HttpRequestBase request){
         Page page = new Page();
-        CloseableHttpResponse response = getResponse(request);
+        CloseableHttpResponse response = null;
+        try {
+            response = HttpClientUtil.getResponse(url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         page.setStatusCode(response.getStatusLine().getStatusCode());
-        page.setUrl(request.getURI().toString());
+        page.setUrl(url);
         try {
             if(page.getStatusCode() == 200){
                 page.setHtml(IOUtils.toString(response.getEntity().getContent()));
@@ -78,7 +59,11 @@ public abstract class HttpClient {
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            request.releaseConnection();
+            try {
+                response.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return page;
     }
@@ -89,20 +74,12 @@ public abstract class HttpClient {
     public boolean deserializeCookieStore(String path){
         try {
             CookieStore cookieStore = (CookieStore) HttpClientUtil.deserializeMyHttpClient(path);
-            httpClientContext.setCookieStore(cookieStore);
+            HttpClientUtil.getHttpClientContext().setCookieStore(cookieStore);
         } catch (Exception e){
             logger.warn("反序列化Cookie失败,没有找到Cookie文件");
             return false;
         }
         return true;
     }
-    public CloseableHttpClient getCloseableHttpClient() {
-        return closeableHttpClient;
-    }
-
-    public HttpClientContext getHttpClientContext() {
-        return httpClientContext;
-    }
-
     public abstract void initHttpClient();
 }
