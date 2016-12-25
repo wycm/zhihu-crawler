@@ -20,8 +20,6 @@ public class DownloadTask implements Runnable{
 		this.url = url;
 	}
 	public void run(){
-		CloseableHttpResponse response = null;
-		CloseableHttpClient hc = zhiHuHttpClient.getCloseableHttpClient();
 		try {
 			Page page = zhiHuHttpClient.getWebPage(url);
 			int status = page.getStatusCode();
