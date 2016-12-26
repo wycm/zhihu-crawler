@@ -7,6 +7,9 @@ import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.log4j.Logger;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
 import java.util.*;
 
 
@@ -30,13 +33,19 @@ public class ModelLogin {
      * @return
      */
     public boolean login(String emailOrPhoneNum, String pwd){
-        String yzm = null;
         String loginState = null;
-//        HttpGet getRequest = new HttpGet(INDEX_URL);
-//        HttpClientUtil.getWebPage(getRequest, "utf-8", false);
         Map<String, String> postParams = new HashMap<>();
-//        yzm = yzm(YZM_URL);//肉眼识别验证码
-        postParams.put("captcha", yzm);
+        String resStr = HttpClientUtil.getWebPage(INDEX_URL + "/#signin");
+        Document document = Jsoup.parse(resStr);
+        if(document.select("input[id=captcha]").size() > 0){
+            //带有登录验证码
+            String yzm = null;
+            yzm = yzm(YZM_URL);//肉眼识别验证码
+            postParams.put("captcha", yzm);
+        }
+        else {
+            postParams.put("captcha", "abcd");
+        }
         postParams.put("_xsrf", "");//这个参数可以不用
         postParams.put("password", pwd);
         postParams.put("remember_me", "true");
@@ -76,6 +85,7 @@ public class ModelLogin {
         logger.info("请输入 " + verificationCodePath + " 下的验证码：");
         Scanner sc = new Scanner(System.in);
         String yzm = sc.nextLine();
+//        String yzm = "1234";
         return yzm;
     }
 }

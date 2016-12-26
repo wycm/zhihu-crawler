@@ -8,11 +8,11 @@ import org.junit.Test;
  * Created by yang.wang on 12/26/16.
  */
 public class ModelLoginTest {
-    @Test
-    public void testLogin(){
+    public static void main(String[] args){
         for (int i = 0; i < 10; i++){
-            new ModelLogin().login("...", "...");
+            new ModelLogin().login("", "");
             HttpClientUtil.setCookieStore(new BasicCookieStore());
         }
     }
+
 }
