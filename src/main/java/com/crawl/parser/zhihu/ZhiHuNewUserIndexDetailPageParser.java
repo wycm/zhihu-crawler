@@ -86,8 +86,7 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
      * @return
      */
     private String getUserId(String url){
-        Pattern pattern = Pattern.compile("https://www.zhihu.com/[a-z]+/(.*)/(following|followees)");
-//        Pattern pattern = Pattern.compile("https://www.zhihu.com/[a-z]+/(.*)/following");
+        Pattern pattern = Pattern.compile("https://www.zhihu.com/[a-z]+/(.*)/following");
         Matcher matcher = pattern.matcher(url);
         String userId = null;
         if(matcher.find()){
