@@ -3,19 +3,12 @@ package com.crawl.zhihu;
 import com.crawl.config.Config;
 import com.crawl.util.HttpClientUtil;
 import com.crawl.util.SimpleLogger;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
+import net.minidev.json.JSONObject;
+import net.minidev.json.JSONValue;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HttpContext;
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
 import java.util.*;
+
 
 /**
  * 模拟登录知乎
@@ -59,8 +52,7 @@ public class ModelLogin {
             postParams.put("phone_num", emailOrPhoneNum);
             loginState = HttpClientUtil.postRequest(PHONENUM_LOGIN_URL, postParams);//登录
         }
-
-        JSONObject jo = new JSONObject(loginState);
+        JSONObject jo = (JSONObject) JSONValue.parse(loginState);
         if(jo.get("r").toString().equals("0")){
             logger.info("登录知乎成功");
             /**
