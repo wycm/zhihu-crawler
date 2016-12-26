@@ -8,6 +8,8 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
+
 /**
  * 下载网页任务
  * 并将下载成功的Page放到解析任务队列
@@ -23,10 +25,10 @@ public class DownloadTask implements Runnable{
 		try {
 			Page page = zhiHuHttpClient.getWebPage(url);
 			int status = page.getStatusCode();
-
 			logger.info(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
 			if(status == HttpStatus.SC_OK){
 				zhiHuHttpClient.getParseThreadExecutor().execute(new ParseTask(page));
+				return;
 			}
 			else if(status == 502 || status == 504 || status == 500 || status == 429){
 				/**
@@ -36,10 +38,9 @@ public class DownloadTask implements Runnable{
 				zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url));
 				return ;
 			}
+			logger.error(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
 		} catch (InterruptedException e) {
 			logger.error("InterruptedException",e);
-		} catch (NullPointerException e){
-			logger.error("NullPointerException",e);
 		}
 	}
 }

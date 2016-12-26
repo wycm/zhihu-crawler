@@ -74,7 +74,7 @@ public abstract class HttpClient {
     public boolean deserializeCookieStore(String path){
         try {
             CookieStore cookieStore = (CookieStore) HttpClientUtil.deserializeMyHttpClient(path);
-            HttpClientUtil.getHttpContext().setAttribute(HttpClientContext.COOKIE_STORE, cookieStore);
+            HttpClientUtil.setCookieStore(cookieStore);
         } catch (Exception e){
             logger.warn("反序列化Cookie失败,没有找到Cookie文件");
             return false;

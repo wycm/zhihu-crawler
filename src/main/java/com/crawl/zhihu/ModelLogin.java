@@ -66,7 +66,7 @@ public class ModelLogin {
             /**
              * 序列化Cookies
              */
-            HttpClientUtil.serializeObject(HttpClientUtil.getHttpContext().getAttribute(HttpClientContext.COOKIE_STORE), Config.cookiePath);
+            HttpClientUtil.serializeObject(HttpClientUtil.getCookieStore(), Config.cookiePath);
             return true;
         }else{
             logger.info("登录知乎失败");
