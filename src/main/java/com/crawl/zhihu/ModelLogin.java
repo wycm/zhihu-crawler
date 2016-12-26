@@ -29,15 +29,13 @@ public class ModelLogin {
      * @param pwd 密码
      * @return
      */
-    public boolean login(ZhiHuHttpClient zhiHuHttpClient,
-                         String emailOrPhoneNum,
-                         String pwd){
+    public boolean login(String emailOrPhoneNum, String pwd){
         String yzm = null;
         String loginState = null;
-        HttpGet getRequest = new HttpGet(INDEX_URL);
-        HttpClientUtil.getWebPage(getRequest, "utf-8", false);
+//        HttpGet getRequest = new HttpGet(INDEX_URL);
+//        HttpClientUtil.getWebPage(getRequest, "utf-8", false);
         Map<String, String> postParams = new HashMap<>();
-        yzm = yzm(YZM_URL);//肉眼识别验证码
+//        yzm = yzm(YZM_URL);//肉眼识别验证码
         postParams.put("captcha", yzm);
         postParams.put("_xsrf", "");//这个参数可以不用
         postParams.put("password", pwd);
@@ -58,7 +56,7 @@ public class ModelLogin {
             /**
              * 序列化Cookies
              */
-            HttpClientUtil.serializeObject(HttpClientUtil.getCookieStore(), Config.cookiePath);
+//            HttpClientUtil.serializeObject(HttpClientUtil.getCookieStore(), Config.cookiePath);
             return true;
         }else{
             logger.info("登录知乎失败");
