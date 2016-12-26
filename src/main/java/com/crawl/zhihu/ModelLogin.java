@@ -6,6 +6,7 @@ import com.crawl.util.SimpleLogger;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -35,16 +36,18 @@ public class ModelLogin {
     public boolean login(String emailOrPhoneNum, String pwd){
         String loginState = null;
         Map<String, String> postParams = new HashMap<>();
-        String resStr = HttpClientUtil.getWebPage(INDEX_URL + "/#signin");
+//        String resStr = HttpClientUtil.getWebPage(INDEX_URL + "/#signin");
+        String resStr = "";
         Document document = Jsoup.parse(resStr);
         if(document.select("input[id=captcha]").size() > 0){
             //带有登录验证码
             String yzm = null;
-            yzm = yzm(YZM_URL);//肉眼识别验证码
-            postParams.put("captcha", yzm);
+//            yzm = yzm(YZM_URL);//肉眼识别验证码
+//            postParams.put("captcha", yzm);
         }
         else {
-            postParams.put("captcha", "abcd");
+            HttpClientUtil.setCookieStore(new BasicCookieStore());
+//            postParams.put("captcha", "abcd");
         }
         postParams.put("_xsrf", "");//这个参数可以不用
         postParams.put("password", pwd);
@@ -69,8 +72,9 @@ public class ModelLogin {
             return true;
         }else{
             logger.info("登录知乎失败");
-            throw new RuntimeException(HttpClientUtil.decodeUnicode(loginState));
+//            throw new RuntimeException(HttpClientUtil.decodeUnicode(loginState));
         }
+        return false;
     }
     /**
      * 肉眼识别验证码
