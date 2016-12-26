@@ -1,6 +1,5 @@
 package com.crawl.util;
 
-import org.apache.commons.io.IOUtils;
 import org.apache.http.*;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.config.CookieSpecs;
@@ -20,7 +19,6 @@ import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.conn.ssl.TrustStrategy;
-import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -47,8 +45,8 @@ import java.util.Map;
  */
 public class HttpClientUtil {
 	private static Logger logger = SimpleLogger.getSimpleLogger(HttpClientUtil.class);
+    private static CookieStore cookieStore = new BasicCookieStore();
 	private static CloseableHttpClient httpClient;
-	private final static HttpClientContext httpClientContext = HttpClientContext.create();
 	private final static String userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36";
 	private static HttpHost proxy;
 	private static RequestConfig requestConfig;
@@ -125,10 +123,8 @@ public class HttpClientUtil {
 		try {
 			response = getResponse(request);
 		} catch (HttpHostConnectException e){
-			e.printStackTrace();
 			logger.error("HttpHostConnectException",e);
 		} catch (IOException e) {
-			e.printStackTrace();
 			logger.error("IOException",e);
 		}
 		logger.info("status---" + response.getStatusLine().getStatusCode());
@@ -146,14 +142,17 @@ public class HttpClientUtil {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("IOException", e);
 		}
 		request.releaseConnection();
 		return webPage.toString();
 	}
 	private static CloseableHttpResponse getResponse(HttpRequestBase request) throws IOException {
 		request.setConfig(requestConfig);
-		return httpClient.execute(request, httpClientContext);
+		HttpClientContext httpClientContext = HttpClientContext.create();
+		httpClientContext.setCookieStore(cookieStore);
+		CloseableHttpResponse response = httpClient.execute(request, httpClientContext);
+		return response;
 	}
 	public static CloseableHttpResponse getResponse(String url) throws IOException {
 		HttpGet request = new HttpGet(url);
@@ -260,37 +259,12 @@ public class HttpClientUtil {
 			e1.printStackTrace();
 		}
 	}
-	/**
-	 * 输出Cookies
-	 * @param cs
-	 */
-	public static void getCookies(CookieStore cs){
-		List<Cookie> cookies = cs.getCookies();
-		if(cookies == null){
-			logger.info("该CookiesStore无Cookie");
-		}else{
-			for(int i = 0;i < cookies.size();i++){
-				logger.info("cookie：" + cookies.get(i).getName() + ":"+ cookies.get(i).getValue()
-						+ "----过期时间"+ cookies.get(i).getExpiryDate()
-						+ "----Comment"+ cookies.get(i).getComment()
-						+ "----CommentURL"+ cookies.get(i).getCommentURL()
-						+ "----domain"+ cookies.get(i).getDomain()
-						+ "----ports"+ cookies.get(i).getPorts()
-				);
-			}
-		}
+	public static CookieStore getCookieStore() {
+		return cookieStore;
 	}
-	/**
-	 * InputStream转换为String
-	 * @param is
-	 * @param encoding
-	 * @return
-	 * @throws Exception
-	 */
-	public static String isToString(InputStream is,String encoding) throws Exception{
-		StringWriter writer = new StringWriter();
-		IOUtils.copy(is, writer, encoding);
-		return writer.toString();
+
+	public static void setCookieStore(CookieStore cookieStore) {
+		HttpClientUtil.cookieStore = cookieStore;
 	}
 	/**
 	 * 有bug 慎用
@@ -335,9 +309,6 @@ public class HttpClientUtil {
 			e.printStackTrace();
 		}
 		request.setEntity(entity);
-	}
-	public static HttpClientContext getHttpClientContext(){
-		return httpClientContext;
 	}
 	public static void main(String args []){
 		String s = "{    \"r\": 1,    \"errcode\": 100000,        \"data\": {\"account\":\"\\u5e10\\u53f7\\u6216\\u5bc6\\u7801\\u9519\\u8bef\"},            \"msg\": \"\\u8be5\\u624b\\u673a\\u53f7\\u5c1a\\u672a\\u6ce8\\u518c\\u77e5\\u4e4e";

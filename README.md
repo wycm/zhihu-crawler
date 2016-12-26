@@ -34,8 +34,8 @@
 现在默认下载线程数是2，可以通过 [config.properties](https://github.com/wycm/zhihu-crawler/tree/2.0/src/main/resources) 配置文件的`downloadThreadSize`来修改。
 最好还是注册一个小号来跑吧。如果确实追求效率，那就多注册几个账号跑吧。
 
-##TODO
-...
+##更新
+* 2016.12.26－移除未使用的包，修复ConcurrentModificationException和NoSuchElementException异常问题。
 
 ##问题
 有什么疑问，欢迎提出来

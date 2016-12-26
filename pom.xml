@@ -9,19 +9,9 @@
   <url>http://maven.apache.org</url>
   <dependencies>
     <dependency>
-      <groupId>org.json</groupId>
-      <artifactId>json</artifactId>
-      <version>20151123</version>
-    </dependency>
-    <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient</artifactId>
       <version>4.5</version>
-    </dependency>
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.4</version>
     </dependency>
     <dependency>
       <groupId>org.jsoup</groupId>
@@ -48,6 +38,16 @@
       <groupId>com.jayway.jsonpath</groupId>
       <artifactId>json-path</artifactId>
       <version>2.2.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>1.7.6</version>
+    </dependency>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-log4j12</artifactId>
+      <version>1.7.6</version>
     </dependency>
   </dependencies>
 
