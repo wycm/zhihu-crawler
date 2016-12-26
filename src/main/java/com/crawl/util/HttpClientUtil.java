@@ -128,10 +128,8 @@ public class HttpClientUtil {
 		try {
 			response = getResponse(request);
 		} catch (HttpHostConnectException e){
-			e.printStackTrace();
 			logger.error("HttpHostConnectException",e);
 		} catch (IOException e) {
-			e.printStackTrace();
 			logger.error("IOException",e);
 		}
 		logger.info("status---" + response.getStatusLine().getStatusCode());
@@ -149,7 +147,7 @@ public class HttpClientUtil {
 				}
 			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("IOException", e);
 		}
 		request.releaseConnection();
 		return webPage.toString();
