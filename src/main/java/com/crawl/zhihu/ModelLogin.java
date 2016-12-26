@@ -36,19 +36,9 @@ public class ModelLogin {
     public boolean login(String emailOrPhoneNum, String pwd){
         String loginState = null;
         Map<String, String> postParams = new HashMap<>();
-//        String resStr = HttpClientUtil.getWebPage(INDEX_URL + "/#signin");
-        String resStr = "";
-        Document document = Jsoup.parse(resStr);
-        if(document.select("input[id=captcha]").size() > 0){
-            //带有登录验证码
-            String yzm = null;
-//            yzm = yzm(YZM_URL);//肉眼识别验证码
-//            postParams.put("captcha", yzm);
-        }
-        else {
-            HttpClientUtil.setCookieStore(new BasicCookieStore());
-//            postParams.put("captcha", "abcd");
-        }
+        String yzm = null;
+        yzm = yzm(YZM_URL);//肉眼识别验证码
+        postParams.put("captcha", yzm);
         postParams.put("_xsrf", "");//这个参数可以不用
         postParams.put("password", pwd);
         postParams.put("remember_me", "true");
@@ -68,13 +58,12 @@ public class ModelLogin {
             /**
              * 序列化Cookies
              */
-//            HttpClientUtil.serializeObject(HttpClientUtil.getCookieStore(), Config.cookiePath);
+            HttpClientUtil.serializeObject(HttpClientUtil.getCookieStore(), Config.cookiePath);
             return true;
         }else{
             logger.info("登录知乎失败");
-//            throw new RuntimeException(HttpClientUtil.decodeUnicode(loginState));
+            throw new RuntimeException(HttpClientUtil.decodeUnicode(loginState));
         }
-        return false;
     }
     /**
      * 肉眼识别验证码
@@ -89,7 +78,6 @@ public class ModelLogin {
         logger.info("请输入 " + verificationCodePath + " 下的验证码：");
         Scanner sc = new Scanner(System.in);
         String yzm = sc.nextLine();
-//        String yzm = "1234";
         return yzm;
     }
 }
