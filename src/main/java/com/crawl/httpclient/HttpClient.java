@@ -5,6 +5,7 @@ import com.crawl.util.HttpClientUtil;
 import com.crawl.util.SimpleLogger;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
@@ -49,6 +50,22 @@ public abstract class HttpClient {
             }
         }
         return page;
+    }
+    public Page getWebPage(HttpRequestBase request){
+        CloseableHttpResponse response = null;
+        try {
+            response = HttpClientUtil.getResponse(request);
+            Page page = new Page();
+            page.setStatusCode(page.getStatusCode());
+            page.setHtml(EntityUtils.toString(response.getEntity()));
+            page.setUrl(request.getURI().toString());
+            return page;
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            request.releaseConnection();
+        }
+        return null;
     }
     /**
      * 反序列化CookiesStore

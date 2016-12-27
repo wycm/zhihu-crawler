@@ -147,7 +147,7 @@ public class HttpClientUtil {
 		request.releaseConnection();
 		return webPage.toString();
 	}
-	private static CloseableHttpResponse getResponse(HttpRequestBase request) throws IOException {
+	public static CloseableHttpResponse getResponse(HttpRequestBase request) throws IOException {
 		request.setConfig(requestConfig);
 		HttpClientContext httpClientContext = HttpClientContext.create();
 		httpClientContext.setCookieStore(cookieStore);

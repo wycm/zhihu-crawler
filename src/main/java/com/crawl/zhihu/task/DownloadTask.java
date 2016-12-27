@@ -5,6 +5,7 @@ import com.crawl.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.log4j.Logger;
 
@@ -17,13 +18,23 @@ import java.io.IOException;
 public class DownloadTask implements Runnable{
 	private static Logger logger = SimpleLogger.getSimpleLogger(DownloadTask.class);
 	private String url;
+	private HttpRequestBase request;
 	private static ZhiHuHttpClient zhiHuHttpClient = ZhiHuHttpClient.getInstance();
 	public DownloadTask(String url){
 		this.url = url;
 	}
+	public DownloadTask(HttpRequestBase request){
+		this.request = request;
+	}
 	public void run(){
 		try {
-			Page page = zhiHuHttpClient.getWebPage(url);
+			Page page = null;
+			if(url != null){
+				page = zhiHuHttpClient.getWebPage(url);
+			}
+			if(request != null){
+				page = zhiHuHttpClient.getWebPage(request);
+			}
 			int status = page.getStatusCode();
 			logger.info(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
 			if(status == HttpStatus.SC_OK){
@@ -35,7 +46,12 @@ public class DownloadTask implements Runnable{
 				 * 将请求继续加入线程池
                  */
 				Thread.sleep(100);
-				zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url));
+				if(url != null){
+					zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url));
+				}
+				if(request != null){
+					zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request));
+				}
 				return ;
 			}
 			logger.error(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);

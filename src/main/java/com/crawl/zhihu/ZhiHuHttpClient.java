@@ -63,7 +63,7 @@ public class ZhiHuHttpClient extends HttpClient{
             /**
              * 获取 authorization 字段值
              */
-            authorization = getAuthorization();
+            setAuthorization();
         }
         if(Config.dbEnable){
             ZhiHuDAO.DBTablesInit(ConnectionManager.getConnection());
@@ -86,8 +86,7 @@ public class ZhiHuHttpClient extends HttpClient{
         downloadThreadExecutor.execute(new DownloadTask(url));
         manageZhiHuClient();
     }
-    private String getAuthorization(){
-        String authorization = null;
+    private void setAuthorization(){
         String content = HttpClientUtil.getWebPage(Config.startURL);
         Pattern pattern = Pattern.compile("https://static\\.zhihu\\.com/heifetz/main\\.app\\.([0-9]|[a-z])*\\.js");
         Matcher matcher = pattern.matcher(content);
@@ -100,9 +99,12 @@ public class ZhiHuHttpClient extends HttpClient{
         matcher = pattern.matcher(jsContent);
         if (matcher.find()){
             authorization = matcher.group(1);
-            return authorization;
+            return ;
         }
         throw new RuntimeException("not get authorization");
+    }
+    public static String getAuthorization(){
+        return authorization;
     }
     /**
      * 管理知乎客户端
