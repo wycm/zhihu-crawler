@@ -57,9 +57,9 @@ public class Config {
      */
     public static String dbPassword;
     /**
-     * 创建href表语句
+     * 创建Url表语句
      */
-    public static String createHrefTable;
+    public static String createUrlTable;
 
     /**
      * 创建user表语句
@@ -91,7 +91,7 @@ public class Config {
             dbHost = p.getProperty("db.host");
             dbUsername = p.getProperty("db.username");
             dbPassword = p.getProperty("db.password");
-            createHrefTable = p.getProperty("createHrefTable");
+            createUrlTable = p.getProperty("createUrlTable");
             createUserTable = p.getProperty("createUserTable");
         }
     }

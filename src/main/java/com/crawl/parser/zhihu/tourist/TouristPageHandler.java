@@ -84,7 +84,7 @@ public class TouristPageHandler implements PageHandler{
             return ;
         }
         String md5Url = Md5Util.Convert2Md5(url);
-        boolean isRepeat = ZhiHuDAO.insertHref(md5Url);
+        boolean isRepeat = ZhiHuDAO.insertUrl(md5Url);
         if(!isRepeat ||
                 (!zhiHuHttpClient.getDownloadThreadExecutor().isShutdown() &&
                         zhiHuHttpClient.getDownloadThreadExecutor().getQueue().size() < 30)){
