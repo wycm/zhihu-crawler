@@ -11,7 +11,6 @@ import com.crawl.zhihu.ZhiHuHttpClient;
  */
 public abstract class AbstractUserIndexDetailPageTest {
     public void testParse(String url, DetailPageParser parser){
-//        ZhiHuHttpClient.getInstance().getHttpClientContext().getCookieStore().clear();
         Page page = ZhiHuHttpClient.getInstance().getWebPage(url);
         User user = parser.parse(page);
         System.out.println(user);

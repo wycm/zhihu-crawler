@@ -3,6 +3,7 @@ package com.crawl.parser.zhihu;
 import com.crawl.entity.Page;
 import com.crawl.entity.User;
 import com.crawl.parser.DetailPageParser;
+import com.crawl.util.Constants;
 import com.jayway.jsonpath.JsonPath;
 import com.jayway.jsonpath.PathNotFoundException;
 import org.jsoup.Jsoup;
@@ -17,26 +18,29 @@ import java.util.regex.Pattern;
  * https://www.zhihu.com/people/wo-yan-chen-mo/following
  * 新版following页面解析出用户详细信息
  */
-public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
-    private static ZhiHuNewUserIndexDetailPageParser zhiHuNewUserIndexDetailPageParser;
-    public static ZhiHuNewUserIndexDetailPageParser getInstance(){
-        if(zhiHuNewUserIndexDetailPageParser == null){
-            zhiHuNewUserIndexDetailPageParser = new ZhiHuNewUserIndexDetailPageParser();
-        }
-        return zhiHuNewUserIndexDetailPageParser;
-    }
+public abstract class ZhiHuNewUserDetailPageParser extends DetailPageParser{
     @Override
     public User parse(Page page) {
         Document doc = Jsoup.parse(page.getHtml());
         User user = new User();
         String userId = getUserId(page.getUrl());
         user.setUrl("https://www.zhihu.com/people/" + userId);//用户主页
-        getUserByJson(user, userId, doc.select("[data-state]").first().attr("data-state"));
+        String parseStrategy = getParseStrategy();
+        String type = null;
+        if (parseStrategy.equals(Constants.LOGIN_PARSE_STRATEGY)){
+            //登录模式
+            type = userId;
+        }
+        else if (parseStrategy.equals(Constants.TOURIST_PARSE_STRATEGY)){
+            //游客模式
+            type = "null";
+        }
+        getUserByJson(user, type, doc.select("[data-state]").first().attr("data-state"));
         return user;
     }
-    private void getUserByJson(User user, String userId, String dataStateJson){
-        userId = "['" + userId + "']";//转义
-        String commonJsonPath = "$.entities.users." + userId;
+    private void getUserByJson(User user, String type, String dataStateJson){
+        type = "['" + type + "']";//转义
+        String commonJsonPath = "$.entities.users." + type;
         setUserInfoByJsonPth(user, "username", dataStateJson, commonJsonPath + ".name");//username
         setUserInfoByJsonPth(user, "hashId", dataStateJson, commonJsonPath + ".id");//hashId
         setUserInfoByJsonPth(user, "followees", dataStateJson, commonJsonPath + ".followingCount");//关注人数
@@ -95,4 +99,5 @@ public class ZhiHuNewUserIndexDetailPageParser extends DetailPageParser{
         }
         throw new RuntimeException("not parse userId");
     }
+    public abstract String getParseStrategy();
 }

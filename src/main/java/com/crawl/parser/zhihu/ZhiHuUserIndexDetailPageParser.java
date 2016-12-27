@@ -12,8 +12,8 @@ import org.jsoup.nodes.Element;
 
 /**
  * Created by yangwang on 16-8-24.
- * https://www.zhihu.com/people/wo-yan-chen-mo/followees
- * followess页面解析出用户详细信息
+ * https://www.zhihu.com/people/wo-yan-chen-mo/following
+ * following页面解析出用户详细信息
  */
 public class ZhiHuUserIndexDetailPageParser extends DetailPageParser{
     Logger logger = SimpleLogger.getSimpleLogger(ZhiHuUserIndexDetailPageParser.class);

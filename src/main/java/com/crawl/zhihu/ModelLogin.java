@@ -19,8 +19,7 @@ import java.util.*;
  */
 public class ModelLogin {
     private static Logger logger = SimpleLogger.getSimpleLogger(ModelLogin.class);
-    //知乎首页
-    final private static String INDEX_URL = "https://www.zhihu.com";
+
     //邮箱登录地址
     final private static String EMAIL_LOGIN_URL = "https://www.zhihu.com/login/email";
     //手机号码登录地址
