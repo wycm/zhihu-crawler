@@ -8,6 +8,7 @@ import com.crawl.parser.DetailPageParser;
 import com.crawl.parser.zhihu.PageHandler;
 import com.crawl.parser.zhihu.ZhiHuUserFollowingListPageParser;
 import com.crawl.parser.zhihu.login.LoginPageHandler;
+import com.crawl.util.Constants;
 import com.crawl.util.Md5Util;
 import com.crawl.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
@@ -98,8 +99,10 @@ public class TouristPageHandler implements PageHandler{
          * "我关注的人"列表页
          */
         if(!isStopDownload && zhiHuHttpClient.getDownloadThreadExecutor().getQueue().size() <= 100){
-            Object o = JsonPath.parse(page.getHtml()).read("$.data.url_token");
-            System.out.println(o);
+            List<String> urlTokenList = JsonPath.parse(page.getHtml()).read("$.data..url_token");
+            for (String s : urlTokenList){
+                handleUrl(Constants.INDEX_URL + "/people/" + s + "/following");
+            }
         }
     }
 }

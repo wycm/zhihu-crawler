@@ -26,21 +26,18 @@ public abstract class ZhiHuNewUserDetailPageParser extends DetailPageParser{
         String userId = getUserId(page.getUrl());
         user.setUrl("https://www.zhihu.com/people/" + userId);//用户主页
         String parseStrategy = getParseStrategy();
-        String type = null;
-        if (parseStrategy.equals(Constants.LOGIN_PARSE_STRATEGY)){
-            //登录模式
-            type = userId;
-        }
-        else if (parseStrategy.equals(Constants.TOURIST_PARSE_STRATEGY)){
-            //游客模式
-            type = "null";
-        }
-        getUserByJson(user, type, doc.select("[data-state]").first().attr("data-state"));
+        getUserByJson(user, userId, doc.select("[data-state]").first().attr("data-state"));
         return user;
     }
-    private void getUserByJson(User user, String type, String dataStateJson){
-        type = "['" + type + "']";//转义
+    private void getUserByJson(User user, String userId, String dataStateJson){
+
+        String type = "['" + userId + "']";//转义
         String commonJsonPath = "$.entities.users." + type;
+        try {
+            JsonPath.parse(dataStateJson).read(commonJsonPath);
+        } catch (PathNotFoundException e){
+            commonJsonPath = "$.entities.users.null";
+        }
         setUserInfoByJsonPth(user, "username", dataStateJson, commonJsonPath + ".name");//username
         setUserInfoByJsonPth(user, "hashId", dataStateJson, commonJsonPath + ".id");//hashId
         setUserInfoByJsonPth(user, "followees", dataStateJson, commonJsonPath + ".followingCount");//关注人数

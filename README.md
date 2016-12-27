@@ -35,7 +35,7 @@
 最好还是注册一个小号来跑吧。如果确实追求效率，那就多注册几个账号跑吧。
 
 ##更新
-* 2016.12.26－移除未使用的包，修复ConcurrentModificationException和NoSuchElementException异常问题。
+* 2016.12.26－移除未使用的包，修复ConcurrentModificationException和NoSuchElementException异常问题。<br>增加游客(免登录)模式抓取。
 
 ##问题
 有什么疑问，欢迎提出来

@@ -56,7 +56,7 @@ public abstract class HttpClient {
         try {
             response = HttpClientUtil.getResponse(request);
             Page page = new Page();
-            page.setStatusCode(page.getStatusCode());
+            page.setStatusCode(response.getStatusLine().getStatusCode());
             page.setHtml(EntityUtils.toString(response.getEntity()));
             page.setUrl(request.getURI().toString());
             return page;
