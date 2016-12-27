@@ -1,6 +1,6 @@
 package com.crawl.dao;
 
-import com.crawl.config.Config;
+import com.crawl.util.Config;
 import com.crawl.util.SimpleLogger;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
 import org.apache.log4j.Logger;

@@ -1,4 +1,4 @@
-package com.crawl.config;
+package com.crawl.util;
 
 import java.io.IOException;
 import java.util.Properties;

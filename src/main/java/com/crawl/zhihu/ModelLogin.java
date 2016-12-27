@@ -1,15 +1,11 @@
 package com.crawl.zhihu;
 
-import com.crawl.config.Config;
+import com.crawl.util.Config;
 import com.crawl.util.HttpClientUtil;
 import com.crawl.util.SimpleLogger;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.log4j.Logger;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
 
 import java.util.*;
 

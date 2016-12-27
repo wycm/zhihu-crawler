@@ -1,9 +1,8 @@
 package com.crawl.zhihu;
 
-import com.crawl.config.Config;
+import com.crawl.util.Config;
 import com.crawl.dao.ConnectionManager;
 import com.crawl.dao.ZhiHuDAO;
-import com.crawl.httpclient.HttpClient;
 import com.crawl.util.Constants;
 import com.crawl.util.HttpClientUtil;
 import com.crawl.util.SimpleLogger;
@@ -12,7 +11,6 @@ import com.crawl.zhihu.task.DownloadTask;
 import com.crawl.zhihu.task.ParseTask;
 import org.apache.log4j.Logger;
 
-import java.util.Properties;
 import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

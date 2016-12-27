@@ -1,4 +1,4 @@
-package com.crawl.httpclient;
+package com.crawl.zhihu;
 
 import com.crawl.entity.Page;
 import com.crawl.util.HttpClientUtil;

@@ -1,8 +1,7 @@
 package com.crawl;
 
-import com.crawl.config.Config;
+import com.crawl.util.Config;
 import com.crawl.util.SimpleLogger;
-import com.crawl.util.ThreadPoolMonitor;
 import com.crawl.zhihu.ZhiHuHttpClient;
 import org.apache.log4j.Logger;
 
