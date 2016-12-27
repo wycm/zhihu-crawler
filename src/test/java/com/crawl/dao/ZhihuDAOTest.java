@@ -10,7 +10,7 @@ import java.sql.Connection;
 public class ZhihuDAOTest {
     @Test
     public void testDBTablesInit(){
-        Connection cn = ConnectionManage.getConnection();
+        Connection cn = ConnectionManager.getConnection();
         ZhiHuDAO.DBTablesInit(cn);
     }
 }

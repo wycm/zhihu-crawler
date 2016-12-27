@@ -85,7 +85,7 @@ public class ZhiHuDAO {
      */
     public synchronized static boolean insertToDB(User u){
         String isContainSql = "select count(*) from user WHERE url='" + u.getUrl() + "'";
-        Connection cn = ConnectionManage.getConnection();
+        Connection cn = ConnectionManager.getConnection();
         try {
             if(isContain(cn,isContainSql)){
                 logger.info("数据库已经存在该用户---" + u.getUsername());
@@ -130,7 +130,7 @@ public class ZhiHuDAO {
      */
     public synchronized static boolean insertHref(String md5Href){
         String isContainSql = "select count(*) from href WHERE href='" + md5Href + "'";
-        Connection cn = ConnectionManage.getConnection();
+        Connection cn = ConnectionManager.getConnection();
         try {
             if(isContain(cn,isContainSql)){
                 logger.debug("数据库已经存在该url---" + md5Href);

@@ -4,18 +4,12 @@ import com.crawl.entity.Page;
 import com.crawl.util.HttpClientUtil;
 import com.crawl.util.SimpleLogger;
 import org.apache.commons.io.IOUtils;
-import org.apache.http.HttpEntity;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URLEncoder;
 
 /**
  * Created by yangwang on 16-8-19.

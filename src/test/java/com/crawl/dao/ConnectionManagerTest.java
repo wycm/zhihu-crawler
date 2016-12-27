@@ -5,10 +5,10 @@ import org.junit.Test;
 /**
  * Created by wy on 2016/6/18 0018.
  */
-public class ConnectionManageTest {
+public class ConnectionManagerTest {
     @Test
     public void testCreateConnection(){
-        ConnectionManage.getConnection();
-        ConnectionManage.close();
+        ConnectionManager.getConnection();
+        ConnectionManager.close();
     }
 }

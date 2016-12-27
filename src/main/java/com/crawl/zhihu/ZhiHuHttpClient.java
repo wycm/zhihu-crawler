@@ -1,7 +1,7 @@
 package com.crawl.zhihu;
 
 import com.crawl.config.Config;
-import com.crawl.dao.ConnectionManage;
+import com.crawl.dao.ConnectionManager;
 import com.crawl.dao.ZhiHuDAO;
 import com.crawl.httpclient.HttpClient;
 import com.crawl.util.SimpleLogger;
@@ -40,7 +40,7 @@ public class ZhiHuHttpClient extends HttpClient{
         new Thread(new ThreadPoolMonitor(parseThreadExecutor, "ParsePage ThreadPool")).start();
     }
     /**
-     * 初始化知乎客户端
+     * 初始化HttpClient
      * 模拟登录知乎，持久化Cookie到本地
      * 不用以后每次都登录
      */
@@ -51,7 +51,7 @@ public class ZhiHuHttpClient extends HttpClient{
             new ModelLogin().login(this, Config.emailOrPhoneNum, Config.password);
         }
         if(Config.dbEnable){
-            ZhiHuDAO.DBTablesInit(ConnectionManage.getConnection());
+            ZhiHuDAO.DBTablesInit(ConnectionManager.getConnection());
         }
     }
 

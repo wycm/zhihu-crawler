@@ -12,8 +12,8 @@ import java.sql.SQLException;
 /**
  * DB Connection管理
  */
-public class ConnectionManage{
-	private static Logger logger = SimpleLogger.getSimpleLogger(ConnectionManage.class);
+public class ConnectionManager {
+	private static Logger logger = SimpleLogger.getSimpleLogger(ConnectionManager.class);
 	private static Connection conn;
 	public static Connection getConnection(){
 		//获取数据库连接
