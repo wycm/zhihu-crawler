@@ -3,18 +3,16 @@ package com.crawl.zhihu;
 import com.crawl.config.Config;
 import com.crawl.util.HttpClientUtil;
 import com.crawl.util.SimpleLogger;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
+import net.minidev.json.JSONObject;
+import net.minidev.json.JSONValue;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.protocol.HttpClientContext;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
-import java.io.UnsupportedEncodingException;
 import java.util.*;
+
 
 /**
  * 模拟登录知乎
@@ -35,14 +33,10 @@ public class ModelLogin {
      * @param pwd 密码
      * @return
      */
-    public boolean login(ZhiHuHttpClient zhiHuHttpClient,
-                         String emailOrPhoneNum,
-                         String pwd){
-        String yzm = null;
+    public boolean login(String emailOrPhoneNum, String pwd){
         String loginState = null;
-        HttpGet getRequest = new HttpGet(INDEX_URL);
-        HttpClientUtil.getWebPage(getRequest, "utf-8", false);
         Map<String, String> postParams = new HashMap<>();
+        String yzm = null;
         yzm = yzm(YZM_URL);//肉眼识别验证码
         postParams.put("captcha", yzm);
         postParams.put("_xsrf", "");//这个参数可以不用
@@ -58,14 +52,13 @@ public class ModelLogin {
             postParams.put("phone_num", emailOrPhoneNum);
             loginState = HttpClientUtil.postRequest(PHONENUM_LOGIN_URL, postParams);//登录
         }
-
-        JSONObject jo = new JSONObject(loginState);
+        JSONObject jo = (JSONObject) JSONValue.parse(loginState);
         if(jo.get("r").toString().equals("0")){
             logger.info("登录知乎成功");
             /**
              * 序列化Cookies
              */
-            HttpClientUtil.serializeObject(HttpClientUtil.getHttpClientContext().getCookieStore(), Config.cookiePath);
+            HttpClientUtil.serializeObject(HttpClientUtil.getCookieStore(), Config.cookiePath);
             return true;
         }else{
             logger.info("登录知乎失败");

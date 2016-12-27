@@ -3,9 +3,9 @@ package com.crawl.httpclient;
 import com.crawl.entity.Page;
 import com.crawl.util.HttpClientUtil;
 import com.crawl.util.SimpleLogger;
-import org.apache.commons.io.IOUtils;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -25,17 +25,6 @@ public abstract class HttpClient {
         }
         return null;
     }
-    public String getWebPageContent(String url){
-        InputStream is = getWebPageInputStream(url);
-        if(is != null){
-            try {
-                return IOUtils.toString(is);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
     public Page getWebPage(String url){
         Page page = new Page();
         CloseableHttpResponse response = null;
@@ -48,7 +37,7 @@ public abstract class HttpClient {
         page.setUrl(url);
         try {
             if(page.getStatusCode() == 200){
-                page.setHtml(IOUtils.toString(response.getEntity().getContent()));
+                page.setHtml(EntityUtils.toString(response.getEntity()));
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -68,7 +57,7 @@ public abstract class HttpClient {
     public boolean deserializeCookieStore(String path){
         try {
             CookieStore cookieStore = (CookieStore) HttpClientUtil.deserializeMyHttpClient(path);
-            HttpClientUtil.getHttpClientContext().setCookieStore(cookieStore);
+            HttpClientUtil.setCookieStore(cookieStore);
         } catch (Exception e){
             logger.warn("反序列化Cookie失败,没有找到Cookie文件");
             return false;

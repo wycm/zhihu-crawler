@@ -48,7 +48,7 @@ public class ZhiHuHttpClient extends HttpClient{
     public void initHttpClient() {
         Properties properties = new Properties();
         if(!deserializeCookieStore(Config.cookiePath)){
-            new ModelLogin().login(this, Config.emailOrPhoneNum, Config.password);
+            new ModelLogin().login(Config.emailOrPhoneNum, Config.password);
         }
         if(Config.dbEnable){
             ZhiHuDAO.DBTablesInit(ConnectionManager.getConnection());
