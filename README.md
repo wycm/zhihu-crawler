@@ -1,6 +1,6 @@
 ﻿知乎爬虫
 ====  
-一个简易知乎爬虫，抓取用户的基本资料。<br>
+一个简易知乎爬虫，抓取知乎用户的基本资料。<br>
 
 ##工程导入(maven)
 * git clone https://github.com/wycm/zhihu-crawler 克隆项目到本地 
