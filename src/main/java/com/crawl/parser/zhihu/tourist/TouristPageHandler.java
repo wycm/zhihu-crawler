@@ -1,5 +1,6 @@
 package com.crawl.parser.zhihu.tourist;
 
+import com.crawl.parser.zhihu.ZhiHuNewUserDetailPageParser;
 import com.crawl.util.Config;
 import com.crawl.dao.ZhiHuDAO;
 import com.crawl.entity.Page;
@@ -24,7 +25,6 @@ import static com.crawl.zhihu.task.ParseTask.isStopDownload;
 import static com.crawl.zhihu.task.ParseTask.parseUserCount;
 
 /**
- * Created by yang.wang on 12/27/16.
  * 游客模式页面处理器
  */
 public class TouristPageHandler implements PageHandler{
@@ -49,7 +49,7 @@ public class TouristPageHandler implements PageHandler{
      */
     private void handleTouristDetailPage(Page page, Document doc){
         DetailPageParser parser = null;
-        parser = new ZhiHuNewUserTouristDetailPageParser();
+        parser = new ZhiHuNewUserDetailPageParser();
         User u = parser.parse(page);
         logger.info("解析用户成功:" + u.toString());
         if(Config.dbEnable){

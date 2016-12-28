@@ -1,5 +1,6 @@
 package com.crawl.parser.zhihu.login;
 
+import com.crawl.parser.zhihu.ZhiHuNewUserDetailPageParser;
 import com.crawl.util.Config;
 import com.crawl.dao.ZhiHuDAO;
 import com.crawl.entity.Page;
@@ -22,7 +23,6 @@ import static com.crawl.zhihu.task.ParseTask.isStopDownload;
 import static com.crawl.zhihu.task.ParseTask.parseUserCount;
 
 /**
- * Created by yang.wang on 12/27/16.
  * 登录模式页面处理器
  */
 public class LoginPageHandler implements PageHandler{
@@ -44,21 +44,14 @@ public class LoginPageHandler implements PageHandler{
      */
     private void handleLoginDetailPage(Page page, Document doc){
         DetailPageParser parser = null;
-        if (doc.select("div[id=ProfileHeader]").size() > 0){
-            //新版主页
-            parser = new ZhiHuNewUserLoginDetailPageParser();
-        }
-        else {
-            //旧版主页
-            parser = ZhiHuUserIndexDetailPageParser.getInstance();
-        }
+        parser = new ZhiHuNewUserDetailPageParser();
         User u = parser.parse(page);
         logger.info("解析用户成功:" + u.toString());
         if(Config.dbEnable){
             ZhiHuDAO.insertToDB(u);
         }
         parseUserCount.incrementAndGet();
-        for(int i = 0;i < u.getFollowees()/20 + 1;i++) {
+        for(int i = 0;i < u.getFollowees() / 20 + 1;i++) {
             /**
              * 当下载网页队列小于100时才获取该用户关注用户
              * 防止下载网页线程池任务队列过量增长

@@ -1,13 +1,10 @@
 package com.crawl.entity;
 
-/**
- * Created by yangwang on 16-8-19.
- * 网页
- */
+
 public class Page {
     private String url;
     private int statusCode;//响应状态码
-    private String html;
+    private String html;//response content
     public String getUrl() {
         return url;
     }

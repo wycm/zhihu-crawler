@@ -6,9 +6,6 @@ import com.crawl.entity.User;
 import com.crawl.parser.DetailPageParser;
 import com.crawl.zhihu.ZhiHuHttpClient;
 
-/**
- * Created by wy on 11/28/2016.
- */
 public abstract class AbstractUserIndexDetailPageTest {
     public void testParse(String url, DetailPageParser parser){
         Page page = ZhiHuHttpClient.getInstance().getWebPage(url);

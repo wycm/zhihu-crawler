@@ -12,7 +12,6 @@ import org.apache.log4j.Logger;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * Created by Administrator on 2016/8/24 0024.
  * 解析网页任务
  */
 public class ParseTask implements Runnable {

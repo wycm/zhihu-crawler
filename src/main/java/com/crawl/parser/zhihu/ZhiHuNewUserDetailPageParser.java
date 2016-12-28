@@ -14,18 +14,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Created by wy on 11/28/2016.
  * https://www.zhihu.com/people/wo-yan-chen-mo/following
  * 新版following页面解析出用户详细信息
  */
-public abstract class ZhiHuNewUserDetailPageParser extends DetailPageParser{
+public class ZhiHuNewUserDetailPageParser extends DetailPageParser{
     @Override
     public User parse(Page page) {
         Document doc = Jsoup.parse(page.getHtml());
         User user = new User();
         String userId = getUserId(page.getUrl());
         user.setUrl("https://www.zhihu.com/people/" + userId);//用户主页
-        String parseStrategy = getParseStrategy();
         getUserByJson(user, userId, doc.select("[data-state]").first().attr("data-state"));
         return user;
     }
@@ -96,5 +94,4 @@ public abstract class ZhiHuNewUserDetailPageParser extends DetailPageParser{
         }
         throw new RuntimeException("not parse userId");
     }
-    public abstract String getParseStrategy();
 }

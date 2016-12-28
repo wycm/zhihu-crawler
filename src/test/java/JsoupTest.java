@@ -3,9 +3,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-/**
- * Created by Administrator on 2016/9/20 0020.
- */
+
 public class JsoupTest {
     public static void main(String[] args){
         String s = "<div class=\"profile-navbar clearfix\">\n" +

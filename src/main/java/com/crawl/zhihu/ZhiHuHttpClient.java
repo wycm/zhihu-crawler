@@ -15,9 +15,6 @@ import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * Created by Administrator on 2016/8/23 0023.
- */
 public class ZhiHuHttpClient extends HttpClient{
     private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuHttpClient.class);
     private static class ZhiHuHttpClientHolder {

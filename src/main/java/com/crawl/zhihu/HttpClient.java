@@ -12,9 +12,6 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 
-/**
- * Created by yangwang on 16-8-19.
- */
 public abstract class HttpClient {
     private Logger logger = SimpleLogger.getSimpleLogger(HttpClient.class);
     public InputStream getWebPageInputStream(String url){

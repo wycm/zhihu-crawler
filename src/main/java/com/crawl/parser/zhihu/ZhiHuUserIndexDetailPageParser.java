@@ -8,13 +8,12 @@ import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-
-
 /**
- * Created by yangwang on 16-8-24.
- * https://www.zhihu.com/people/wo-yan-chen-mo/following
+ * https://www.zhihu.com/people/.../following
  * following页面解析出用户详细信息
+ * 2016.12.28 知乎页面全面更新，该解析器不再使用
  */
+@Deprecated
 public class ZhiHuUserIndexDetailPageParser extends DetailPageParser{
     Logger logger = SimpleLogger.getSimpleLogger(ZhiHuUserIndexDetailPageParser.class);
     private static ZhiHuUserIndexDetailPageParser zhiHuUserIndexDetailPageParser;

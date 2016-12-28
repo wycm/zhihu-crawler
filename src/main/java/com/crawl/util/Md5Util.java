@@ -2,6 +2,9 @@ package com.crawl.util;
 
 import java.security.MessageDigest;
 
+/**
+ * md5转换工具
+ */
 public class Md5Util {
 	public static String Convert2Md5(String password){
 		MessageDigest md5 = null;  
