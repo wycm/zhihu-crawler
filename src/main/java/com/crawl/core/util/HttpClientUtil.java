@@ -309,6 +309,12 @@ public class HttpClientUtil {
 		}
 		request.setEntity(entity);
 	}
+	public static org.apache.http.client.config.RequestConfig.Builder getRequestConfigBuilder(){
+		return RequestConfig.custom().setSocketTimeout(10000).
+				setConnectTimeout(10000).
+				setConnectionRequestTimeout(10000).
+				setCookieSpec(CookieSpecs.STANDARD);
+	}
 	public static void main(String args []){
 		String s = "{    \"r\": 1,    \"errcode\": 100000,        \"data\": {\"account\":\"\\u5e10\\u53f7\\u6216\\u5bc6\\u7801\\u9519\\u8bef\"},            \"msg\": \"\\u8be5\\u624b\\u673a\\u53f7\\u5c1a\\u672a\\u6ce8\\u518c\\u77e5\\u4e4e";
 		logger.info(decodeUnicode(s));

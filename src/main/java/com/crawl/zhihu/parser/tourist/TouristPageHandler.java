@@ -79,7 +79,7 @@ public class TouristPageHandler implements PageHandler{
         HttpGet request = new HttpGet(url);
         request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
         if(!Config.dbEnable){
-            zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request));
+            zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request, true));
             return ;
         }
         String md5Url = Md5Util.Convert2Md5(url);
@@ -90,7 +90,7 @@ public class TouristPageHandler implements PageHandler{
             /**
              * 防止互相等待，导致死锁
              */
-            zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request));
+            zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request, true));
         }
     }
     private void handleTouristListPage(Page page){

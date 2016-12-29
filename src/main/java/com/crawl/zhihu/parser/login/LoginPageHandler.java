@@ -71,7 +71,7 @@ public class LoginPageHandler implements PageHandler{
     }
     private void handleUrl(String url){
         if(!Config.dbEnable){
-            zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url));
+            zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url, false));
             return ;
         }
         String md5Url = Md5Util.Convert2Md5(url);
@@ -82,7 +82,7 @@ public class LoginPageHandler implements PageHandler{
             /**
              * 防止互相等待，导致死锁
              */
-            zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url));
+            zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url, false));
         }
     }
     @Override

@@ -48,21 +48,14 @@ public abstract class HttpClient {
         }
         return page;
     }
-    public Page getWebPage(HttpRequestBase request){
+    public Page getWebPage(HttpRequestBase request) throws IOException {
         CloseableHttpResponse response = null;
-        try {
             response = HttpClientUtil.getResponse(request);
             Page page = new Page();
             page.setStatusCode(response.getStatusLine().getStatusCode());
             page.setHtml(EntityUtils.toString(response.getEntity()));
             page.setUrl(request.getURI().toString());
             return page;
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            request.releaseConnection();
-        }
-        return null;
     }
     /**
      * 反序列化CookiesStore

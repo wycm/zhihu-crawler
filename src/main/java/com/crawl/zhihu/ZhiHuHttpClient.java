@@ -24,7 +24,6 @@ public class ZhiHuHttpClient extends HttpClient{
     public static final ZhiHuHttpClient getInstance(){
         return ZhiHuHttpClientHolder.INSTANCE;
     }
-    private static ZhiHuHttpClient zhiHuHttpClient;
     /**
      * 解析网页线程池
      */
@@ -79,7 +78,7 @@ public class ZhiHuHttpClient extends HttpClient{
                 new LinkedBlockingQueue<Runnable>());
     }
     public void startCrawl(String url){
-        downloadThreadExecutor.execute(new DownloadTask(url));
+        downloadThreadExecutor.execute(new DownloadTask(url, true));
         manageZhiHuClient();
     }
     private void setAuthorization(){
