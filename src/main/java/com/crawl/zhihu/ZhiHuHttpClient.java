@@ -1,16 +1,17 @@
 package com.crawl.zhihu;
 
-import com.crawl.util.Config;
-import com.crawl.dao.ConnectionManager;
-import com.crawl.dao.ZhiHuDAO;
-import com.crawl.util.Constants;
-import com.crawl.util.HttpClientUtil;
-import com.crawl.util.SimpleLogger;
-import com.crawl.util.ThreadPoolMonitor;
+import com.crawl.core.util.Config;
+import com.crawl.zhihu.dao.ConnectionManager;
+import com.crawl.zhihu.dao.ZhiHuDAO;
+import com.crawl.core.util.Constants;
+import com.crawl.core.util.HttpClientUtil;
+import com.crawl.core.util.SimpleLogger;
+import com.crawl.core.util.ThreadPoolMonitor;
 import com.crawl.zhihu.task.DownloadTask;
 import com.crawl.zhihu.task.ParseTask;
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -82,14 +83,24 @@ public class ZhiHuHttpClient extends HttpClient{
         manageZhiHuClient();
     }
     private void setAuthorization(){
-        String content = HttpClientUtil.getWebPage(Config.startURL);
+        String content = null;
+        try {
+            content = HttpClientUtil.getWebPage(Config.startURL);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         Pattern pattern = Pattern.compile("https://static\\.zhihu\\.com/heifetz/main\\.app\\.([0-9]|[a-z])*\\.js");
         Matcher matcher = pattern.matcher(content);
         String jsSrc = null;
         if (matcher.find()){
             jsSrc = matcher.group(0);
         }
-        String jsContent = HttpClientUtil.getWebPage(jsSrc);
+        String jsContent = null;
+        try {
+            jsContent = HttpClientUtil.getWebPage(jsSrc);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         pattern = Pattern.compile("CLIENT_ALIAS=\"(([0-9]|[a-z])*)\"");
         matcher = pattern.matcher(jsContent);
         if (matcher.find()){

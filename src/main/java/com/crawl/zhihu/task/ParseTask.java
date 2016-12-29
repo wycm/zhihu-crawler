@@ -1,12 +1,12 @@
 package com.crawl.zhihu.task;
 
-import com.crawl.util.Config;
-import com.crawl.entity.Page;
-import com.crawl.parser.zhihu.PageHandler;
-import com.crawl.parser.zhihu.login.LoginPageHandler;
-import com.crawl.parser.zhihu.tourist.TouristPageHandler;
-import com.crawl.util.Constants;
-import com.crawl.util.SimpleLogger;
+import com.crawl.core.util.Config;
+import com.crawl.zhihu.entity.Page;
+import com.crawl.zhihu.parser.PageHandler;
+import com.crawl.zhihu.parser.login.LoginPageHandler;
+import com.crawl.zhihu.parser.tourist.TouristPageHandler;
+import com.crawl.core.util.Constants;
+import com.crawl.core.util.SimpleLogger;
 import org.apache.log4j.Logger;
 
 import java.util.concurrent.atomic.AtomicInteger;

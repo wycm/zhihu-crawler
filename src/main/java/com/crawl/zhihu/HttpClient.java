@@ -1,8 +1,8 @@
 package com.crawl.zhihu;
 
-import com.crawl.entity.Page;
-import com.crawl.util.HttpClientUtil;
-import com.crawl.util.SimpleLogger;
+import com.crawl.zhihu.entity.Page;
+import com.crawl.core.util.HttpClientUtil;
+import com.crawl.core.util.SimpleLogger;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;

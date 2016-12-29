@@ -1,12 +1,13 @@
 package com.crawl.zhihu;
 
-import com.crawl.util.Config;
-import com.crawl.util.HttpClientUtil;
-import com.crawl.util.SimpleLogger;
+import com.crawl.core.util.Config;
+import com.crawl.core.util.HttpClientUtil;
+import com.crawl.core.util.SimpleLogger;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.util.*;
 
 
@@ -40,12 +41,20 @@ public class ModelLogin {
         if(emailOrPhoneNum.contains("@")){
             //通过邮箱登录
             postParams.put("email", emailOrPhoneNum);
-            loginState = HttpClientUtil.postRequest(EMAIL_LOGIN_URL, postParams);//登录
+            try {
+                loginState = HttpClientUtil.postRequest(EMAIL_LOGIN_URL, postParams);//登录
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else {
             //通过手机号码登录
             postParams.put("phone_num", emailOrPhoneNum);
-            loginState = HttpClientUtil.postRequest(PHONENUM_LOGIN_URL, postParams);//登录
+            try {
+                loginState = HttpClientUtil.postRequest(PHONENUM_LOGIN_URL, postParams);//登录
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         JSONObject jo = (JSONObject) JSONValue.parse(loginState);
         if(jo.get("r").toString().equals("0")){

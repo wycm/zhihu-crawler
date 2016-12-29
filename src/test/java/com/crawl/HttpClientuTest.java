@@ -1,14 +1,12 @@
 package com.crawl;
 
-import com.crawl.util.HttpClientUtil;
-import org.apache.http.client.protocol.HttpClientContext;
+import com.crawl.core.util.HttpClientUtil;
 
-/**
- * Created by yang.wang on 12/26/16.
- */
+import java.io.IOException;
+
 public class HttpClientuTest {
     private final static int j = 0;
-    public static void main(String[] args){
+    public static void main(String[] args) throws IOException {
         HttpClientUtil.getWebPage("https://www.baidu.com");
         HttpClientUtil.getWebPage("https://www.google.com");
     }

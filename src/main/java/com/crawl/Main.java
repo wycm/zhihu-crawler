@@ -1,7 +1,7 @@
 package com.crawl;
 
-import com.crawl.util.Config;
-import com.crawl.util.SimpleLogger;
+import com.crawl.core.util.Config;
+import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
 import org.apache.log4j.Logger;
 
@@ -14,4 +14,4 @@ public class Main {
         String startURL = Config.startURL;
         ZhiHuHttpClient.getInstance().startCrawl(startURL);
     }
-}
+    }

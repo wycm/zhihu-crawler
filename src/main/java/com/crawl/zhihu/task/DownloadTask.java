@@ -1,15 +1,11 @@
 package com.crawl.zhihu.task;
 
-import com.crawl.entity.Page;
-import com.crawl.util.SimpleLogger;
+import com.crawl.zhihu.entity.Page;
+import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
 import org.apache.http.HttpStatus;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.log4j.Logger;
-
-import java.io.IOException;
 
 /**
  * 下载网页任务
