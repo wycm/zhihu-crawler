@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by yangwang on 16-8-24.
  * 知乎“我关注的人”列表页面
  */
 public class ZhiHuUserFollowingListPageParser extends ListPageParser{

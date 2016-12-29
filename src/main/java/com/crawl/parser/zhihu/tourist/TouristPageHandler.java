@@ -1,12 +1,12 @@
 package com.crawl.parser.zhihu.tourist;
 
-import com.crawl.config.Config;
+import com.crawl.parser.zhihu.ZhiHuNewUserDetailPageParser;
+import com.crawl.util.Config;
 import com.crawl.dao.ZhiHuDAO;
 import com.crawl.entity.Page;
 import com.crawl.entity.User;
 import com.crawl.parser.DetailPageParser;
 import com.crawl.parser.zhihu.PageHandler;
-import com.crawl.parser.zhihu.ZhiHuUserFollowingListPageParser;
 import com.crawl.parser.zhihu.login.LoginPageHandler;
 import com.crawl.util.Constants;
 import com.crawl.util.Md5Util;
@@ -25,7 +25,6 @@ import static com.crawl.zhihu.task.ParseTask.isStopDownload;
 import static com.crawl.zhihu.task.ParseTask.parseUserCount;
 
 /**
- * Created by yang.wang on 12/27/16.
  * 游客模式页面处理器
  */
 public class TouristPageHandler implements PageHandler{
@@ -50,7 +49,7 @@ public class TouristPageHandler implements PageHandler{
      */
     private void handleTouristDetailPage(Page page, Document doc){
         DetailPageParser parser = null;
-        parser = new ZhiHuNewUserTouristDetailPageParser();
+        parser = new ZhiHuNewUserDetailPageParser();
         User u = parser.parse(page);
         logger.info("解析用户成功:" + u.toString());
         if(Config.dbEnable){
@@ -84,7 +83,7 @@ public class TouristPageHandler implements PageHandler{
             return ;
         }
         String md5Url = Md5Util.Convert2Md5(url);
-        boolean isRepeat = ZhiHuDAO.insertHref(md5Url);
+        boolean isRepeat = ZhiHuDAO.insertUrl(md5Url);
         if(!isRepeat ||
                 (!zhiHuHttpClient.getDownloadThreadExecutor().isShutdown() &&
                         zhiHuHttpClient.getDownloadThreadExecutor().getQueue().size() < 30)){

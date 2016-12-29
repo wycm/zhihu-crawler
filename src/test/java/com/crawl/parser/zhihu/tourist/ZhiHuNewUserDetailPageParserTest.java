@@ -7,9 +7,7 @@ import com.crawl.parser.zhihu.ZhiHuNewUserDetailPageParser;
 import com.crawl.util.HttpClientUtil;
 import org.junit.Test;
 
-/**
- * Created by wy on 11/28/2016.
- */
+
 public class ZhiHuNewUserDetailPageParserTest {
     @Test
     public void testParse(){
@@ -22,7 +20,7 @@ public class ZhiHuNewUserDetailPageParserTest {
         String url = "https://www.zhihu.com/people/Vincen.t/following";
         page.setHtml(HttpClientUtil.getWebPage(url));
         page.setUrl(url);
-        DetailPageParser parser = new ZhiHuNewUserTouristDetailPageParser();
+        DetailPageParser parser = new ZhiHuNewUserDetailPageParser();
         User user = parser.parse(page);
         System.out.println(user);
     }

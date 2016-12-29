@@ -8,9 +8,6 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
-/**
- *
- */
 public class ZhiHuDAO {
     private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuDAO.class);
 
@@ -25,16 +22,16 @@ public class ZhiHuDAO {
         try {
             //加载properties文件
             p.load(ZhiHuDAO.class.getResourceAsStream("/config.properties"));
-            rs = cn.getMetaData().getTables(null, null, "href", null);
+            rs = cn.getMetaData().getTables(null, null, "url", null);
             Statement st = cn.createStatement();
-            //不存在href表
+            //不存在url表
             if(!rs.next()){
-                //创建href表
-                st.execute(p.getProperty("createHrefTable"));
-                logger.info("href表创建成功");
+                //创建url表
+                st.execute(p.getProperty("createUrlTable"));
+                logger.info("url表创建成功");
             }
             else{
-                logger.info("href表已存在");
+                logger.info("url表已存在");
             }
             rs = cn.getMetaData().getTables(null, null, "user", null);
             //不存在user表
@@ -124,22 +121,22 @@ public class ZhiHuDAO {
 
     /**
      * 将访问过的url插入数据库
-     * @param md5Href 经过md5处理后的url
+     * @param md5Url 经过md5处理后的url
      * @return
      * @throws SQLException
      */
-    public synchronized static boolean insertHref(String md5Href){
-        String isContainSql = "select count(*) from href WHERE href='" + md5Href + "'";
+    public synchronized static boolean insertUrl(String md5Url){
+        String isContainSql = "select count(*) from url WHERE md5_url ='" + md5Url + "'";
         Connection cn = ConnectionManager.getConnection();
         try {
             if(isContain(cn,isContainSql)){
-                logger.debug("数据库已经存在该url---" + md5Href);
+                logger.debug("数据库已经存在该url---" + md5Url);
                 return false;
             }
-            String sql = "insert into href (href) values( ?)";
+            String sql = "insert into url (md5_url) values( ?)";
             PreparedStatement pstmt;
             pstmt = cn.prepareStatement(sql);
-            pstmt.setString(1,md5Href);
+            pstmt.setString(1,md5Url);
             pstmt.executeUpdate();
             pstmt.close();
             cn.close();
@@ -155,14 +152,14 @@ public class ZhiHuDAO {
      * @param cn
      * @throws SQLException
      */
-    public synchronized static void deleteHrefTable(Connection cn){
-        String sql = "DELETE FROM href";
+    public synchronized static void deleteUrlTable(Connection cn){
+        String sql = "DELETE FROM url";
         PreparedStatement pstmt = null;
         try {
             pstmt = cn.prepareStatement(sql);
             pstmt.executeUpdate();
             pstmt.close();
-            logger.info("href表删除成功---");
+            logger.info("url表删除成功---");
         } catch (SQLException e) {
             e.printStackTrace();
         }

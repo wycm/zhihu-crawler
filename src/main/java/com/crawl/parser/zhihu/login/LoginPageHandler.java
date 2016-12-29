@@ -1,6 +1,7 @@
 package com.crawl.parser.zhihu.login;
 
-import com.crawl.config.Config;
+import com.crawl.parser.zhihu.ZhiHuNewUserDetailPageParser;
+import com.crawl.util.Config;
 import com.crawl.dao.ZhiHuDAO;
 import com.crawl.entity.Page;
 import com.crawl.entity.User;
@@ -8,12 +9,10 @@ import com.crawl.parser.DetailPageParser;
 import com.crawl.parser.zhihu.PageHandler;
 import com.crawl.parser.zhihu.ZhiHuUserFollowingListPageParser;
 import com.crawl.parser.zhihu.ZhiHuUserIndexDetailPageParser;
-import com.crawl.util.Constants;
 import com.crawl.util.Md5Util;
 import com.crawl.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
 import com.crawl.zhihu.task.DownloadTask;
-import com.crawl.zhihu.task.ParseTask;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,7 +23,6 @@ import static com.crawl.zhihu.task.ParseTask.isStopDownload;
 import static com.crawl.zhihu.task.ParseTask.parseUserCount;
 
 /**
- * Created by yang.wang on 12/27/16.
  * 登录模式页面处理器
  */
 public class LoginPageHandler implements PageHandler{
@@ -46,21 +44,14 @@ public class LoginPageHandler implements PageHandler{
      */
     private void handleLoginDetailPage(Page page, Document doc){
         DetailPageParser parser = null;
-        if (doc.select("div[id=ProfileHeader]").size() > 0){
-            //新版主页
-            parser = new ZhiHuNewUserLoginDetailPageParser();
-        }
-        else {
-            //旧版主页
-            parser = ZhiHuUserIndexDetailPageParser.getInstance();
-        }
+        parser = new ZhiHuNewUserDetailPageParser();
         User u = parser.parse(page);
         logger.info("解析用户成功:" + u.toString());
         if(Config.dbEnable){
             ZhiHuDAO.insertToDB(u);
         }
         parseUserCount.incrementAndGet();
-        for(int i = 0;i < u.getFollowees()/20 + 1;i++) {
+        for(int i = 0;i < u.getFollowees() / 20 + 1;i++) {
             /**
              * 当下载网页队列小于100时才获取该用户关注用户
              * 防止下载网页线程池任务队列过量增长
@@ -85,7 +76,7 @@ public class LoginPageHandler implements PageHandler{
             return ;
         }
         String md5Url = Md5Util.Convert2Md5(url);
-        boolean isRepeat = ZhiHuDAO.insertHref(md5Url);
+        boolean isRepeat = ZhiHuDAO.insertUrl(md5Url);
         if(!isRepeat ||
                 (!zhiHuHttpClient.getDownloadThreadExecutor().isShutdown() &&
                         zhiHuHttpClient.getDownloadThreadExecutor().getQueue().size() < 30)){

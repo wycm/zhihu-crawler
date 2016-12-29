@@ -13,7 +13,7 @@ import java.io.IOException;
 
 /**
  * 下载网页任务
- * 并将下载成功的Page放到解析任务队列
+ * 下载网页，并下载成功的Page放到解析线程池
  */
 public class DownloadTask implements Runnable{
 	private static Logger logger = SimpleLogger.getSimpleLogger(DownloadTask.class);
