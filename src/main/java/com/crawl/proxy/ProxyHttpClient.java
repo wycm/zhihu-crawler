@@ -57,7 +57,7 @@ public class ProxyHttpClient extends HttpClient{
                         proxyTestThreadExecutor.execute(new ProxyTestTask(p));
                     }
                     try {
-                        Thread.sleep(30000);
+                        Thread.sleep(300000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

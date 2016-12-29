@@ -34,7 +34,7 @@ public class ProxyTestTask implements Runnable{
                     build();
             request.setConfig(requestConfig);
             Page page = ZhiHuHttpClient.getInstance().getWebPage(request);
-            if (page == null && page.getStatusCode() != 200){
+            if (page == null || page.getStatusCode() != 200){
                 return;
 //                throw new IOException("status code " + page.getStatusCode());
             }

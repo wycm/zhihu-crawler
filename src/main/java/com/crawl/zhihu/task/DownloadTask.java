@@ -23,6 +23,7 @@ public class DownloadTask implements Runnable{
 	private String url;
 	private HttpRequestBase request;
 	private boolean proxyFlag;//是否通过代理下载
+	private Proxy currentProxy;//当前线程使用的代理
 
 	private static ZhiHuHttpClient zhiHuHttpClient = ZhiHuHttpClient.getInstance();
 	public DownloadTask(String url, boolean proxyFlag){
@@ -39,8 +40,8 @@ public class DownloadTask implements Runnable{
 			if(url != null){
 				if (proxyFlag){
 					HttpGet request = new HttpGet(url);
-					Proxy p = ProxyPool.queue.take();
-					HttpHost proxy = new HttpHost(p.getIp(), p.getPort());
+					currentProxy = ProxyPool.queue.take();
+					HttpHost proxy = new HttpHost(currentProxy.getIp(), currentProxy.getPort());
 					request.setConfig(HttpClientUtil.getRequestConfigBuilder().setProxy(proxy).build());
 					page = zhiHuHttpClient.getWebPage(request);
 				}else {
@@ -49,8 +50,8 @@ public class DownloadTask implements Runnable{
 			}
 			if(request != null){
 				if (proxyFlag){
-					Proxy p = ProxyPool.queue.take();
-					HttpHost proxy = new HttpHost(p.getIp(), p.getPort());
+					currentProxy = ProxyPool.queue.take();
+					HttpHost proxy = new HttpHost(currentProxy.getIp(), currentProxy.getPort());
 					request.setConfig(HttpClientUtil.getRequestConfigBuilder().setProxy(proxy).build());
 					page = zhiHuHttpClient.getWebPage(request);
 				}else {
@@ -61,26 +62,31 @@ public class DownloadTask implements Runnable{
 			logger.info(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
 			if(status == HttpStatus.SC_OK){
 				zhiHuHttpClient.getParseThreadExecutor().execute(new ParseTask(page));
+				ProxyPool.queue.add(currentProxy);//将当前代理放入代理池中
 				return;
 			}
 			else if(status == 502 || status == 504 || status == 500 || status == 429){
-				/**
-				 * 将请求继续加入线程池
-                 */
 				Thread.sleep(100);
-				if(url != null){
-					zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url, true));
-				}
-				if(request != null){
-					zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request, true));
-				}
+				retry();
 				return ;
 			}
 			logger.error(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
 		} catch (InterruptedException e) {
 			logger.error(e);
 		} catch (IOException e) {
-			e.printStackTrace();
+			retry();
+		}
+	}
+
+	/**
+	 * retry
+	 */
+	private void retry(){
+		if(url != null){
+			zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url, true));
+		}
+		if (request != null){
+			zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request, true));
 		}
 	}
 }
