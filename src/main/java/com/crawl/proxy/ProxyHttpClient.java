@@ -41,23 +41,24 @@ public class ProxyHttpClient extends HttpClient{
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
     }
-    public void startCrawl(final String url){
+    public void startCrawl(final String... urls){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true){
                     String content = null;
                     try {
-                        content = HttpClientUtil.getWebPage(url);
+                        for (String url : urls){
+                            content = HttpClientUtil.getWebPage(url);
+                            List<Proxy> proxyList = new XicidailiProxyListPageParser().parse(content);
+                            for(Proxy p : proxyList){
+                                proxyTestThreadExecutor.execute(new ProxyTestTask(p));
+                            }
+                            Thread.sleep(1000);
+                        }
+                        Thread.sleep(1000 * 60 * 30);
                     } catch (IOException e) {
                         e.printStackTrace();
-                    }
-                    List<Proxy> proxyList = new XicidailiProxyListPageParser().parse(content);
-                    for(Proxy p : proxyList){
-                        proxyTestThreadExecutor.execute(new ProxyTestTask(p));
-                    }
-                    try {
-                        Thread.sleep(300000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

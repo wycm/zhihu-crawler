@@ -30,6 +30,7 @@ import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContexts;
+import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 
 import javax.net.ssl.SSLContext;
@@ -136,45 +137,26 @@ public class HttpClientUtil {
 
 	public static String getWebPage(String url) throws IOException {
 		HttpGet request = new HttpGet(url);
-		return getWebPage(request, "utf-8", false);
+		return getWebPage(request, "utf-8");
 	}
 	public static String getWebPage(HttpRequestBase request) throws IOException {
-		return getWebPage(request, "utf-8", false);
+		return getWebPage(request, "utf-8");
 	}
 	public static String postRequest(String postUrl, Map<String, String> params) throws IOException {
 		HttpPost post = new HttpPost(postUrl);
 		setHttpPostParams(post, params);
-		return getWebPage(post, "utf-8", false);
+		return getWebPage(post, "utf-8");
 	}
 	/**
 	 * @param encoding 字符编码
-	 * @param isPrintConsole 是否打印到控制台
      * @return 网页内容
      */
 	public static String getWebPage(HttpRequestBase request
-			, String encoding
-			, boolean isPrintConsole) throws IOException {
+			, String encoding) throws IOException {
 		CloseableHttpResponse response = null;
 		response = getResponse(request);
 		logger.info("status---" + response.getStatusLine().getStatusCode());
-		BufferedReader rd = null;
-		StringBuilder webPage = null;
-		try {
-			rd = new BufferedReader(
-                    new InputStreamReader(response.getEntity().getContent(),encoding));
-			String line = "";
-			webPage = new StringBuilder();
-			while((line = rd.readLine()) != null) {
-				webPage.append(line);
-				if(isPrintConsole){
-					logger.info(line);
-				}
-			}
-		} catch (IOException e) {
-			logger.error("IOException", e);
-		}
-		request.releaseConnection();
-		return webPage.toString();
+		return EntityUtils.toString(response.getEntity(),encoding);
 	}
 	public static CloseableHttpResponse getResponse(HttpRequestBase request) throws IOException {
 		if (request.getConfig() == null){

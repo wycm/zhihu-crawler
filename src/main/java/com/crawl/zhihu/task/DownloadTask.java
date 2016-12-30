@@ -40,7 +40,7 @@ public class DownloadTask implements Runnable{
 			Page page = null;
 			if(url != null){
 				if (proxyFlag){
-					HttpGet request = new HttpGet(url);
+					request = new HttpGet(url);
 					currentProxy = ProxyPool.proxyQueue.take();
 					HttpHost proxy = new HttpHost(currentProxy.getIp(), currentProxy.getPort());
 					request.setConfig(HttpClientUtil.getRequestConfigBuilder().setProxy(proxy).build());
@@ -76,6 +76,10 @@ public class DownloadTask implements Runnable{
 			logger.error(e);
 		} catch (IOException e) {
 			retry();
+		} finally {
+			if (request != null){
+				request.releaseConnection();
+			}
 		}
 	}
 

@@ -25,13 +25,13 @@
 Run with [Main.java](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/java/com/crawl/Main.java) <br>
 
 ##注意
-知乎有反爬虫机制，如果访问频繁账号会封禁一段时间，不过可以通过发送邮件的方式手动解封的。
-跑5个下载线程就账号可能被封。
-现在默认下载线程数是2，可以通过 [config.properties](https://github.com/wycm/zhihu-crawler/tree/2.0/src/main/resources) 配置文件的`downloadThreadSize`来修改。
-最好还是注册一个小号来跑吧。如果确实追求效率，那就多注册几个账号跑吧。
+因为登录方式抓取，可能会导致封号。现在默认使用游客模式抓取。
 
 ##更新
-* 2016.12.26－移除未使用的包，修复ConcurrentModificationException和NoSuchElementException异常问题。<br>增加游客(免登录)模式抓取。
+####2016.12.26
+* 移除未使用的包，修复ConcurrentModificationException和NoSuchElementException异常问题。
+* 增加游客(免登录)模式抓取.
+* 添加代理，默认使用代理抓取。
 
 ##最后
 欢迎交流，欢迎提交代码

@@ -18,11 +18,16 @@ import java.util.regex.Pattern;
 
 public class ZhiHuHttpClient extends HttpClient{
     private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuHttpClient.class);
-    private static class ZhiHuHttpClientHolder {
-        private static final ZhiHuHttpClient INSTANCE = new ZhiHuHttpClient();
-    }
-    public static final ZhiHuHttpClient getInstance(){
-        return ZhiHuHttpClientHolder.INSTANCE;
+    private volatile static ZhiHuHttpClient instance;
+    public static ZhiHuHttpClient getInstance(){
+        if (instance == null){
+            synchronized (ZhiHuHttpClient.class){
+                if (instance == null){
+                    instance = new ZhiHuHttpClient();
+                }
+            }
+        }
+        return instance;
     }
     /**
      * 解析网页线程池
@@ -36,7 +41,7 @@ public class ZhiHuHttpClient extends HttpClient{
      * request　header
      */
     private static String authorization;
-    public ZhiHuHttpClient() {
+    private ZhiHuHttpClient() {
         initHttpClient();
         intiThreadPool();
         new Thread(new ThreadPoolMonitor(downloadThreadExecutor, "DownloadPage ThreadPool")).start();
@@ -93,6 +98,8 @@ public class ZhiHuHttpClient extends HttpClient{
         String jsSrc = null;
         if (matcher.find()){
             jsSrc = matcher.group(0);
+        } else {
+            throw new RuntimeException("not find javascript url");
         }
         String jsContent = null;
         try {
