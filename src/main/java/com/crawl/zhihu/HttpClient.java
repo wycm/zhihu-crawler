@@ -23,17 +23,13 @@ public abstract class HttpClient {
         }
         return null;
     }
-    public Page getWebPage(String url){
+    public Page getWebPage(String url) throws IOException {
         return getWebPage(url, "UTF-8");
     }
-    public Page getWebPage(String url, String charset){
+    public Page getWebPage(String url, String charset) throws IOException {
         Page page = new Page();
         CloseableHttpResponse response = null;
-        try {
-            response = HttpClientUtil.getResponse(url);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        response = HttpClientUtil.getResponse(url);
         page.setStatusCode(response.getStatusLine().getStatusCode());
         page.setUrl(url);
         try {

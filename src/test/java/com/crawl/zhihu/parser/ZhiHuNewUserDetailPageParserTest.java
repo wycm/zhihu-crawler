@@ -3,9 +3,11 @@ package com.crawl.zhihu.parser;
 import com.crawl.core.parser.DetailPageParser;
 import org.junit.Test;
 
+import java.io.IOException;
+
 public class ZhiHuNewUserDetailPageParserTest extends AbstractUserIndexDetailPageTest{
     @Test
-    public void testParse(){
+    public void testParse() throws IOException {
         /**
          * 新版本页面
          */

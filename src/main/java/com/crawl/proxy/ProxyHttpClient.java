@@ -3,9 +3,11 @@ package com.crawl.proxy;
 import com.crawl.core.util.HttpClientUtil;
 import com.crawl.core.util.ThreadPoolMonitor;
 import com.crawl.proxy.entity.Proxy;
+import com.crawl.proxy.site.ProxyListPageParserFactory;
 import com.crawl.proxy.site.xicidaili.XicidailiProxyListPageParser;
 import com.crawl.proxy.task.ProxyTestTask;
 import com.crawl.zhihu.HttpClient;
+import com.crawl.zhihu.entity.Page;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -48,16 +50,17 @@ public class ProxyHttpClient extends HttpClient{
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
     }
-    public void startCrawl(final String... urls){
+    public void startCrawl(){
         new Thread(new Runnable() {
             @Override
             public void run() {
                 while (true){
                     String content = null;
-                    for (String url : urls){
+                    for (String url : ProxyPool.proxyMap.keySet()){
                         try {
-                            content = HttpClientUtil.getWebPage(url);
-                            List<Proxy> proxyList = new XicidailiProxyListPageParser().parse(content);
+                            Page page = getWebPage(url);
+                            ProxyListPageParser parser = ProxyListPageParserFactory.getProxyListPageParser(ProxyPool.proxyMap.get(url));
+                            List<Proxy> proxyList = parser.parse(page.getHtml());
                             for(Proxy p : proxyList){
                                 proxyTestThreadExecutor.execute(new ProxyTestTask(p));
                             }

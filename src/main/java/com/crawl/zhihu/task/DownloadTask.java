@@ -70,7 +70,6 @@ public class DownloadTask implements Runnable{
 					 */
 					currentProxy.setDelayTime(5000l);
 					ProxyPool.proxyQueue.add(currentProxy);//将当前代理放入代理池中
-					logger.error("proxyQueue　size:" + ProxyPool.proxyQueue.size());
 				}
 				return;
 			}

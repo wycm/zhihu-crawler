@@ -11,9 +11,9 @@ public class Test {
     public static void main(String[] args){
         String url = "http://www1.folha.uol.com.br/mundo/?cmpid=menutopo";
         String url1 = "http://pt.wikihow.com/P%C3%A1gina-principal";
-        String url2 = "google.com";
+        String url2 = "google.com.br";
         Pattern pattern = Pattern.compile("(.*?://)*((www[^\\.]*)*\\.)*(.*)\\.com.*");
-        Matcher matcher = pattern.matcher(url);
+        Matcher matcher = pattern.matcher(url2);
         if (matcher.find()){
             System.out.println(matcher.group(4));
         }

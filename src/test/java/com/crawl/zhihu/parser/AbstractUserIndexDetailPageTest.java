@@ -6,8 +6,10 @@ import com.crawl.zhihu.entity.Page;
 import com.crawl.zhihu.entity.User;
 import com.crawl.zhihu.ZhiHuHttpClient;
 
+import java.io.IOException;
+
 public abstract class AbstractUserIndexDetailPageTest {
-    public void testParse(String url, DetailPageParser parser){
+    public void testParse(String url, DetailPageParser parser) throws IOException {
         Page page = ZhiHuHttpClient.getInstance().getWebPage(url);
         User user = parser.parse(page);
         System.out.println(user);

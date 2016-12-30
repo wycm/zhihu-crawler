@@ -13,10 +13,7 @@ public class Main {
     private static Logger logger = SimpleLogger.getLogger(Main.class);
     public static void main(String args []){
         String startURL = Config.startURL;
-        ProxyHttpClient.getInstance().startCrawl(
-                "http://www.xicidaili.com/wt",
-                "http://www.xicidaili.com/nn",
-                "http://www.xicidaili.com/wn");
+        ProxyHttpClient.getInstance().startCrawl();
         ZhiHuHttpClient.getInstance().startCrawl(startURL);
     }
 }
