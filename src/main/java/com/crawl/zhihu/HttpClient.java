@@ -24,6 +24,9 @@ public abstract class HttpClient {
         return null;
     }
     public Page getWebPage(String url){
+        return getWebPage(url, "UTF-8");
+    }
+    public Page getWebPage(String url, String charset){
         Page page = new Page();
         CloseableHttpResponse response = null;
         try {
@@ -35,7 +38,7 @@ public abstract class HttpClient {
         page.setUrl(url);
         try {
             if(page.getStatusCode() == 200){
-                page.setHtml(EntityUtils.toString(response.getEntity()));
+                page.setHtml(EntityUtils.toString(response.getEntity(), charset));
             }
         } catch (IOException e) {
             e.printStackTrace();

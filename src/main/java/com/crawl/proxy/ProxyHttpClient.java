@@ -16,11 +16,16 @@ import java.util.concurrent.TimeUnit;
 
 public class ProxyHttpClient extends HttpClient{
     private static final Logger logger = Logger.getLogger(ProxyHttpClient.class);
-    private static class ProxyHttpClientHolder {
-        private static final ProxyHttpClient INSTANCE = new ProxyHttpClient();
-    }
-    public static final ProxyHttpClient getInstance(){
-        return ProxyHttpClientHolder.INSTANCE;
+    private volatile static ProxyHttpClient instance;
+    public static ProxyHttpClient getInstance(){
+        if (instance == null){
+            synchronized (ProxyHttpClient.class){
+                if (instance == null){
+                    instance = new ProxyHttpClient();
+                }
+            }
+        }
+        return instance;
     }
     /**
      * 代理测试线程池
