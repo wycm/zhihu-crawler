@@ -40,7 +40,7 @@ public class DownloadTask implements Runnable{
 			if(url != null){
 				if (proxyFlag){
 					HttpGet request = new HttpGet(url);
-					currentProxy = ProxyPool.queue.take();
+					currentProxy = ProxyPool.proxyQueue.take();
 					HttpHost proxy = new HttpHost(currentProxy.getIp(), currentProxy.getPort());
 					request.setConfig(HttpClientUtil.getRequestConfigBuilder().setProxy(proxy).build());
 					page = zhiHuHttpClient.getWebPage(request);
@@ -50,7 +50,7 @@ public class DownloadTask implements Runnable{
 			}
 			if(request != null){
 				if (proxyFlag){
-					currentProxy = ProxyPool.queue.take();
+					currentProxy = ProxyPool.proxyQueue.take();
 					HttpHost proxy = new HttpHost(currentProxy.getIp(), currentProxy.getPort());
 					request.setConfig(HttpClientUtil.getRequestConfigBuilder().setProxy(proxy).build());
 					page = zhiHuHttpClient.getWebPage(request);
@@ -62,10 +62,10 @@ public class DownloadTask implements Runnable{
 			logger.info(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
 			if(status == HttpStatus.SC_OK){
 				zhiHuHttpClient.getParseThreadExecutor().execute(new ParseTask(page));
-				ProxyPool.queue.add(currentProxy);//将当前代理放入代理池中
+				ProxyPool.proxyQueue.add(currentProxy);//将当前代理放入代理池中
 				return;
 			}
-			else if(status == 502 || status == 504 || status == 500 || status == 429){
+			else if(status > 404){
 				Thread.sleep(100);
 				retry();
 				return ;

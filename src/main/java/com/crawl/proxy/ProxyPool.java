@@ -14,6 +14,6 @@ public class ProxyPool {
     /**
      * 代理池队列
      */
-    public final static DelayQueue<Proxy> queue = new DelayQueue();
+    public final static DelayQueue<Proxy> proxyQueue = new DelayQueue();
 
 }

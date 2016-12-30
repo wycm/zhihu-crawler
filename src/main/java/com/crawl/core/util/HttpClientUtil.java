@@ -2,6 +2,7 @@ package com.crawl.core.util;
 
 import org.apache.http.*;
 import org.apache.http.client.CookieStore;
+import org.apache.http.client.HttpRequestRetryHandler;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -14,6 +15,7 @@ import org.apache.http.config.ConnectionConfig;
 import org.apache.http.config.Registry;
 import org.apache.http.config.RegistryBuilder;
 import org.apache.http.config.SocketConfig;
+import org.apache.http.conn.ConnectTimeoutException;
 import org.apache.http.conn.HttpHostConnectException;
 import org.apache.http.conn.socket.ConnectionSocketFactory;
 import org.apache.http.conn.socket.PlainConnectionSocketFactory;
@@ -26,11 +28,14 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.ssl.SSLContexts;
 import org.apache.log4j.Logger;
 
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
 import java.io.*;
+import java.net.UnknownHostException;
 import java.nio.charset.CodingErrorAction;
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
@@ -38,6 +43,7 @@ import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 
 /**
@@ -84,8 +90,34 @@ public class HttpClientUtil {
             connManager.setDefaultConnectionConfig(connectionConfig);
             connManager.setMaxTotal(300);
             connManager.setDefaultMaxPerRoute(100);
+			HttpRequestRetryHandler retryHandler = new HttpRequestRetryHandler() {
+				@Override
+				public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
+					if (executionCount > 0) {
+						return false;
+					}
+					if (exception instanceof InterruptedIOException) {
+						return true;
+					}
+					if (exception instanceof ConnectTimeoutException) {
+						return true;
+					}
+					if (exception instanceof UnknownHostException) {
+						return true;
+					}
+					if (exception instanceof SSLException) {
+						return true;
+					}
+					HttpRequest request = HttpClientContext.adapt(context).getRequest();
+					if (!(request instanceof HttpEntityEnclosingRequest)) {
+						return true;
+					}
+					return false;
+				}
+			};
             HttpClientBuilder httpClientBuilder =
                     HttpClients.custom().setConnectionManager(connManager)
+							.setRetryHandler(retryHandler)
                             .setDefaultCookieStore(new BasicCookieStore()).setUserAgent(userAgent);
             if (proxy != null) {
                 httpClientBuilder.setRoutePlanner(new DefaultProxyRoutePlanner(proxy)).build();
@@ -148,6 +180,7 @@ public class HttpClientUtil {
 		if (request.getConfig() == null){
 			request.setConfig(requestConfig);
 		}
+		request.addHeader("User-Agent", Constants.userAgentArray[new Random().nextInt(Constants.userAgentArray.length)]);
 		HttpClientContext httpClientContext = HttpClientContext.create();
 		httpClientContext.setCookieStore(cookieStore);
 		CloseableHttpResponse response = httpClient.execute(request, httpClientContext);

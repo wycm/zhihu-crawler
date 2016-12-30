@@ -1,6 +1,6 @@
 package com.crawl.proxy.task;
 
-import com.crawl.core.util.HttpClientUtil;
+import com.crawl.core.util.Constants;
 import com.crawl.proxy.ProxyPool;
 import com.crawl.proxy.entity.Proxy;
 import com.crawl.zhihu.ZhiHuHttpClient;
@@ -25,7 +25,7 @@ public class ProxyTestTask implements Runnable{
         long startTime = System.currentTimeMillis();
         proxy.setLastUseTime(startTime);
         try {
-            HttpGet request = new HttpGet("https://www.zhihu.com/people/wo-yan-chen-mo/following");
+            HttpGet request = new HttpGet(Constants.INDEX_URL);
             RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(10000).
                     setConnectTimeout(10000).
                     setConnectionRequestTimeout(10000).
@@ -42,9 +42,9 @@ public class ProxyTestTask implements Runnable{
             long endTime = System.currentTimeMillis();
             proxy.setDelay(5000);
             if(!ProxyPool.proxySet.contains(getProxyStr())){
-                ProxyPool.queue.add(proxy);
+                ProxyPool.proxyQueue.add(proxy);
             }
-            logger.info(proxy.toString() + "----------代理可用--------请求耗时:" + (endTime - startTime) + "ms");
+            logger.debug(proxy.toString() + "----------代理可用--------请求耗时:" + (endTime - startTime) + "ms");
         } catch (IOException e) {
             logger.debug(e.getMessage());
         }

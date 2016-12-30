@@ -21,7 +21,10 @@ public class XicidailiProxyListPageParser implements ProxyListPageParser{
         for (Element element : elements){
             String ip = element.select("td:eq(1)").first().text();
             String port  = element.select("td:eq(2)").first().text();
-            proxyList.add(new Proxy(ip, Integer.valueOf(port)));
+            String isAnonymous = element.select("td:eq(4)").first().text();
+            if(isAnonymous.equals("高匿")){
+                proxyList.add(new Proxy(ip, Integer.valueOf(port)));
+            }
         }
         return proxyList;
     }
