@@ -21,14 +21,15 @@ public class ZhiHuNewUserDetailPageParser implements DetailPageParser {
     public User parse(Page page) {
         Document doc = Jsoup.parse(page.getHtml());
         User user = new User();
-        String userId = getUserId(page.getUrl());
-        user.setUrl("https://www.zhihu.com/people/" + userId);//用户主页
-        getUserByJson(user, userId, doc.select("[data-state]").first().attr("data-state"));
+        String userToken = getUserToken(page.getUrl());
+        user.setUserToken(userToken);
+        user.setUrl("https://www.zhihu.com/people/" + userToken);//用户主页
+        getUserByJson(user, userToken, doc.select("[data-state]").first().attr("data-state"));
         return user;
     }
-    private void getUserByJson(User user, String userId, String dataStateJson){
+    private void getUserByJson(User user, String userToken, String dataStateJson){
 
-        String type = "['" + userId + "']";//转义
+        String type = "['" + userToken + "']";//转义
         String commonJsonPath = "$.entities.users." + type;
         try {
             JsonPath.parse(dataStateJson).read(commonJsonPath);
@@ -83,7 +84,7 @@ public class ZhiHuNewUserDetailPageParser implements DetailPageParser {
      * @param url
      * @return
      */
-    private String getUserId(String url){
+    private String getUserToken(String url){
         Pattern pattern = Pattern.compile("https://www.zhihu.com/[a-z]+/(.*)/following");
         Matcher matcher = pattern.matcher(url);
         String userId = null;

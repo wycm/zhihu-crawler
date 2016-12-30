@@ -16,8 +16,9 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 
 /**
- * 下载网页任务
- * 下载网页，并下载成功的Page放到解析线程池
+ * 下载网页任务， 并下载成功的Page放到解析线程池
+ * 若使用代理，从ProxyPool中取
+ * @see ProxyPool
  */
 public class DownloadTask implements Runnable{
 	private static Logger logger = SimpleLogger.getSimpleLogger(DownloadTask.class);
@@ -63,7 +64,14 @@ public class DownloadTask implements Runnable{
 			logger.info(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
 			if(status == HttpStatus.SC_OK){
 				zhiHuHttpClient.getParseThreadExecutor().execute(new ParseTask(page));
-				ProxyPool.proxyQueue.add(currentProxy);//将当前代理放入代理池中
+				if(currentProxy != null){
+					/**
+					 * 该代理可用，将该代理继续添加到proxyQueue
+					 */
+					currentProxy.setDelayTime(5000l);
+					ProxyPool.proxyQueue.add(currentProxy);//将当前代理放入代理池中
+					logger.error("proxyQueue　size:" + ProxyPool.proxyQueue.size());
+				}
 				return;
 			}
 			else if(status > 404){

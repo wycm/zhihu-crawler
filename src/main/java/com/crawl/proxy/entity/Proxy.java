@@ -13,13 +13,6 @@ public class Proxy implements Delayed{
     private long lastUseTime;
     private int delay;
 
-    public Proxy() {
-    }
-
-    public Proxy(String ip, int port) {
-        this.ip = ip;
-        this.port = port;
-    }
     public Proxy(String ip, int port, long delayTime) {
         this.ip = ip;
         this.port = port;
@@ -74,7 +67,9 @@ public class Proxy implements Delayed{
         this.delay = delay;
     }
 
-
+    public void setDelayTime(long delayTime){
+        this.delayTime=TimeUnit.NANOSECONDS.convert(delayTime, TimeUnit.MILLISECONDS) + System.nanoTime();
+    }
     @Override
     public long getDelay(TimeUnit unit) {
         return unit.convert(delayTime - System.nanoTime(), TimeUnit.NANOSECONDS);

@@ -65,13 +65,13 @@ public class TouristPageHandler implements PageHandler{
                 /**
                  * 获取关注用户列表,因为知乎每次最多返回20个关注用户
                  */
-                String userFolloweesUrl = formatUserFolloweesUrl(20 * i);
+                String userFolloweesUrl = formatUserFolloweesUrl(u.getUserToken(), 20 * i);
                 handleUrl(userFolloweesUrl);
             }
         }
     }
-    public String formatUserFolloweesUrl(int offset){
-        String url = "https://www.zhihu.com/api/v4/members/cheng-yi-nan/followees?include=data%5B*%5D.answer_count%2Carticles_count%2Cfollower_count%2C" +
+    public String formatUserFolloweesUrl(String userToken, int offset){
+        String url = "https://www.zhihu.com/api/v4/members/" + userToken + "/followees?include=data%5B*%5D.answer_count%2Carticles_count%2Cfollower_count%2C" +
                 "is_followed%2Cis_following%2Cbadge%5B%3F(type%3Dbest_answerer)%5D.topics&offset=" + offset + "&limit=20";
         return url;
     }

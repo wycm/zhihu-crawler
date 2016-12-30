@@ -156,7 +156,9 @@ public class HttpClientUtil {
 		CloseableHttpResponse response = null;
 		response = getResponse(request);
 		logger.info("status---" + response.getStatusLine().getStatusCode());
-		return EntityUtils.toString(response.getEntity(),encoding);
+		String content = EntityUtils.toString(response.getEntity(),encoding);
+		request.releaseConnection();
+		return content;
 	}
 	public static CloseableHttpResponse getResponse(HttpRequestBase request) throws IOException {
 		if (request.getConfig() == null){
@@ -166,6 +168,10 @@ public class HttpClientUtil {
 		HttpClientContext httpClientContext = HttpClientContext.create();
 		httpClientContext.setCookieStore(cookieStore);
 		CloseableHttpResponse response = httpClient.execute(request, httpClientContext);
+		int statusCode = response.getStatusLine().getStatusCode();
+		if(statusCode != 200){
+			throw new IOException("status code is:" + statusCode);
+		}
 		return response;
 	}
 	public static CloseableHttpResponse getResponse(String url) throws IOException {

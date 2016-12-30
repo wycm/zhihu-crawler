@@ -13,7 +13,11 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
-
+/**
+ * 检测代理，是否可用。
+ * 通过访问知乎首页，能否正确响应
+ * 将可用代理添加到DelayQueue延时队列中，设置５秒延迟
+ */
 public class ProxyTestTask implements Runnable{
     private final static Logger logger = Logger.getLogger(ProxyTestTask.class);
     private Proxy proxy;
@@ -40,7 +44,6 @@ public class ProxyTestTask implements Runnable{
             }
             request.releaseConnection();
             long endTime = System.currentTimeMillis();
-            proxy.setDelay(5000);
             if(!ProxyPool.proxySet.contains(getProxyStr())){
                 ProxyPool.proxyQueue.add(proxy);
             }

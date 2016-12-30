@@ -6,6 +6,7 @@ import com.crawl.proxy.entity.Proxy;
 import com.crawl.proxy.site.xicidaili.XicidailiProxyListPageParser;
 import com.crawl.proxy.task.ProxyTestTask;
 import com.crawl.zhihu.HttpClient;
+import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ProxyHttpClient extends HttpClient{
+    private static final Logger logger = Logger.getLogger(ProxyHttpClient.class);
     private static class ProxyHttpClientHolder {
         private static final ProxyHttpClient INSTANCE = new ProxyHttpClient();
     }
@@ -47,18 +49,22 @@ public class ProxyHttpClient extends HttpClient{
             public void run() {
                 while (true){
                     String content = null;
-                    try {
-                        for (String url : urls){
+                    for (String url : urls){
+                        try {
                             content = HttpClientUtil.getWebPage(url);
                             List<Proxy> proxyList = new XicidailiProxyListPageParser().parse(content);
                             for(Proxy p : proxyList){
                                 proxyTestThreadExecutor.execute(new ProxyTestTask(p));
                             }
                             Thread.sleep(1000);
+                        } catch (IOException e) {
+                            logger.error(e);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
                         }
+                    }
+                    try {
                         Thread.sleep(1000 * 60 * 30);
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }

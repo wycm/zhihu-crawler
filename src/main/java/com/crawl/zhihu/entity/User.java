@@ -36,6 +36,8 @@ public class User {
     private int followers;
     // hashId 用户唯一标识
     private String hashId;
+    //user token
+    private String userToken;
 
     public String getLocation() {
         return location;
@@ -165,6 +167,13 @@ public class User {
         this.hashId = hashId;
     }
 
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
     @Override
     public String toString() {
         return "User{" +
