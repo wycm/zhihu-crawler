@@ -1,11 +1,9 @@
 package com.crawl.core.util;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class Constants {
-    public final static String LOGIN_PARSE_STRATEGY = "login";
-    public final static String TOURIST_PARSE_STRATEGY = "tourist";
+    public final static String DIRECT_CRAWL_STRATEGY = "direct";
+    public final static String PROXY_CRAWL_STRATEGY = "proxy";
     //知乎首页
     public final static String INDEX_URL = "https://www.zhihu.com";
     public final static String[] userAgentArray = new String[]{

@@ -24,11 +24,11 @@ public class ParseTask implements Runnable {
     public static volatile boolean isStopDownload = false;
     private static PageHandler pageHandler;
     static {
-        String crawlStrategy = Config.crawlStrategy;
-        if(crawlStrategy.equals(Constants.LOGIN_PARSE_STRATEGY)){
+        boolean loginFlag = Config.isLogin;
+        if(loginFlag){
             pageHandler = new LoginPageHandler();
         }
-        else if (crawlStrategy.equals(Constants.TOURIST_PARSE_STRATEGY)){
+        else{
             pageHandler = new TouristPageHandler();
         }
     }

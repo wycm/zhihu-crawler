@@ -12,9 +12,13 @@ public class Config {
      */
     public static boolean dbEnable;
     /**
-     * 抓取策略
+     * 是否使用代理抓取
      */
-    public static String crawlStrategy;
+    public static boolean isProxy;
+    /**
+     * 是否登录
+     */
+    public static boolean isLogin;
     /**
      * 下载网页线程数
      */
@@ -84,7 +88,8 @@ public class Config {
         downloadPageCount = Integer.valueOf(p.getProperty("downloadPageCount"));
         downloadThreadSize = Integer.valueOf(p.getProperty("downloadThreadSize"));
         cookiePath = p.getProperty("cookiePath");
-        crawlStrategy = p.getProperty("crawlStrategy");
+        isLogin = Boolean.valueOf(p.getProperty("isLogin"));
+        isProxy = Boolean.valueOf(p.getProperty("isProxy"));
         if (dbEnable){
             dbName = p.getProperty("db.name");
             dbHost = p.getProperty("db.host");

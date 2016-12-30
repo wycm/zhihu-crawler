@@ -1,5 +1,6 @@
 package com.crawl.zhihu.task;
 
+import com.crawl.core.util.Config;
 import com.crawl.core.util.HttpClientUtil;
 import com.crawl.proxy.ProxyPool;
 import com.crawl.proxy.entity.Proxy;
@@ -83,10 +84,10 @@ public class DownloadTask implements Runnable{
 	 */
 	private void retry(){
 		if(url != null){
-			zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url, true));
+			zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url, Config.isProxy));
 		}
 		if (request != null){
-			zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request, true));
+			zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request, Config.isProxy));
 		}
 	}
 }

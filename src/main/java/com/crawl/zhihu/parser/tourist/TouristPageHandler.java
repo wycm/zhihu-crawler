@@ -65,7 +65,7 @@ public class TouristPageHandler implements PageHandler{
                 /**
                  * 获取关注用户列表,因为知乎每次最多返回20个关注用户
                  */
-                String userFolloweesUrl = formatUserFolloweesUrl(20*i);
+                String userFolloweesUrl = formatUserFolloweesUrl(20 * i);
                 handleUrl(userFolloweesUrl);
             }
         }
@@ -79,7 +79,7 @@ public class TouristPageHandler implements PageHandler{
         HttpGet request = new HttpGet(url);
         request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
         if(!Config.dbEnable){
-            zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request, true));
+            zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request, Config.isProxy));
             return ;
         }
         String md5Url = Md5Util.Convert2Md5(url);
@@ -90,7 +90,7 @@ public class TouristPageHandler implements PageHandler{
             /**
              * 防止互相等待，导致死锁
              */
-            zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request, true));
+            zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request, Config.isProxy));
         }
     }
     private void handleTouristListPage(Page page){

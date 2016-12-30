@@ -47,14 +47,14 @@ public class ZhiHuHttpClient extends HttpClient{
      */
     @Override
     public void initHttpClient() {
-        if(Config.crawlStrategy.equals(Constants.LOGIN_PARSE_STRATEGY) &&
+        if(Config.isLogin &&
                 !deserializeCookieStore(Config.cookiePath)){
             /**
              * 模拟登录知乎，持久化Cookie到本地
              * 不用以后每次都登录
              */
             new ModelLogin().login(Config.emailOrPhoneNum, Config.password);
-        }else if (Config.crawlStrategy.equals(Constants.TOURIST_PARSE_STRATEGY)){
+        }else if (!Config.isLogin){
             /**
              * 获取 authorization 字段值
              */
@@ -78,7 +78,7 @@ public class ZhiHuHttpClient extends HttpClient{
                 new LinkedBlockingQueue<Runnable>());
     }
     public void startCrawl(String url){
-        downloadThreadExecutor.execute(new DownloadTask(url, true));
+        downloadThreadExecutor.execute(new DownloadTask(url, Config.isProxy));
         manageZhiHuClient();
     }
     private void setAuthorization(){
