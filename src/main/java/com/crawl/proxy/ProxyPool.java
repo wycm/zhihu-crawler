@@ -1,5 +1,6 @@
 package com.crawl.proxy;
 
+import com.crawl.proxy.entity.Direct;
 import com.crawl.proxy.entity.Proxy;
 import com.crawl.proxy.site.ip181.Ip181ProxyListPageParser;
 import com.crawl.proxy.site.xicidaili.XicidailiProxyListPageParser;
@@ -25,7 +26,8 @@ public class ProxyPool {
         proxyMap.put("http://www.xicidaili.com/wt", XicidailiProxyListPageParser.class);
         proxyMap.put("http://www.xicidaili.com/nn", XicidailiProxyListPageParser.class);
         proxyMap.put("http://www.xicidaili.com/wn", XicidailiProxyListPageParser.class);
-//        proxyMap.put("http://www.ip181.com/daili/1.html", Ip181ProxyListPageParser.class);
+        proxyMap.put("http://www.ip181.com/daili/1.html", Ip181ProxyListPageParser.class);
+        proxyQueue.add(new Direct(5000));
     }
 
 }

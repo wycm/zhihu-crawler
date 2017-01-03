@@ -3,6 +3,7 @@ package com.crawl.zhihu.task;
 import com.crawl.core.util.Config;
 import com.crawl.core.util.HttpClientUtil;
 import com.crawl.proxy.ProxyPool;
+import com.crawl.proxy.entity.Direct;
 import com.crawl.proxy.entity.Proxy;
 import com.crawl.zhihu.entity.Page;
 import com.crawl.core.util.SimpleLogger;
@@ -41,11 +42,13 @@ public class DownloadTask implements Runnable{
 			Page page = null;
 			if(url != null){
 				if (proxyFlag){
-					request = new HttpGet(url);
+					HttpGet tempReqeust = new HttpGet(url);
 					currentProxy = ProxyPool.proxyQueue.take();
-					HttpHost proxy = new HttpHost(currentProxy.getIp(), currentProxy.getPort());
-					request.setConfig(HttpClientUtil.getRequestConfigBuilder().setProxy(proxy).build());
-					page = zhiHuHttpClient.getWebPage(request);
+					if(!(currentProxy instanceof Direct)){
+						HttpHost proxy = new HttpHost(currentProxy.getIp(), currentProxy.getPort());
+						tempReqeust.setConfig(HttpClientUtil.getRequestConfigBuilder().setProxy(proxy).build());
+					}
+					page = zhiHuHttpClient.getWebPage(tempReqeust);
 				}else {
 					page = zhiHuHttpClient.getWebPage(url);
 				}
@@ -53,8 +56,10 @@ public class DownloadTask implements Runnable{
 			if(request != null){
 				if (proxyFlag){
 					currentProxy = ProxyPool.proxyQueue.take();
-					HttpHost proxy = new HttpHost(currentProxy.getIp(), currentProxy.getPort());
-					request.setConfig(HttpClientUtil.getRequestConfigBuilder().setProxy(proxy).build());
+					if(!(currentProxy instanceof Direct)) {
+						HttpHost proxy = new HttpHost(currentProxy.getIp(), currentProxy.getPort());
+						request.setConfig(HttpClientUtil.getRequestConfigBuilder().setProxy(proxy).build());
+					}
 					page = zhiHuHttpClient.getWebPage(request);
 				}else {
 					page = zhiHuHttpClient.getWebPage(request);

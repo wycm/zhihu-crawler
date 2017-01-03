@@ -7,7 +7,7 @@ import static com.crawl.proxy.ProxyPool.proxyQueue;
 
 public class DelayQueueTest {
     public static void main(String[] args){
-        Proxy proxy = new Proxy("123", 123, 5000);
+        Proxy proxy = new Proxy("123", 123, 1000);
         proxyQueue.add(proxy);
         try {
             proxyQueue.take();

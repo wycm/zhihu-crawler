@@ -100,6 +100,9 @@ public class TouristPageHandler implements PageHandler{
         if(!isStopDownload && zhiHuHttpClient.getDownloadThreadExecutor().getQueue().size() <= 100){
             List<String> urlTokenList = JsonPath.parse(page.getHtml()).read("$.data..url_token");
             for (String s : urlTokenList){
+                if (s == null){
+                    continue;
+                }
                 handleUrl(Constants.INDEX_URL + "/people/" + s + "/following");
             }
         }

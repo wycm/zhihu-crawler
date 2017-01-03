@@ -30,8 +30,8 @@ Run with [Main.java](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/jav
 ##更新
 ####2016.12.26
 * 移除未使用的包，修复ConcurrentModificationException和NoSuchElementException异常问题。
-* 增加游客(免登录)模式抓取.
-* 添加代理，默认使用代理抓取。
+* 增加游客(免登录)模式抓取。
+* 添加代理抓取。
 
 ##最后
 欢迎交流，欢迎提交代码
