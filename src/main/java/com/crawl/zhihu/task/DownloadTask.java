@@ -66,32 +66,31 @@ public class DownloadTask implements Runnable{
 				}
 			}
 			int status = page.getStatusCode();
-			logger.info(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
 			if(status == HttpStatus.SC_OK){
+				logger.info(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
 				zhiHuHttpClient.getParseThreadExecutor().execute(new ParseTask(page));
-				if(currentProxy != null){
-					/**
-					 * 该代理可用，将该代理继续添加到proxyQueue
-					 */
-					currentProxy.setDelayTime(5000l);
-					ProxyPool.proxyQueue.add(currentProxy);//将当前代理放入代理池中
-				}
-				return;
+				currentProxy.setSuccessfulTimes(currentProxy.getSuccessfulTimes() + 1);
 			}
 			else if(status > 404){
-				Thread.sleep(100);
+                logger.error(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
+                Thread.sleep(100);
 				retry();
-				return ;
 			}
-			logger.error(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
 		} catch (InterruptedException e) {
 			logger.error(e);
 		} catch (IOException e) {
+            if(currentProxy != null){
+                /**
+                 * 该代理可用，将该代理继续添加到proxyQueue
+                 */
+                currentProxy.setFailureTimes(currentProxy.getFailureTimes() + 1);
+            }
 			retry();
 		} finally {
 			if (request != null){
 				request.releaseConnection();
 			}
+			setProxyUseStrategy();
 		}
 	}
 
@@ -102,8 +101,27 @@ public class DownloadTask implements Runnable{
 		if(url != null){
 			zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url, Config.isProxy));
 		}
-		if (request != null){
+		else if (request != null){
 			zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request, Config.isProxy));
 		}
 	}
+
+    /**
+     * 是否继续使用代理
+	 * 失败次数大于３，且失败率超过60%，则丢弃
+     */
+	private void setProxyUseStrategy(){
+        if (currentProxy != null){
+            int succTimes = currentProxy.getSuccessfulTimes();
+            int failTimes = currentProxy.getFailureTimes();
+            if(failTimes >= 3){
+                double failRate = (failTimes + 0.0) / (succTimes + failTimes);
+                if (failRate > 0.6){
+                    return;
+                }
+            }
+            currentProxy.setDelayTime(5000l);
+            ProxyPool.proxyQueue.add(currentProxy);//将当前代理放入代理池中
+        }
+    }
 }

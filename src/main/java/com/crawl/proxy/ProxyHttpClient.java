@@ -1,12 +1,10 @@
 package com.crawl.proxy;
 
-import com.crawl.core.util.HttpClientUtil;
 import com.crawl.core.util.ThreadPoolMonitor;
 import com.crawl.proxy.entity.Proxy;
 import com.crawl.proxy.site.ProxyListPageParserFactory;
-import com.crawl.proxy.site.xicidaili.XicidailiProxyListPageParser;
 import com.crawl.proxy.task.ProxyTestTask;
-import com.crawl.zhihu.HttpClient;
+import com.crawl.core.httpclient.AbstractHttpClient;
 import com.crawl.zhihu.entity.Page;
 import org.apache.log4j.Logger;
 
@@ -16,7 +14,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-public class ProxyHttpClient extends HttpClient{
+public class ProxyHttpClient extends AbstractHttpClient {
     private static final Logger logger = Logger.getLogger(ProxyHttpClient.class);
     private volatile static ProxyHttpClient instance;
     public static ProxyHttpClient getInstance(){
@@ -34,13 +32,8 @@ public class ProxyHttpClient extends HttpClient{
      */
     private ThreadPoolExecutor proxyTestThreadExecutor;
     public ProxyHttpClient(){
-        initHttpClient();
         intiThreadPool();
         new Thread(new ThreadPoolMonitor(proxyTestThreadExecutor, "ProxyTest ThreadPool")).start();
-    }
-    @Override
-    public void initHttpClient() {
-
     }
     /**
      * 初始化线程池

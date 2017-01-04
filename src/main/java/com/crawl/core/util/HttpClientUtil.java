@@ -57,6 +57,7 @@ public class HttpClientUtil {
 	private final static String userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36";
 	private static HttpHost proxy;
 	private static RequestConfig requestConfig;
+	private static final int TIMEOUT = 10000;
 
 	static{
 		init();
@@ -82,7 +83,7 @@ public class HttpClientUtil {
             PoolingHttpClientConnectionManager connManager =
                     new PoolingHttpClientConnectionManager(socketFactoryRegistry);
 
-            SocketConfig socketConfig = SocketConfig.custom().setTcpNoDelay(true).build();
+            SocketConfig socketConfig = SocketConfig.custom().setSoTimeout(TIMEOUT).setTcpNoDelay(true).build();
             connManager.setDefaultSocketConfig(socketConfig);
 
             ConnectionConfig connectionConfig =
@@ -94,7 +95,7 @@ public class HttpClientUtil {
 			HttpRequestRetryHandler retryHandler = new HttpRequestRetryHandler() {
 				@Override
 				public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {
-					if (executionCount > 0) {
+					if (executionCount > 2) {
 						return false;
 					}
 					if (exception instanceof InterruptedIOException) {
@@ -125,9 +126,9 @@ public class HttpClientUtil {
             }
             httpClient = httpClientBuilder.build();
 
-            requestConfig = RequestConfig.custom().setSocketTimeout(10000).
-					setConnectTimeout(10000).
-					setConnectionRequestTimeout(10000).
+            requestConfig = RequestConfig.custom().setSocketTimeout(TIMEOUT).
+					setConnectTimeout(TIMEOUT).
+					setConnectionRequestTimeout(TIMEOUT).
 					setCookieSpec(CookieSpecs.STANDARD).
 					build();
         } catch (Exception e) {
@@ -204,22 +205,16 @@ public class HttpClientUtil {
 	 * @param path
 	 * @throws Exception
 	 */
-	public static Object deserializeMyHttpClient(String path) throws NullPointerException, FileNotFoundException {
+	public static Object deserializeObject(String path) throws Exception {
 //		InputStream fis = HttpClientUtil.class.getResourceAsStream(name);
 		File file = new File(path);
 		InputStream fis = new FileInputStream(file);
 		ObjectInputStream ois = null;
 		Object object = null;
-		try {
-			ois = new ObjectInputStream(fis);
-			object = ois.readObject();
-			fis.close();
-			ois.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
+		ois = new ObjectInputStream(fis);
+		object = ois.readObject();
+		fis.close();
+		ois.close();
 		return object;
 	}
 
@@ -331,9 +326,9 @@ public class HttpClientUtil {
 		request.setEntity(entity);
 	}
 	public static org.apache.http.client.config.RequestConfig.Builder getRequestConfigBuilder(){
-		return RequestConfig.custom().setSocketTimeout(10000).
-				setConnectTimeout(10000).
-				setConnectionRequestTimeout(10000).
+		return RequestConfig.custom().setSocketTimeout(TIMEOUT).
+				setConnectTimeout(TIMEOUT).
+				setConnectionRequestTimeout(TIMEOUT).
 				setCookieSpec(CookieSpecs.STANDARD);
 	}
 	public static void main(String args []){

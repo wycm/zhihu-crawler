@@ -1,5 +1,6 @@
 package com.crawl.zhihu.dao;
 
+import com.crawl.core.db.ConnectionManager;
 import com.crawl.zhihu.entity.User;
 import com.crawl.core.util.SimpleLogger;
 import org.apache.log4j.Logger;

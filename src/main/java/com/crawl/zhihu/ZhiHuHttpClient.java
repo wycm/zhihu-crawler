@@ -1,9 +1,10 @@
 package com.crawl.zhihu;
 
+import com.crawl.core.httpclient.AbstractHttpClient;
+import com.crawl.core.httpclient.IHttpClient;
 import com.crawl.core.util.Config;
-import com.crawl.zhihu.dao.ConnectionManager;
+import com.crawl.core.db.ConnectionManager;
 import com.crawl.zhihu.dao.ZhiHuDAO;
-import com.crawl.core.util.Constants;
 import com.crawl.core.util.HttpClientUtil;
 import com.crawl.core.util.SimpleLogger;
 import com.crawl.core.util.ThreadPoolMonitor;
@@ -16,7 +17,7 @@ import java.util.concurrent.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class ZhiHuHttpClient extends HttpClient{
+public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
     private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuHttpClient.class);
     private volatile static ZhiHuHttpClient instance;
     public static ZhiHuHttpClient getInstance(){

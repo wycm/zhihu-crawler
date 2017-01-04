@@ -17,7 +17,7 @@ import java.util.concurrent.DelayQueue;
 public class ProxyPool {
     public final static Set<String> proxySet = new HashSet<String>();
     /**
-     * 代理池延时队列
+     * 代理池延迟队列
      */
     public final static DelayQueue<Proxy> proxyQueue = new DelayQueue();
 

@@ -1,4 +1,4 @@
-package com.crawl.zhihu;
+package com.crawl.core.httpclient;
 
 import com.crawl.zhihu.entity.Page;
 import com.crawl.core.util.HttpClientUtil;
@@ -12,8 +12,8 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 import java.io.InputStream;
 
-public abstract class HttpClient {
-    private Logger logger = SimpleLogger.getSimpleLogger(HttpClient.class);
+public abstract class AbstractHttpClient{
+    private Logger logger = SimpleLogger.getSimpleLogger(AbstractHttpClient.class);
     public InputStream getWebPageInputStream(String url){
         try {
             CloseableHttpResponse response = HttpClientUtil.getResponse(url);
@@ -62,7 +62,7 @@ public abstract class HttpClient {
      */
     public boolean deserializeCookieStore(String path){
         try {
-            CookieStore cookieStore = (CookieStore) HttpClientUtil.deserializeMyHttpClient(path);
+            CookieStore cookieStore = (CookieStore) HttpClientUtil.deserializeObject(path);
             HttpClientUtil.setCookieStore(cookieStore);
         } catch (Exception e){
             logger.warn("反序列化Cookie失败,没有找到Cookie文件");
@@ -70,5 +70,4 @@ public abstract class HttpClient {
         }
         return true;
     }
-    public abstract void initHttpClient();
 }

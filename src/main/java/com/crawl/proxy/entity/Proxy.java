@@ -12,6 +12,8 @@ public class Proxy implements Delayed{
     private boolean anonymousFlag;
     private long lastUseTime;
     private int delay;
+    private int failureTimes;//请求失败次数
+    private int successfulTimes;//请求成功次数
 
     public Proxy(String ip, int port, long delayTime) {
         this.ip = ip;
@@ -79,6 +81,22 @@ public class Proxy implements Delayed{
     public int compareTo(Delayed o) {
         Proxy element = (Proxy)o;
         return delayTime > element.delayTime ? 1:(delayTime < element.delayTime ? -1 : 0);
+    }
+
+    public int getFailureTimes() {
+        return failureTimes;
+    }
+
+    public void setFailureTimes(int failureTimes) {
+        this.failureTimes = failureTimes;
+    }
+
+    public int getSuccessfulTimes() {
+        return successfulTimes;
+    }
+
+    public void setSuccessfulTimes(int successfulTimes) {
+        this.successfulTimes = successfulTimes;
     }
 
     @Override

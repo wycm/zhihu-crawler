@@ -1,4 +1,4 @@
-package com.crawl.zhihu.dao;
+package com.crawl.core.db;
 
 import com.crawl.core.util.Config;
 import com.crawl.core.util.SimpleLogger;

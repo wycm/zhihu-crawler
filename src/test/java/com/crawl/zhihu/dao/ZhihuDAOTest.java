@@ -1,5 +1,6 @@
 package com.crawl.zhihu.dao;
 
+import com.crawl.core.db.ConnectionManager;
 import org.junit.Test;
 
 import java.sql.Connection;

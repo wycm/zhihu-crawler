@@ -56,7 +56,7 @@ public class TouristPageHandler implements PageHandler{
             ZhiHuDAO.insertToDB(u);
         }
         parseUserCount.incrementAndGet();
-        for(int i = 0;i < u.getFollowees()/20 + 1;i++) {
+        for(int i = 0;i < u.getFollowees() / 20 + 1;i++) {
             /**
              * 当下载网页队列小于100时才获取该用户关注用户
              * 防止下载网页线程池任务队列过量增长
