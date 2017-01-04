@@ -4,6 +4,7 @@ import com.crawl.core.httpclient.AbstractHttpClient;
 import com.crawl.core.httpclient.IHttpClient;
 import com.crawl.core.util.Config;
 import com.crawl.core.db.ConnectionManager;
+import com.crawl.proxy.ProxyHttpClient;
 import com.crawl.zhihu.dao.ZhiHuDAO;
 import com.crawl.core.util.HttpClientUtil;
 import com.crawl.core.util.SimpleLogger;
@@ -85,7 +86,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
     }
     public void startCrawl(String url){
         downloadThreadExecutor.execute(new DownloadTask(url, Config.isProxy));
-        manageZhiHuClient();
+        manageHttpClient();
     }
     private void setAuthorization(){
         String content = null;
@@ -123,7 +124,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
      * 管理知乎客户端
      * 关闭整个爬虫
      */
-    public void manageZhiHuClient(){
+    public void manageHttpClient(){
         while (true) {
             /**
              * 下载网页数
@@ -149,6 +150,10 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
                  * 关闭线程池Monitor
                  */
                 ThreadPoolMonitor.isStopMonitor = true;
+                /**
+                 * 关闭ProxyHttpClient客户端
+                 */
+                ProxyHttpClient.getInstance().getProxyTestThreadExecutor().shutdownNow();
                 logger.info("--------------爬取结果--------------");
                 logger.info("获取用户数:" +ParseTask.parseUserCount.get());
                 break;
@@ -159,6 +164,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
                 e.printStackTrace();
             }
         }
+        System.exit(0);
     }
     public ThreadPoolExecutor getParseThreadExecutor() {
         return parseThreadExecutor;

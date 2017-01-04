@@ -5,6 +5,7 @@ import com.crawl.proxy.entity.Proxy;
 import com.crawl.proxy.site.ProxyListPageParserFactory;
 import com.crawl.proxy.task.ProxyTestTask;
 import com.crawl.core.httpclient.AbstractHttpClient;
+import com.crawl.zhihu.ZhiHuHttpClient;
 import com.crawl.zhihu.entity.Page;
 import org.apache.log4j.Logger;
 
@@ -55,11 +56,13 @@ public class ProxyHttpClient extends AbstractHttpClient {
                             ProxyListPageParser parser = ProxyListPageParserFactory.getProxyListPageParser(ProxyPool.proxyMap.get(url));
                             List<Proxy> proxyList = parser.parse(page.getHtml());
                             for(Proxy p : proxyList){
-                                proxyTestThreadExecutor.execute(new ProxyTestTask(p));
+                                if(!ZhiHuHttpClient.getInstance().getDownloadThreadExecutor().isTerminated()){
+                                    proxyTestThreadExecutor.execute(new ProxyTestTask(p));
+                                }
                             }
                             Thread.sleep(1000);
                         } catch (IOException e) {
-                            logger.error(e);
+                            logger.error("IOException", e);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
@@ -72,5 +75,9 @@ public class ProxyHttpClient extends AbstractHttpClient {
                 }
             }
         }).start();
+    }
+
+    public ThreadPoolExecutor getProxyTestThreadExecutor() {
+        return proxyTestThreadExecutor;
     }
 }

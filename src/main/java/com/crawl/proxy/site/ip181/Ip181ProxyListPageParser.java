@@ -16,6 +16,8 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.crawl.core.util.Constants.DELAY_TIME;
+
 public class Ip181ProxyListPageParser implements ProxyListPageParser {
     @Override
     public List<Proxy> parse(String content) {
@@ -37,7 +39,7 @@ public class Ip181ProxyListPageParser implements ProxyListPageParser {
             String port  = element.select("td:eq(1)").first().text();
             String isAnonymous = element.select("td:eq(2)").first().text();
             if(isAnonymous.equals("高匿")){
-                proxyList.add(new Proxy(ip, Integer.valueOf(port), 5000l));
+                proxyList.add(new Proxy(ip, Integer.valueOf(port), DELAY_TIME));
             }
         }
         return proxyList;

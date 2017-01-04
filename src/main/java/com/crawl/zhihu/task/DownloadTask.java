@@ -16,6 +16,8 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
+import static com.crawl.core.util.Constants.DELAY_TIME;
+
 /**
  * 下载网页任务， 并下载成功的Page放到解析线程池
  * 若使用代理，从ProxyPool中取
@@ -77,7 +79,7 @@ public class DownloadTask implements Runnable{
 				retry();
 			}
 		} catch (InterruptedException e) {
-			logger.error(e);
+			logger.error("InterruptedException", e);
 		} catch (IOException e) {
             if(currentProxy != null){
                 /**
@@ -85,7 +87,9 @@ public class DownloadTask implements Runnable{
                  */
                 currentProxy.setFailureTimes(currentProxy.getFailureTimes() + 1);
             }
-			retry();
+            if(!zhiHuHttpClient.getDownloadThreadExecutor().isShutdown()){
+				retry();
+			}
 		} finally {
 			if (request != null){
 				request.releaseConnection();
@@ -120,7 +124,7 @@ public class DownloadTask implements Runnable{
                     return;
                 }
             }
-            currentProxy.setDelayTime(5000l);
+            currentProxy.setDelayTime(DELAY_TIME);
             ProxyPool.proxyQueue.add(currentProxy);//将当前代理放入代理池中
         }
     }

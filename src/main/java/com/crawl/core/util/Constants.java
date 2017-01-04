@@ -5,6 +5,7 @@ public class Constants {
     public final static String DIRECT_CRAWL_STRATEGY = "direct";
     public final static String PROXY_CRAWL_STRATEGY = "proxy";
     public final static int TIMEOUT = 10000;
+    public final static long DELAY_TIME = 5000;//请求延迟
     //知乎首页
     public final static String INDEX_URL = "https://www.zhihu.com";
     public final static String[] userAgentArray = new String[]{

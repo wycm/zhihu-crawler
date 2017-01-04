@@ -131,7 +131,7 @@ public class HttpClientUtil {
 					setCookieSpec(CookieSpecs.STANDARD).
 					build();
         } catch (Exception e) {
-            logger.error(e.getMessage());
+            logger.error("Exception:", e);
         }
     }
 

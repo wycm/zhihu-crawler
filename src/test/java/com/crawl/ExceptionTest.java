@@ -1,0 +1,19 @@
+package com.crawl;
+
+
+import com.crawl.core.util.SimpleLogger;
+import com.crawl.zhihu.task.DownloadTask;
+import org.apache.log4j.Logger;
+
+import java.io.IOException;
+
+public class ExceptionTest {
+    private static Logger logger = SimpleLogger.getSimpleLogger(DownloadTask.class);
+    public static void main(String[] args){
+        try {
+            throw new IOException();
+        } catch (IOException e) {
+            logger.error(e.getMessage(), e);
+        }
+    }
+}

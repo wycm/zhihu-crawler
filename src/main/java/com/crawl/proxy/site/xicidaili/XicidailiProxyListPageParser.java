@@ -12,6 +12,8 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.crawl.core.util.Constants.DELAY_TIME;
+
 public class XicidailiProxyListPageParser implements ProxyListPageParser{
     @Override
     public List<Proxy> parse(String hmtl) {
@@ -23,7 +25,7 @@ public class XicidailiProxyListPageParser implements ProxyListPageParser{
             String port  = element.select("td:eq(2)").first().text();
             String isAnonymous = element.select("td:eq(4)").first().text();
             if(isAnonymous.equals("高匿")){
-                proxyList.add(new Proxy(ip, Integer.valueOf(port), 5000l));
+                proxyList.add(new Proxy(ip, Integer.valueOf(port), DELAY_TIME));
             }
         }
         return proxyList;

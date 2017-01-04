@@ -10,7 +10,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 public class ThreadPoolMonitor implements Runnable{
     private static Logger logger = SimpleLogger.getSimpleLogger(ThreadPoolMonitor.class);
     private ThreadPoolExecutor executor;
-    public static volatile boolean isStopMonitor=false;
+    public static volatile boolean isStopMonitor = false;
     private String name = "";
     public ThreadPoolMonitor(ThreadPoolExecutor executor,String name){
         this.executor = executor;
