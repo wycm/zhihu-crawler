@@ -57,7 +57,6 @@ public class HttpClientUtil {
 	private final static String userAgent = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36";
 	private static HttpHost proxy;
 	private static RequestConfig requestConfig;
-	private static final int TIMEOUT = 10000;
 
 	static{
 		init();
@@ -83,7 +82,7 @@ public class HttpClientUtil {
             PoolingHttpClientConnectionManager connManager =
                     new PoolingHttpClientConnectionManager(socketFactoryRegistry);
 
-            SocketConfig socketConfig = SocketConfig.custom().setSoTimeout(TIMEOUT).setTcpNoDelay(true).build();
+            SocketConfig socketConfig = SocketConfig.custom().setSoTimeout(Constants.TIMEOUT).setTcpNoDelay(true).build();
             connManager.setDefaultSocketConfig(socketConfig);
 
             ConnectionConfig connectionConfig =
@@ -126,9 +125,9 @@ public class HttpClientUtil {
             }
             httpClient = httpClientBuilder.build();
 
-            requestConfig = RequestConfig.custom().setSocketTimeout(TIMEOUT).
-					setConnectTimeout(TIMEOUT).
-					setConnectionRequestTimeout(TIMEOUT).
+            requestConfig = RequestConfig.custom().setSocketTimeout(Constants.TIMEOUT).
+					setConnectTimeout(Constants.TIMEOUT).
+					setConnectionRequestTimeout(Constants.TIMEOUT).
 					setCookieSpec(CookieSpecs.STANDARD).
 					build();
         } catch (Exception e) {
@@ -169,10 +168,10 @@ public class HttpClientUtil {
 		HttpClientContext httpClientContext = HttpClientContext.create();
 		httpClientContext.setCookieStore(cookieStore);
 		CloseableHttpResponse response = httpClient.execute(request, httpClientContext);
-		int statusCode = response.getStatusLine().getStatusCode();
-		if(statusCode != 200){
-			throw new IOException("status code is:" + statusCode);
-		}
+//		int statusCode = response.getStatusLine().getStatusCode();
+//		if(statusCode != 200){
+//			throw new IOException("status code is:" + statusCode);
+//		}
 		return response;
 	}
 	public static CloseableHttpResponse getResponse(String url) throws IOException {
@@ -326,9 +325,9 @@ public class HttpClientUtil {
 		request.setEntity(entity);
 	}
 	public static org.apache.http.client.config.RequestConfig.Builder getRequestConfigBuilder(){
-		return RequestConfig.custom().setSocketTimeout(TIMEOUT).
-				setConnectTimeout(TIMEOUT).
-				setConnectionRequestTimeout(TIMEOUT).
+		return RequestConfig.custom().setSocketTimeout(Constants.TIMEOUT).
+				setConnectTimeout(Constants.TIMEOUT).
+				setConnectionRequestTimeout(Constants.TIMEOUT).
 				setCookieSpec(CookieSpecs.STANDARD);
 	}
 	public static void main(String args []){
