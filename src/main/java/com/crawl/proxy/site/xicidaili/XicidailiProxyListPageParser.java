@@ -3,7 +3,6 @@ package com.crawl.proxy.site.xicidaili;
 
 import com.crawl.proxy.ProxyListPageParser;
 import com.crawl.proxy.entity.Proxy;
-import com.crawl.zhihu.entity.Page;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -12,7 +11,7 @@ import org.jsoup.select.Elements;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.crawl.core.util.Constants.DELAY_TIME;
+import static com.crawl.core.util.Constants.TIME_INTERVAL;
 
 public class XicidailiProxyListPageParser implements ProxyListPageParser{
     @Override
@@ -25,7 +24,7 @@ public class XicidailiProxyListPageParser implements ProxyListPageParser{
             String port  = element.select("td:eq(2)").first().text();
             String isAnonymous = element.select("td:eq(4)").first().text();
             if(isAnonymous.equals("高匿")){
-                proxyList.add(new Proxy(ip, Integer.valueOf(port), DELAY_TIME));
+                proxyList.add(new Proxy(ip, Integer.valueOf(port), TIME_INTERVAL));
             }
         }
         return proxyList;

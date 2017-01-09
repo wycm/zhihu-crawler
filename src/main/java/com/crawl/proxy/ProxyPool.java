@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.DelayQueue;
 
-import static com.crawl.core.util.Constants.DELAY_TIME;
+import static com.crawl.core.util.Constants.TIME_INTERVAL;
 
 /**
  * 代理池
@@ -40,7 +40,7 @@ public class ProxyPool {
         proxyMap.put("http://www.ip181.com/daili/1.html", Ip181ProxyListPageParser.class);
         proxyMap.put("http://www.ip181.com/daili/2.html", Ip181ProxyListPageParser.class);
         proxyMap.put("http://www.ip181.com/daili/3.html", Ip181ProxyListPageParser.class);
-        proxyQueue.add(new Direct(DELAY_TIME));
+        proxyQueue.add(new Direct(TIME_INTERVAL));
     }
 
 }

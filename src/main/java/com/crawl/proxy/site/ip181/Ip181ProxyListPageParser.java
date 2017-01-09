@@ -3,20 +3,15 @@ package com.crawl.proxy.site.ip181;
 
 import com.crawl.proxy.ProxyListPageParser;
 import com.crawl.proxy.entity.Proxy;
-import org.apache.http.Consts;
-import org.apache.http.util.CharsetUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.ByteBuffer;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.crawl.core.util.Constants.DELAY_TIME;
+import static com.crawl.core.util.Constants.TIME_INTERVAL;
 
 public class Ip181ProxyListPageParser implements ProxyListPageParser {
     @Override
@@ -39,7 +34,7 @@ public class Ip181ProxyListPageParser implements ProxyListPageParser {
             String port  = element.select("td:eq(1)").first().text();
             String isAnonymous = element.select("td:eq(2)").first().text();
             if(isAnonymous.equals("高匿")){
-                proxyList.add(new Proxy(ip, Integer.valueOf(port), DELAY_TIME));
+                proxyList.add(new Proxy(ip, Integer.valueOf(port), TIME_INTERVAL));
             }
         }
         return proxyList;

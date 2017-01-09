@@ -5,7 +5,7 @@ import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
 public class Proxy implements Delayed{
-    private long delayTime;//任务间隔时间,单位ms
+    private long timeInterval ;//任务间隔时间,单位ms
     private String ip;
     private int port;
     private boolean availableFlag;
@@ -15,11 +15,11 @@ public class Proxy implements Delayed{
     private int failureTimes;//请求失败次数
     private int successfulTimes;//请求成功次数
 
-    public Proxy(String ip, int port, long delayTime) {
+    public Proxy(String ip, int port, long timeInterval) {
         this.ip = ip;
         this.port = port;
-        this.delayTime = delayTime;
-        this.delayTime=TimeUnit.NANOSECONDS.convert(delayTime, TimeUnit.MILLISECONDS) + System.nanoTime();
+        this.timeInterval = timeInterval;
+        this.timeInterval=TimeUnit.NANOSECONDS.convert(timeInterval, TimeUnit.MILLISECONDS) + System.nanoTime();
     }
     public String getIp() {
         return ip;
@@ -69,18 +69,18 @@ public class Proxy implements Delayed{
         this.delay = delay;
     }
 
-    public void setDelayTime(long delayTime){
-        this.delayTime=TimeUnit.NANOSECONDS.convert(delayTime, TimeUnit.MILLISECONDS) + System.nanoTime();
+    public void setTimeInterval(long timeInterval){
+        this.timeInterval=TimeUnit.NANOSECONDS.convert(timeInterval, TimeUnit.MILLISECONDS) + System.nanoTime();
     }
     @Override
     public long getDelay(TimeUnit unit) {
-        return unit.convert(delayTime - System.nanoTime(), TimeUnit.NANOSECONDS);
+        return unit.convert(timeInterval - System.nanoTime(), TimeUnit.NANOSECONDS);
     }
 
     @Override
     public int compareTo(Delayed o) {
         Proxy element = (Proxy)o;
-        return delayTime > element.delayTime ? 1:(delayTime < element.delayTime ? -1 : 0);
+        return timeInterval > element.timeInterval ? 1:(timeInterval < element.timeInterval ? -1 : 0);
     }
 
     public int getFailureTimes() {
@@ -102,13 +102,15 @@ public class Proxy implements Delayed{
     @Override
     public String toString() {
         return "Proxy{" +
-                "delayTime=" + delayTime +
+                "timeInterval=" + timeInterval +
                 ", ip='" + ip + '\'' +
                 ", port=" + port +
                 ", availableFlag=" + availableFlag +
                 ", anonymousFlag=" + anonymousFlag +
                 ", lastUseTime=" + lastUseTime +
                 ", delay=" + delay +
+                ", failureTimes=" + failureTimes +
+                ", successfulTimes=" + successfulTimes +
                 '}';
     }
 }

@@ -16,7 +16,7 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 
-import static com.crawl.core.util.Constants.DELAY_TIME;
+import static com.crawl.core.util.Constants.TIME_INTERVAL;
 
 /**
  * 下载网页任务， 并下载成功的Page放到解析线程池
@@ -124,7 +124,7 @@ public class DownloadTask implements Runnable{
                     return;
                 }
             }
-            currentProxy.setDelayTime(DELAY_TIME);
+            currentProxy.setTimeInterval(TIME_INTERVAL);
             ProxyPool.proxyQueue.add(currentProxy);//将当前代理放入代理池中
         }
     }
