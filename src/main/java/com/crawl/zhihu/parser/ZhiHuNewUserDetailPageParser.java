@@ -50,13 +50,18 @@ public class ZhiHuNewUserDetailPageParser implements DetailPageParser {
         setUserInfoByJsonPth(user, "followers", dataStateJson, commonJsonPath + ".followerCount");//粉丝数
         setUserInfoByJsonPth(user, "agrees", dataStateJson, commonJsonPath + ".voteupCount");//赞同数
         setUserInfoByJsonPth(user, "thanks", dataStateJson, commonJsonPath + ".thankedCount");//感谢数
-        Integer gender = JsonPath.parse(dataStateJson).read(commonJsonPath + ".gender");
-        if (gender != null && gender == 1){
-            user.setSex("male");
+        try {
+            Integer gender = JsonPath.parse(dataStateJson).read(commonJsonPath + ".gender");
+            if (gender != null && gender == 1){
+                user.setSex("male");
+            }
+            else if(gender != null && gender == 0){
+                user.setSex("female");
+            }
+        } catch (PathNotFoundException e){
+            //没有该属性
         }
-        else if(gender != null && gender == 0){
-            user.setSex("female");
-        }
+
     }
 
     /**
