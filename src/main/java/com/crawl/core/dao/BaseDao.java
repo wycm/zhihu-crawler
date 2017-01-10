@@ -1,11 +1,6 @@
 package com.crawl.core.dao;
 
-/**
- * @ClassName: BaseDao
- * @Description: 插入数据库的底层baseDao
- * @author: 杨爽
- * @date: 2016/12/16 9:35
- */
+
 public interface BaseDao<T> {
 
 

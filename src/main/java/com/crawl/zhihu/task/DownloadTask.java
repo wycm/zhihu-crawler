@@ -73,9 +73,13 @@ public class DownloadTask implements Runnable{
 				zhiHuHttpClient.getParseThreadExecutor().execute(new ParseTask(page));
 				currentProxy.setSuccessfulTimes(currentProxy.getSuccessfulTimes() + 1);
 			}
-			else if(status > 404){
-                logger.error(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
-                Thread.sleep(100);
+			else if(status == 404 ||
+					status == 410){
+				logger.warn(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
+			}
+			else {
+				logger.error(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
+				Thread.sleep(100);
 				retry();
 			}
 		} catch (InterruptedException e) {

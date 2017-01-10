@@ -3,6 +3,7 @@ package com.crawl.proxy;
 import com.crawl.proxy.entity.Direct;
 import com.crawl.proxy.entity.Proxy;
 import com.crawl.proxy.site.ip181.Ip181ProxyListPageParser;
+import com.crawl.proxy.site.mimiip.MimiipProxyListPageParser;
 import com.crawl.proxy.site.xicidaili.XicidailiProxyListPageParser;
 
 import java.util.HashMap;
@@ -40,6 +41,9 @@ public class ProxyPool {
         proxyMap.put("http://www.ip181.com/daili/1.html", Ip181ProxyListPageParser.class);
         proxyMap.put("http://www.ip181.com/daili/2.html", Ip181ProxyListPageParser.class);
         proxyMap.put("http://www.ip181.com/daili/3.html", Ip181ProxyListPageParser.class);
+        proxyMap.put("http://www.mimiip.com/gngao/1", MimiipProxyListPageParser.class);
+        proxyMap.put("http://www.mimiip.com/gngao/2", MimiipProxyListPageParser.class);
+        proxyMap.put("http://www.mimiip.com/gngao/3", MimiipProxyListPageParser.class);
         proxyQueue.add(new Direct(TIME_INTERVAL));
     }
 
