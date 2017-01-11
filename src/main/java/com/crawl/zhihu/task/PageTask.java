@@ -1,6 +1,5 @@
 package com.crawl.zhihu.task;
 
-import com.crawl.core.util.Config;
 import com.crawl.core.util.HttpClientUtil;
 import com.crawl.proxy.ProxyPool;
 import com.crawl.proxy.entity.Direct;
@@ -23,19 +22,22 @@ import static com.crawl.core.util.Constants.TIME_INTERVAL;
  * 若使用代理，从ProxyPool中取
  * @see ProxyPool
  */
-public class DownloadTask implements Runnable{
-	private static Logger logger = SimpleLogger.getSimpleLogger(DownloadTask.class);
-	private String url;
-	private HttpRequestBase request;
+public abstract class PageTask implements Runnable{
+	private static Logger logger = SimpleLogger.getSimpleLogger(PageTask.class);
+	protected String url;
+	protected HttpRequestBase request;
 	private boolean proxyFlag;//是否通过代理下载
 	private Proxy currentProxy;//当前线程使用的代理
 
-	private static ZhiHuHttpClient zhiHuHttpClient = ZhiHuHttpClient.getInstance();
-	public DownloadTask(String url, boolean proxyFlag){
+	protected static ZhiHuHttpClient zhiHuHttpClient = ZhiHuHttpClient.getInstance();
+	public PageTask(){
+
+	}
+	public PageTask(String url, boolean proxyFlag){
 		this.url = url;
 		this.proxyFlag = proxyFlag;
 	}
-	public DownloadTask(HttpRequestBase request, boolean proxyFlag){
+	public PageTask(HttpRequestBase request, boolean proxyFlag){
 		this.request = request;
 		this.proxyFlag = proxyFlag;
 	}
@@ -72,8 +74,8 @@ public class DownloadTask implements Runnable{
 			if(status == HttpStatus.SC_OK){
 				if (page.getHtml().contains("zhihu")){
 					logger.info(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
-					zhiHuHttpClient.getParseThreadExecutor().execute(new ParseTask(page));
 					currentProxy.setSuccessfulTimes(currentProxy.getSuccessfulTimes() + 1);
+					handle(page);
 				}else {
 					/**
 					 * 代理异常，没有正确返回目标url
@@ -100,7 +102,7 @@ public class DownloadTask implements Runnable{
                  */
                 currentProxy.setFailureTimes(currentProxy.getFailureTimes() + 1);
             }
-            if(!zhiHuHttpClient.getDownloadThreadExecutor().isShutdown()){
+            if(!zhiHuHttpClient.getDetailPageThreadPool().isShutdown()){
 				retry();
 			}
 		} finally {
@@ -114,14 +116,7 @@ public class DownloadTask implements Runnable{
 	/**
 	 * retry
 	 */
-	private void retry(){
-		if(url != null){
-			zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(url, Config.isProxy));
-		}
-		else if (request != null){
-			zhiHuHttpClient.getDownloadThreadExecutor().execute(new DownloadTask(request, Config.isProxy));
-		}
-	}
+	abstract void retry();
 
     /**
      * 是否继续使用代理
@@ -141,4 +136,6 @@ public class DownloadTask implements Runnable{
             ProxyPool.proxyQueue.add(currentProxy);//将当前代理放入代理池中
         }
     }
+
+	abstract void handle(Page page);
 }

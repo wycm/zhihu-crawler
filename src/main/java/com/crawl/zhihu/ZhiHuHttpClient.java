@@ -9,7 +9,7 @@ import com.crawl.zhihu.dao.ZhiHuDAO;
 import com.crawl.core.util.HttpClientUtil;
 import com.crawl.core.util.SimpleLogger;
 import com.crawl.core.util.ThreadPoolMonitor;
-import com.crawl.zhihu.task.DownloadTask;
+import com.crawl.zhihu.task.DetailPageTask;
 import com.crawl.zhihu.task.ParseTask;
 import org.apache.log4j.Logger;
 
@@ -34,11 +34,15 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
     /**
      * 解析网页线程池
      */
-    private ThreadPoolExecutor parseThreadExecutor;
+    private ThreadPoolExecutor parseThreadPool;
     /**
-     * 下载网页线程池
+     * 详情页下载网页线程池
      */
-    private ThreadPoolExecutor downloadThreadExecutor;
+    private ThreadPoolExecutor detailPageThreadPool;
+    /**
+     * 列表页下载网页线程池
+     */
+    private ThreadPoolExecutor listPageThreadPool;
     /**
      * request　header
      */
@@ -46,8 +50,9 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
     private ZhiHuHttpClient() {
         initHttpClient();
         intiThreadPool();
-        new Thread(new ThreadPoolMonitor(downloadThreadExecutor, "DownloadPage ThreadPool")).start();
-        new Thread(new ThreadPoolMonitor(parseThreadExecutor, "ParsePage ThreadPool")).start();
+        new Thread(new ThreadPoolMonitor(detailPageThreadPool, "DetailPageDownloadThreadPool")).start();
+        new Thread(new ThreadPoolMonitor(listPageThreadPool, "ListPageDownloadThreadPool")).start();
+        new Thread(new ThreadPoolMonitor(parseThreadPool, "ParsePage ThreadPool")).start();
     }
     /**
      * 初始化HttpClient
@@ -76,16 +81,19 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
      * 初始化线程池
      */
     private void intiThreadPool(){
-        parseThreadExecutor = new ThreadPoolExecutor(1, 1,
+        parseThreadPool = new ThreadPoolExecutor(1, 1,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
-        downloadThreadExecutor = new ThreadPoolExecutor(Config.downloadThreadSize,
+        detailPageThreadPool = new ThreadPoolExecutor(Config.downloadThreadSize,
                 Config.downloadThreadSize,
+                0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>());
+        listPageThreadPool = new ThreadPoolExecutor(2, 2,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
     }
     public void startCrawl(String url){
-        downloadThreadExecutor.execute(new DownloadTask(url, Config.isProxy));
+        detailPageThreadPool.execute(new DetailPageTask(url, Config.isProxy));
         manageHttpClient();
     }
     private void setAuthorization(){
@@ -129,23 +137,23 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
             /**
              * 下载网页数
              */
-            long downloadPageCount = downloadThreadExecutor.getTaskCount();
+            long downloadPageCount = detailPageThreadPool.getTaskCount();
             if (downloadPageCount >= Config.downloadPageCount &&
-                    ! ZhiHuHttpClient.getInstance().getDownloadThreadExecutor().isShutdown()) {
+                    ! ZhiHuHttpClient.getInstance().getDetailPageThreadPool().isShutdown()) {
                 ParseTask.isStopDownload = true;
                 /**
                  * shutdown 下载网页线程池
                  */
-                ZhiHuHttpClient.getInstance().getDownloadThreadExecutor().shutdown();
+                ZhiHuHttpClient.getInstance().getDetailPageThreadPool().shutdown();
             }
-            if(ZhiHuHttpClient.getInstance().getDownloadThreadExecutor().isTerminated() &&
-                    !ZhiHuHttpClient.getInstance().getParseThreadExecutor().isShutdown()){
+            if(ZhiHuHttpClient.getInstance().getDetailPageThreadPool().isTerminated() &&
+                    !ZhiHuHttpClient.getInstance().getParseThreadPool().isShutdown()){
                 /**
                  * 下载网页线程池关闭后，再关闭解析网页线程池
                  */
-                ZhiHuHttpClient.getInstance().getParseThreadExecutor().shutdown();
+                ZhiHuHttpClient.getInstance().getParseThreadPool().shutdown();
             }
-            if(ZhiHuHttpClient.getInstance().getParseThreadExecutor().isTerminated()){
+            if(ZhiHuHttpClient.getInstance().getParseThreadPool().isTerminated()){
                 /**
                  * 关闭线程池Monitor
                  */
@@ -166,11 +174,15 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
         }
         System.exit(0);
     }
-    public ThreadPoolExecutor getParseThreadExecutor() {
-        return parseThreadExecutor;
+    public ThreadPoolExecutor getParseThreadPool() {
+        return parseThreadPool;
     }
 
-    public ThreadPoolExecutor getDownloadThreadExecutor() {
-        return downloadThreadExecutor;
+    public ThreadPoolExecutor getDetailPageThreadPool() {
+        return detailPageThreadPool;
+    }
+
+    public ThreadPoolExecutor getListPageThreadPool() {
+        return listPageThreadPool;
     }
 }

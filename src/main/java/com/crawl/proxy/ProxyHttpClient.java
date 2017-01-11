@@ -56,7 +56,7 @@ public class ProxyHttpClient extends AbstractHttpClient {
                             ProxyListPageParser parser = ProxyListPageParserFactory.getProxyListPageParser(ProxyPool.proxyMap.get(url));
                             List<Proxy> proxyList = parser.parse(page.getHtml());
                             for(Proxy p : proxyList){
-                                if(!ZhiHuHttpClient.getInstance().getDownloadThreadExecutor().isTerminated()){
+                                if(!ZhiHuHttpClient.getInstance().getDetailPageThreadPool().isTerminated()){
                                     proxyTestThreadExecutor.execute(new ProxyTestTask(p));
                                 }
                             }

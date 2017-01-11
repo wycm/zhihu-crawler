@@ -3,9 +3,6 @@ package com.crawl.zhihu.task;
 import com.crawl.core.util.Config;
 import com.crawl.zhihu.entity.Page;
 import com.crawl.zhihu.parser.PageHandler;
-import com.crawl.zhihu.parser.login.LoginPageHandler;
-import com.crawl.zhihu.parser.tourist.TouristPageHandler;
-import com.crawl.core.util.Constants;
 import com.crawl.core.util.SimpleLogger;
 import org.apache.log4j.Logger;
 
@@ -14,6 +11,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 解析网页任务
  */
+@Deprecated
 public class ParseTask implements Runnable {
     private static Logger logger = SimpleLogger.getSimpleLogger(ParseTask.class);
     private Page page;
@@ -26,10 +24,10 @@ public class ParseTask implements Runnable {
     static {
         boolean loginFlag = Config.isLogin;
         if(loginFlag){
-            pageHandler = new LoginPageHandler();
+//            pageHandler = new LoginPageHandler();
         }
         else{
-            pageHandler = new TouristPageHandler();
+//            pageHandler = new TouristPageHandler();
         }
     }
     public ParseTask(Page page){

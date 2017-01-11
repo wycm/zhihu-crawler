@@ -89,10 +89,10 @@ public class ZhiHuDAO {
                 logger.info("数据库已经存在该用户---" + u.getUsername());
                 return false;
             }
-            String colum = "location,business,sex,employment,username,url,agrees,thanks,asks," +
+            String column = "location,business,sex,employment,username,url,agrees,thanks,asks," +
                     "answers,posts,followees,followers,hashId,education";
             String values = "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
-            String sql = "insert into user (" + colum + ") values(" +values+")";
+            String sql = "insert into user (" + column + ") values(" +values+")";
             PreparedStatement pstmt;
             pstmt = cn.prepareStatement(sql);
             pstmt.setString(1,u.getLocation());
