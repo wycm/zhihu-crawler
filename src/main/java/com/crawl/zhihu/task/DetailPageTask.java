@@ -63,7 +63,7 @@ public class DetailPageTask extends AbstractPageTask {
             zhiHuHttpClient.getListPageThreadPool().execute(new ListPageTask(request, Config.isProxy));
             return ;
         }
-        if(zhiHuHttpClient.getDetailPageThreadPool().getQueue().size() < 30){
+        if(zhiHuHttpClient.getListPageThreadPool().getQueue().size() < 100){
             zhiHuHttpClient.getListPageThreadPool().execute(new ListPageTask(request, Config.isProxy));
         }
     }

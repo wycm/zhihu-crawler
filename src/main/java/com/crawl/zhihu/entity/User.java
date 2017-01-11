@@ -4,6 +4,10 @@ package com.crawl.zhihu.entity;
  * 知乎用户资料
  */
 public class User {
+    //用户名
+    private String username;
+    //user token
+    private String userToken;
     //位置
     private String location;
     //行业
@@ -16,8 +20,6 @@ public class User {
     private String position;
     //教育
     private String education;
-    //用户名
-    private String username;
     //用户首页url
     private String url;
     //答案赞同数
@@ -36,8 +38,22 @@ public class User {
     private int followers;
     // hashId 用户唯一标识
     private String hashId;
-    //user token
-    private String userToken;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUserToken() {
+        return userToken;
+    }
+
+    public void setUserToken(String userToken) {
+        this.userToken = userToken;
+    }
 
     public String getLocation() {
         return location;
@@ -85,14 +101,6 @@ public class User {
 
     public void setEducation(String education) {
         this.education = education;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getUrl() {
@@ -167,23 +175,17 @@ public class User {
         this.hashId = hashId;
     }
 
-    public String getUserToken() {
-        return userToken;
-    }
-
-    public void setUserToken(String userToken) {
-        this.userToken = userToken;
-    }
     @Override
     public String toString() {
         return "User{" +
-                "location='" + location + '\'' +
+                "username='" + username + '\'' +
+                ", userToken='" + userToken + '\'' +
+                ", location='" + location + '\'' +
                 ", business='" + business + '\'' +
                 ", sex='" + sex + '\'' +
                 ", employment='" + employment + '\'' +
                 ", position='" + position + '\'' +
                 ", education='" + education + '\'' +
-                ", username='" + username + '\'' +
                 ", url='" + url + '\'' +
                 ", agrees=" + agrees +
                 ", thanks=" + thanks +

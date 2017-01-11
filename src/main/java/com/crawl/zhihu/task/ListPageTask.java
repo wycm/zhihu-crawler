@@ -40,10 +40,8 @@ public class ListPageTask extends AbstractPageTask {
             zhiHuHttpClient.getDetailPageThreadPool().execute(new DetailPageTask(url, Config.isProxy));
             return ;
         }
-//        String md5Url = Md5Util.Convert2Md5(url);
-//        boolean isRepeat = ZhiHuDAO.insertUrl(md5Url);
         boolean existUserFlag = ZhiHuDAO.isExistUser(userToken);
-        if(!existUserFlag){
+        if(!existUserFlag || zhiHuHttpClient.getDetailPageThreadPool().getActiveCount() == 0){
             /**
              * 防止互相等待，导致死锁
              */
