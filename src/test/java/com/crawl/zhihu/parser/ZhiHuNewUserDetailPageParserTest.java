@@ -14,7 +14,7 @@ public class ZhiHuNewUserDetailPageParserTest extends AbstractUserIndexDetailPag
 //        String url = "https://www.zhihu.com/people/cheng-yi-nan/following";
 //        String url = "https://www.zhihu.com/people/excited-vczh/following";
         String url = "https://www.zhihu.com/people/Vincen.t/following";
-        DetailPageParser parser = new ZhiHuNewUserDetailPageParser();
+        DetailPageParser parser = ZhiHuNewUserDetailPageParser.getInstance();
         super.testParse(url, parser);
     }
 }

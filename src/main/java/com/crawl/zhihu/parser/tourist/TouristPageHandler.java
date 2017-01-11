@@ -34,22 +34,25 @@ public class TouristPageHandler implements PageHandler{
     @Override
     public void handle(Page page) {
         Document doc = Jsoup.parse(page.getHtml());
-        if(doc.select("title").size() != 0) {
-            /**
-             * 详情页
-             */
-            handleTouristDetailPage(page, doc);
-        }
-        else {
-            handleTouristListPage(page);
-        }
+            if(doc.select("title").size() != 0) {
+                /**
+                 * 详情页
+                 */
+                handleTouristDetailPage(page, doc);
+            }
+            else {
+                /**
+                 * "关注的人"列表页
+                 */
+                handleTouristListPage(page);
+            }
     }
     /**
      * 游客模式详情页解析
      */
     private void handleTouristDetailPage(Page page, Document doc){
         DetailPageParser parser = null;
-        parser = new ZhiHuNewUserDetailPageParser();
+        parser = ZhiHuNewUserDetailPageParser.getInstance();
         User u = parser.parse(page);
         logger.info("解析用户成功:" + u.toString());
         if(Config.dbEnable){
@@ -61,9 +64,9 @@ public class TouristPageHandler implements PageHandler{
              * 当下载网页队列小于100时才获取该用户关注用户
              * 防止下载网页线程池任务队列过量增长
              */
-            if (!isStopDownload && zhiHuHttpClient.getDownloadThreadExecutor().getQueue().size() <= 100) {
+            if (!isStopDownload && zhiHuHttpClient.getDownloadThreadExecutor().getQueue().size() <= 500) {
                 /**
-                 * 获取关注用户列表,因为知乎每次最多返回20个关注用户
+                 * 获取关注用户列表,知乎每次最多返回20个关注用户
                  */
                 String userFolloweesUrl = formatUserFolloweesUrl(u.getUserToken(), 20 * i);
                 handleUrl(userFolloweesUrl);
@@ -97,7 +100,7 @@ public class TouristPageHandler implements PageHandler{
         /**
          * "我关注的人"列表页
          */
-        if(!isStopDownload && zhiHuHttpClient.getDownloadThreadExecutor().getQueue().size() <= 100){
+        if(!isStopDownload && zhiHuHttpClient.getDownloadThreadExecutor().getQueue().size() <= 500){
             List<String> urlTokenList = JsonPath.parse(page.getHtml()).read("$.data..url_token");
             for (String s : urlTokenList){
                 if (s == null){

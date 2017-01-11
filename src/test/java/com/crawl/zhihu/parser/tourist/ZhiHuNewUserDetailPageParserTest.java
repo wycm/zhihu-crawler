@@ -26,7 +26,7 @@ public class ZhiHuNewUserDetailPageParserTest {
             e.printStackTrace();
         }
         page.setUrl(url);
-        DetailPageParser parser = new ZhiHuNewUserDetailPageParser();
+        DetailPageParser parser = ZhiHuNewUserDetailPageParser.getInstance();
         User user = parser.parse(page);
         System.out.println(user);
     }

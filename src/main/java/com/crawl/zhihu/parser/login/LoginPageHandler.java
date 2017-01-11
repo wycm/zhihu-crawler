@@ -43,7 +43,7 @@ public class LoginPageHandler implements PageHandler{
      */
     private void handleLoginDetailPage(Page page, Document doc){
         DetailPageParser parser = null;
-        parser = new ZhiHuNewUserDetailPageParser();
+        parser = ZhiHuNewUserDetailPageParser.getInstance();
         User u = parser.parse(page);
         logger.info("解析用户成功:" + u.toString());
         if(Config.dbEnable){

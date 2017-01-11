@@ -1,6 +1,7 @@
 package com.crawl.zhihu.parser;
 
 import com.crawl.core.parser.DetailPageParser;
+import com.crawl.zhihu.ZhiHuHttpClient;
 import com.crawl.zhihu.entity.Page;
 import com.crawl.zhihu.entity.User;
 import com.jayway.jsonpath.JsonPath;
@@ -17,6 +18,20 @@ import java.util.regex.Pattern;
  * 新版following页面解析出用户详细信息
  */
 public class ZhiHuNewUserDetailPageParser implements DetailPageParser {
+    private volatile static ZhiHuNewUserDetailPageParser instance;
+    public static ZhiHuNewUserDetailPageParser getInstance(){
+        if (instance == null){
+            synchronized (ZhiHuHttpClient.class){
+                if (instance == null){
+                    instance = new ZhiHuNewUserDetailPageParser();
+                }
+            }
+        }
+        return instance;
+    }
+    private ZhiHuNewUserDetailPageParser(){
+
+    }
     @Override
     public User parse(Page page) {
         Document doc = Jsoup.parse(page.getHtml());

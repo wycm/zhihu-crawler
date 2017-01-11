@@ -19,7 +19,7 @@ import java.io.IOException;
 import static com.crawl.core.util.Constants.TIME_INTERVAL;
 
 /**
- * 下载网页任务， 并下载成功的Page放到解析线程池
+ * 下载网页任务， 下载成功的Page放到解析线程池
  * 若使用代理，从ProxyPool中取
  * @see ProxyPool
  */
@@ -67,11 +67,20 @@ public class DownloadTask implements Runnable{
 					page = zhiHuHttpClient.getWebPage(request);
 				}
 			}
+			page.setProxy(currentProxy);
 			int status = page.getStatusCode();
 			if(status == HttpStatus.SC_OK){
-				logger.info(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
-				zhiHuHttpClient.getParseThreadExecutor().execute(new ParseTask(page));
-				currentProxy.setSuccessfulTimes(currentProxy.getSuccessfulTimes() + 1);
+				if (page.getHtml().contains("zhihu")){
+					logger.info(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
+					zhiHuHttpClient.getParseThreadExecutor().execute(new ParseTask(page));
+					currentProxy.setSuccessfulTimes(currentProxy.getSuccessfulTimes() + 1);
+				}else {
+					/**
+					 * 代理异常，没有正确返回目标url
+					 */
+					logger.warn("proxy exception:" + currentProxy.toString());
+				}
+
 			}
 			else if(status == 404 ||
 					status == 410){
