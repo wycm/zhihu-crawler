@@ -3,7 +3,6 @@ package com.crawl.zhihu.task;
 
 import com.crawl.core.parser.DetailPageParser;
 import com.crawl.core.util.Config;
-import com.crawl.core.util.Md5Util;
 import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
 import com.crawl.zhihu.dao.ZhiHuDAO;
@@ -13,10 +12,10 @@ import com.crawl.zhihu.parser.ZhiHuNewUserDetailPageParser;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.log4j.Logger;
 
-import static com.crawl.zhihu.task.ParseTask.isStopDownload;
-import static com.crawl.zhihu.task.ParseTask.parseUserCount;
+import static com.crawl.zhihu.ZhiHuHttpClient.parseUserCount;
 
-public class DetailPageTask extends PageTask {
+
+public class DetailPageTask extends AbstractPageTask {
     private static Logger logger = SimpleLogger.getSimpleLogger(DetailPageTask.class);
 
     public DetailPageTask(String url, boolean proxyFlag) {
@@ -35,7 +34,7 @@ public class DetailPageTask extends PageTask {
         User u = parser.parse(page);
         logger.info("解析用户成功:" + u.toString());
         if(Config.dbEnable){
-            ZhiHuDAO.insertToDB(u);
+            ZhiHuDAO.insertUser(u);
         }
         parseUserCount.incrementAndGet();
         for(int i = 0;i < u.getFollowees() / 20 + 1;i++) {
@@ -66,7 +65,6 @@ public class DetailPageTask extends PageTask {
         }
         if(zhiHuHttpClient.getDetailPageThreadPool().getQueue().size() < 30){
             zhiHuHttpClient.getListPageThreadPool().execute(new ListPageTask(request, Config.isProxy));
-
         }
     }
 }

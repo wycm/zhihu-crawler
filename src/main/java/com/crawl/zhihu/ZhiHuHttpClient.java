@@ -10,17 +10,23 @@ import com.crawl.core.util.HttpClientUtil;
 import com.crawl.core.util.SimpleLogger;
 import com.crawl.core.util.ThreadPoolMonitor;
 import com.crawl.zhihu.task.DetailPageTask;
-import com.crawl.zhihu.task.ParseTask;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
     private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuHttpClient.class);
     private volatile static ZhiHuHttpClient instance;
+    /**
+     * 统计用户数量
+     */
+    public static AtomicInteger parseUserCount = new AtomicInteger(0);
+    public static volatile boolean isStop = false;
+
     public static ZhiHuHttpClient getInstance(){
         if (instance == null){
             synchronized (ZhiHuHttpClient.class){
@@ -59,19 +65,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
      */
     @Override
     public void initHttpClient() {
-        if(Config.isLogin &&
-                !deserializeCookieStore(Config.cookiePath)){
-            /**
-             * 模拟登录知乎，持久化Cookie到本地
-             * 不用以后每次都登录
-             */
-            new ModelLogin().login(Config.emailOrPhoneNum, Config.password);
-        }else if (!Config.isLogin){
-            /**
-             * 获取 authorization 字段值
-             */
-            setAuthorization();
-        }
+        setAuthorization();
         if(Config.dbEnable){
             ZhiHuDAO.DBTablesInit(ConnectionManager.getConnection());
         }
@@ -140,7 +134,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
             long downloadPageCount = detailPageThreadPool.getTaskCount();
             if (downloadPageCount >= Config.downloadPageCount &&
                     ! ZhiHuHttpClient.getInstance().getDetailPageThreadPool().isShutdown()) {
-                ParseTask.isStopDownload = true;
+                isStop = true;
                 /**
                  * shutdown 下载网页线程池
                  */
@@ -163,7 +157,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
                  */
                 ProxyHttpClient.getInstance().getProxyTestThreadExecutor().shutdownNow();
                 logger.info("--------------爬取结果--------------");
-                logger.info("获取用户数:" +ParseTask.parseUserCount.get());
+                logger.info("获取用户数:" + parseUserCount.get());
                 break;
             }
             try {

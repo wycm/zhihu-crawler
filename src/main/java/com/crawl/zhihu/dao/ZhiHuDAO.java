@@ -11,6 +11,7 @@ import java.util.Properties;
 
 public class ZhiHuDAO {
     private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuDAO.class);
+    private static Connection cn = ConnectionManager.getConnection();
 
     /**
      * 数据库表初始化，创建数据库表。
@@ -46,7 +47,6 @@ public class ZhiHuDAO {
             }
             rs.close();
             st.close();
-            cn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -55,11 +55,10 @@ public class ZhiHuDAO {
     }
     /**
      * 判断该数据库中是否存在该用户
-     * @param cn
      * @param sql 判断该sql数据库中是否存在
      * @return
      */
-    public synchronized static boolean isContain(Connection cn, String sql) throws SQLException {
+    private synchronized static boolean isExistRecord(String sql) throws SQLException {
         int num;
         PreparedStatement pstmt;
         pstmt = cn.prepareStatement(sql);
@@ -81,17 +80,14 @@ public class ZhiHuDAO {
      * @param u
      * @throws SQLException
      */
-    public synchronized static boolean insertToDB(User u){
-        String isContainSql = "select count(*) from user WHERE url='" + u.getUrl() + "'";
-        Connection cn = ConnectionManager.getConnection();
+    public synchronized static boolean insertUser(User u){
         try {
-            if(isContain(cn,isContainSql)){
-                logger.info("数据库已经存在该用户---" + u.getUsername());
+            if (isExistUser(u.getUserToken())){
                 return false;
             }
             String column = "location,business,sex,employment,username,url,agrees,thanks,asks," +
-                    "answers,posts,followees,followers,hashId,education";
-            String values = "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
+                    "answers,posts,followees,followers,hashId,education,user_token";
+            String values = "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
             String sql = "insert into user (" + column + ") values(" +values+")";
             PreparedStatement pstmt;
             pstmt = cn.prepareStatement(sql);
@@ -110,9 +106,9 @@ public class ZhiHuDAO {
             pstmt.setInt(13,u.getFollowers());
             pstmt.setString(14,u.getHashId());
             pstmt.setString(15,u.getEducation());
+            pstmt.setString(16,u.getUserToken());
             pstmt.executeUpdate();
             pstmt.close();
-            cn.close();
             logger.info("插入数据库成功---" + u.getUsername());
         } catch (SQLException e) {
             e.printStackTrace();
@@ -121,6 +117,22 @@ public class ZhiHuDAO {
     }
 
     /**
+     * 是否存在该用户
+     * @param userTokent
+     * @return
+     */
+    public synchronized static boolean isExistUser(String userTokent){
+        String isContainSql = "select count(*) from user WHERE user_token='" + userTokent + "'";
+        try {
+            if(isExistRecord(isContainSql)){
+                return true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    /**
      * 将访问过的url插入数据库
      * @param md5Url 经过md5处理后的url
      * @return
@@ -128,9 +140,8 @@ public class ZhiHuDAO {
      */
     public synchronized static boolean insertUrl(String md5Url){
         String isContainSql = "select count(*) from url WHERE md5_url ='" + md5Url + "'";
-        Connection cn = ConnectionManager.getConnection();
         try {
-            if(isContain(cn,isContainSql)){
+            if(isExistRecord(isContainSql)){
                 logger.debug("数据库已经存在该url---" + md5Url);
                 return false;
             }
@@ -140,7 +151,6 @@ public class ZhiHuDAO {
             pstmt.setString(1,md5Url);
             pstmt.executeUpdate();
             pstmt.close();
-            cn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }

@@ -11,8 +11,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 知乎“我关注的人”列表页面
+ * 登录模式 “我关注的人”列表页面解析器
+ * 2016-12-28起 不在使用
  */
+@Deprecated
 public class ZhiHuUserFollowingListPageParser implements ListPageParser {
     private static ZhiHuUserFollowingListPageParser zhiHuUserFollowingListPageParser;
     public static ZhiHuUserFollowingListPageParser getInstance(){

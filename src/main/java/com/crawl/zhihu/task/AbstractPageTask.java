@@ -22,22 +22,22 @@ import static com.crawl.core.util.Constants.TIME_INTERVAL;
  * 若使用代理，从ProxyPool中取
  * @see ProxyPool
  */
-public abstract class PageTask implements Runnable{
-	private static Logger logger = SimpleLogger.getSimpleLogger(PageTask.class);
+public abstract class AbstractPageTask implements Runnable{
+	private static Logger logger = SimpleLogger.getSimpleLogger(AbstractPageTask.class);
 	protected String url;
 	protected HttpRequestBase request;
 	private boolean proxyFlag;//是否通过代理下载
 	private Proxy currentProxy;//当前线程使用的代理
 
 	protected static ZhiHuHttpClient zhiHuHttpClient = ZhiHuHttpClient.getInstance();
-	public PageTask(){
+	public AbstractPageTask(){
 
 	}
-	public PageTask(String url, boolean proxyFlag){
+	public AbstractPageTask(String url, boolean proxyFlag){
 		this.url = url;
 		this.proxyFlag = proxyFlag;
 	}
-	public PageTask(HttpRequestBase request, boolean proxyFlag){
+	public AbstractPageTask(HttpRequestBase request, boolean proxyFlag){
 		this.request = request;
 		this.proxyFlag = proxyFlag;
 	}
@@ -73,7 +73,7 @@ public abstract class PageTask implements Runnable{
 			int status = page.getStatusCode();
 			if(status == HttpStatus.SC_OK){
 				if (page.getHtml().contains("zhihu")){
-					logger.info(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
+					logger.debug(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
 					currentProxy.setSuccessfulTimes(currentProxy.getSuccessfulTimes() + 1);
 					handle(page);
 				}else {

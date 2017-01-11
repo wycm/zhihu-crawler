@@ -3,7 +3,6 @@ package com.crawl.zhihu.task;
 
 import com.crawl.core.util.Config;
 import com.crawl.core.util.Constants;
-import com.crawl.core.util.Md5Util;
 import com.crawl.zhihu.dao.ZhiHuDAO;
 import com.crawl.zhihu.entity.Page;
 import com.jayway.jsonpath.JsonPath;
@@ -11,9 +10,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 
 import java.util.List;
 
-import static com.crawl.zhihu.task.ParseTask.isStopDownload;
-
-public class ListPageTask extends PageTask {
+public class ListPageTask extends AbstractPageTask {
 
     public ListPageTask(HttpRequestBase request, boolean proxyFlag) {
         super(request, proxyFlag);
@@ -34,17 +31,19 @@ public class ListPageTask extends PageTask {
             if (s == null){
                 continue;
             }
-            handleUrl(Constants.INDEX_URL + "/people/" + s + "/following");
+            handleUserTokent(s);
         }
     }
-    private void handleUrl(String url){
+    private void handleUserTokent(String userToken){
+        String url = Constants.INDEX_URL + "/people/" + userToken + "/following";
         if(!Config.dbEnable){
             zhiHuHttpClient.getDetailPageThreadPool().execute(new DetailPageTask(url, Config.isProxy));
             return ;
         }
-        String md5Url = Md5Util.Convert2Md5(url);
-        boolean isRepeat = ZhiHuDAO.insertUrl(md5Url);
-        if(!isRepeat){
+//        String md5Url = Md5Util.Convert2Md5(url);
+//        boolean isRepeat = ZhiHuDAO.insertUrl(md5Url);
+        boolean existUserFlag = ZhiHuDAO.isExistUser(userToken);
+        if(!existUserFlag){
             /**
              * 防止互相等待，导致死锁
              */
