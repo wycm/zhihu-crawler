@@ -89,8 +89,8 @@ public class HttpClientUtil {
                     ConnectionConfig.custom().setMalformedInputAction(CodingErrorAction.IGNORE)
                             .setUnmappableInputAction(CodingErrorAction.IGNORE).setCharset(Consts.UTF_8).build();
             connManager.setDefaultConnectionConfig(connectionConfig);
-            connManager.setMaxTotal(300);
-            connManager.setDefaultMaxPerRoute(100);
+            connManager.setMaxTotal(500);
+            connManager.setDefaultMaxPerRoute(300);
 			HttpRequestRetryHandler retryHandler = new HttpRequestRetryHandler() {
 				@Override
 				public boolean retryRequest(IOException exception, int executionCount, HttpContext context) {

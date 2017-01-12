@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class ProxyHttpClient extends AbstractHttpClient {
     private static final Logger logger = Logger.getLogger(ProxyHttpClient.class);
     private volatile static ProxyHttpClient instance;
-    private Set<Page> proxyPageSet = new HashSet<>(ProxyPool.proxyMap.size());
+    private Set<Page> downloadFailureProxyPageSet = new HashSet<>(ProxyPool.proxyMap.size());
 
     public static ProxyHttpClient getInstance(){
         if (instance == null){
@@ -50,7 +50,7 @@ public class ProxyHttpClient extends AbstractHttpClient {
      * 初始化线程池
      */
     private void intiThreadPool(){
-        proxyTestThreadExecutor = new ThreadPoolExecutor(50, 50,
+        proxyTestThreadExecutor = new ThreadPoolExecutor(100, 100,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
     }
@@ -71,7 +71,7 @@ public class ProxyHttpClient extends AbstractHttpClient {
                      * 处理下载失败的代理page
                      * 从ProxyPool中取代理去获取代理page
                      */
-                    for (Page page : proxyPageSet){
+                    for (Page page : downloadFailureProxyPageSet){
                         if (page.getStatusCode() != 200){
                             try {
                                 Proxy proxy = ProxyPool.proxyQueue.take();
@@ -123,8 +123,16 @@ public class ProxyHttpClient extends AbstractHttpClient {
             e.printStackTrace();
         } catch (Exception e){
             logger.error("Exception", e);
+        } finally {
+            if (page.getStatusCode() == 200){
+                if(downloadFailureProxyPageSet.contains(page)){
+                    downloadFailureProxyPageSet.remove(page);
+                }
+            } else {
+                downloadFailureProxyPageSet.add(page);
+            }
         }
-        proxyPageSet.add(page);
+        
     }
     public ThreadPoolExecutor getProxyTestThreadExecutor() {
         return proxyTestThreadExecutor;
