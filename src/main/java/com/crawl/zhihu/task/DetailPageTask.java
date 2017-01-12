@@ -38,17 +38,8 @@ public class DetailPageTask extends AbstractPageTask {
         }
         parseUserCount.incrementAndGet();
         for(int i = 0;i < u.getFollowees() / 20 + 1;i++) {
-            /**
-             * 当下载网页队列小于100时才获取该用户关注用户
-             * 防止下载网页线程池任务队列过量增长
-             */
-//            if (!isStopDownload && zhiHuHttpClient.getDetailPageThreadPool().getQueue().size() <= 500) {
-                /**
-                 * 获取关注用户列表,知乎每次最多返回20个关注用户
-                 */
-                String userFolloweesUrl = formatUserFolloweesUrl(u.getUserToken(), 20 * i);
-                handleUrl(userFolloweesUrl);
-//            }
+            String userFolloweesUrl = formatUserFolloweesUrl(u.getUserToken(), 20 * i);
+            handleUrl(userFolloweesUrl);
         }
     }
     public String formatUserFolloweesUrl(String userToken, int offset){

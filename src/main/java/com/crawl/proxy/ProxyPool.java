@@ -41,9 +41,12 @@ public class ProxyPool {
         proxyMap.put("http://www.ip181.com/daili/1.html", Ip181ProxyListPageParser.class);
         proxyMap.put("http://www.ip181.com/daili/2.html", Ip181ProxyListPageParser.class);
         proxyMap.put("http://www.ip181.com/daili/3.html", Ip181ProxyListPageParser.class);
-        proxyMap.put("http://www.mimiip.com/gngao/1", MimiipProxyListPageParser.class);
-        proxyMap.put("http://www.mimiip.com/gngao/2", MimiipProxyListPageParser.class);
-        proxyMap.put("http://www.mimiip.com/gngao/3", MimiipProxyListPageParser.class);
+        proxyMap.put("http://www.mimiip.com/gngao/1", MimiipProxyListPageParser.class);//高匿
+        proxyMap.put("http://www.mimiip.com/gngao/2", MimiipProxyListPageParser.class);//高匿
+        proxyMap.put("http://www.mimiip.com/gngao/3", MimiipProxyListPageParser.class);//高匿
+        proxyMap.put("http://www.mimiip.com/gnpu/1", MimiipProxyListPageParser.class);//普匿
+        proxyMap.put("http://www.mimiip.com/gnpu/2", MimiipProxyListPageParser.class);//普匿
+        proxyMap.put("http://www.mimiip.com/gnpu/3", MimiipProxyListPageParser.class);//普匿
         proxyQueue.add(new Direct(TIME_INTERVAL));
     }
 

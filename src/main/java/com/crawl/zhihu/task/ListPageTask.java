@@ -18,7 +18,7 @@ public class ListPageTask extends AbstractPageTask {
 
     @Override
     void retry() {
-        zhiHuHttpClient.getDetailPageThreadPool().execute(new ListPageTask(request, Config.isProxy));
+        zhiHuHttpClient.getListPageThreadPool().execute(new ListPageTask(request, Config.isProxy));
     }
 
     @Override

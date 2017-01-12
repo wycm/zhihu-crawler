@@ -33,7 +33,7 @@ public class Ip181ProxyListPageParser implements ProxyListPageParser {
             String ip = element.select("td:eq(0)").first().text();
             String port  = element.select("td:eq(1)").first().text();
             String isAnonymous = element.select("td:eq(2)").first().text();
-            if(isAnonymous.equals("高匿")){
+            if(!anonymousFlag || isAnonymous.contains("匿")){
                 proxyList.add(new Proxy(ip, Integer.valueOf(port), TIME_INTERVAL));
             }
         }

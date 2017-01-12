@@ -25,6 +25,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
      * 统计用户数量
      */
     public static AtomicInteger parseUserCount = new AtomicInteger(0);
+    private static long startTime = System.currentTimeMillis();
     public static volatile boolean isStop = false;
 
     public static ZhiHuHttpClient getInstance(){
@@ -74,7 +75,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
                 Config.downloadThreadSize,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
-        listPageThreadPool = new ThreadPoolExecutor(4, 4,
+        listPageThreadPool = new ThreadPoolExecutor(20, 20,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
     }
@@ -152,6 +153,8 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
                 logger.info("获取用户数:" + parseUserCount.get());
                 break;
             }
+            double costTime = (System.currentTimeMillis() - startTime) / 1000.0;//单位s
+            logger.info("抓取速率：" + parseUserCount.get() / costTime + "个/s");
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
