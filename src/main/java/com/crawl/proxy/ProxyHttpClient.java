@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 public class ProxyHttpClient extends AbstractHttpClient {
     private static final Logger logger = Logger.getLogger(ProxyHttpClient.class);
     private volatile static ProxyHttpClient instance;
-    private Set<Page> downloadFailureProxyPageSet = new HashSet<>(ProxyPool.proxyMap.size());
+    public static Set<Page> downloadFailureProxyPageSet = new HashSet<>(ProxyPool.proxyMap.size());
 
     public static ProxyHttpClient getInstance(){
         if (instance == null){

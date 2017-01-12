@@ -41,6 +41,13 @@ public class ListPageTask extends AbstractPageTask {
             return ;
         }
         boolean existUserFlag = ZhiHuDAO.isExistUser(userToken);
+        while (zhiHuHttpClient.getDetailPageThreadPool().getQueue().size() > 1000){
+            try {
+                Thread.sleep(3000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         if(!existUserFlag || zhiHuHttpClient.getDetailPageThreadPool().getActiveCount() == 0){
             /**
              * 防止互相等待，导致死锁

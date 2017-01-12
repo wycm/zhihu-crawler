@@ -155,6 +155,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
             }
             double costTime = (System.currentTimeMillis() - startTime) / 1000.0;//单位s
             logger.info("抓取速率：" + parseUserCount.get() / costTime + "个/s");
+            logger.info("downloadFailureProxyPageSet size:" + ProxyHttpClient.downloadFailureProxyPageSet.size());
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

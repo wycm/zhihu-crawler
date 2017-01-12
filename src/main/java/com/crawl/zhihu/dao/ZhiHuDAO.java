@@ -11,7 +11,7 @@ import java.util.Properties;
 
 public class ZhiHuDAO {
     private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuDAO.class);
-    private static Connection cn = ConnectionManager.getConnection();
+//    private static Connection cn = ConnectionManager.getConnection();
 
     /**
      * 数据库表初始化，创建数据库表。
@@ -61,7 +61,7 @@ public class ZhiHuDAO {
     private synchronized static boolean isExistRecord(String sql) throws SQLException {
         int num;
         PreparedStatement pstmt;
-        pstmt = cn.prepareStatement(sql);
+        pstmt = ConnectionManager.getConnection().prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
         while(rs.next()){
             num = rs.getInt("count(*)");
@@ -73,6 +73,7 @@ public class ZhiHuDAO {
         }
         rs.close();
         pstmt.close();
+        ConnectionManager.close();
         return true;
     }
     /**
@@ -90,7 +91,7 @@ public class ZhiHuDAO {
             String values = "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
             String sql = "insert into user (" + column + ") values(" +values+")";
             PreparedStatement pstmt;
-            pstmt = cn.prepareStatement(sql);
+            pstmt = ConnectionManager.getConnection().prepareStatement(sql);
             pstmt.setString(1,u.getLocation());
             pstmt.setString(2,u.getBusiness());
             pstmt.setString(3,u.getSex());
@@ -112,6 +113,8 @@ public class ZhiHuDAO {
             logger.info("插入数据库成功---" + u.getUsername());
         } catch (SQLException e) {
             e.printStackTrace();
+        } finally {
+            ConnectionManager.close();
         }
         return true;
     }
@@ -147,7 +150,7 @@ public class ZhiHuDAO {
             }
             String sql = "insert into url (md5_url) values( ?)";
             PreparedStatement pstmt;
-            pstmt = cn.prepareStatement(sql);
+            pstmt = ConnectionManager.getConnection().prepareStatement(sql);
             pstmt.setString(1,md5Url);
             pstmt.executeUpdate();
             pstmt.close();

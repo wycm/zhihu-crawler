@@ -42,11 +42,12 @@ public abstract class AbstractPageTask implements Runnable{
 		this.proxyFlag = proxyFlag;
 	}
 	public void run(){
+		HttpGet tempReqeust = null;
 		try {
 			Page page = null;
 			if(url != null){
 				if (proxyFlag){
-					HttpGet tempReqeust = new HttpGet(url);
+					tempReqeust = new HttpGet(url);
 					currentProxy = ProxyPool.proxyQueue.take();
 					if(!(currentProxy instanceof Direct)){
 						HttpHost proxy = new HttpHost(currentProxy.getIp(), currentProxy.getPort());
@@ -108,6 +109,9 @@ public abstract class AbstractPageTask implements Runnable{
 		} finally {
 			if (request != null){
 				request.releaseConnection();
+			}
+			if (tempReqeust != null){
+				tempReqeust.releaseConnection();
 			}
 			setProxyUseStrategy();
 		}
