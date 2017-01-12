@@ -1,5 +1,7 @@
 package com.crawl;
 
+import org.apache.http.client.methods.HttpGet;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -17,5 +19,6 @@ public class Test {
         if (matcher.find()){
             System.out.println(matcher.group(4));
         }
+        System.out.println(new HttpGet("https://www.baidu.com/user").getURI());
     }
 }

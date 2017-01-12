@@ -74,7 +74,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
                 Config.downloadThreadSize,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
-        listPageThreadPool = new ThreadPoolExecutor(3, 3,
+        listPageThreadPool = new ThreadPoolExecutor(4, 4,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
     }

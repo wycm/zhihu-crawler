@@ -86,10 +86,10 @@ public abstract class AbstractPageTask implements Runnable{
 			}
 			else if(status == 404 ||
 					status == 410){
-				logger.warn(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
+				logger.warn(Thread.currentThread().getName() + " " + getProxyStr(currentProxy)  + " statusCode:" + status + "  executing request " + page.getUrl());
 			}
 			else {
-				logger.error(Thread.currentThread().getName() + " executing request " + page.getUrl() + "   status:" + status);
+				logger.error(Thread.currentThread().getName() + " " + getProxyStr(currentProxy)  + " statusCode:" + status + "  executing request " + page.getUrl());
 				Thread.sleep(100);
 				retry();
 			}
@@ -138,4 +138,11 @@ public abstract class AbstractPageTask implements Runnable{
     }
 
 	abstract void handle(Page page);
+
+	private String getProxyStr(Proxy proxy){
+		if (proxy == null){
+			return "";
+		}
+		return proxy.getIp() + ":" + proxy.getPort();
+	}
 }
