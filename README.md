@@ -1,10 +1,10 @@
 ﻿知乎爬虫
 ====  
 一个简易知乎爬虫，抓取知乎用户的基本资料。<br>
-刚开始爬取速度会比较慢，因为代理比较少。随着可用代理的增多，爬取速度会越来越快，最终稳定在24个用户/s左右。
-运行环境
-*-cpu:Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz
-*-memory size: DIMM DDR3 Synchronous 1600 MHz (0.6 ns)--(8GB)
+刚开始爬取速度会比较慢，因为代理比较少。随着可用代理的增多，爬取速度会越来越快，最终稳定在24个用户/s左右。<br>
+运行环境<br>
+*-cpu:Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz<br>
+*-memory size: DIMM DDR3 Synchronous 1600 MHz (0.6 ns)--(8GB)<br>
 *-system:ubuntu 12.04
 ##工程导入(maven)
 * git clone https://github.com/wycm/zhihu-crawler 克隆项目到本地 
