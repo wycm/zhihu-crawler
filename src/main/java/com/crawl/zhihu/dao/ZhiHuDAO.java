@@ -59,22 +59,21 @@ public class ZhiHuDAO {
      * @return
      */
     private synchronized static boolean isExistRecord(String sql) throws SQLException {
-        int num;
+        int num = 0;
         PreparedStatement pstmt;
         pstmt = ConnectionManager.getConnection().prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
         while(rs.next()){
             num = rs.getInt("count(*)");
-            if(num == 0){
-                return false;
-            }else{
-                return true;
-            }
         }
         rs.close();
         pstmt.close();
-        ConnectionManager.close();
-        return true;
+//        ConnectionManager.close();
+        if(num == 0){
+            return false;
+        }else{
+            return true;
+        }
     }
     /**
      * user 插入数据库
@@ -114,7 +113,7 @@ public class ZhiHuDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            ConnectionManager.close();
+//            ConnectionManager.close();
         }
         return true;
     }
