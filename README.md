@@ -36,8 +36,10 @@ Run with [Main.java](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/jav
 * 不再采用登录抓取，并移除登录抓取相关模块，模拟登录的主要逻辑代码见[ModelLogin.java](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/java/com/crawl/zhihu/ModelLogin.java)。
 * 优化项目结构，加快抓取速度。采用ListPageThreadPool和DetailPageThreadPool两个线程池。ListPageThreadPool负责下载”关注用户“列表页，解析出关注用户，将关注用户的url去重，然后放到DetailPageThreadPool线程池。
 DetailPageThreadPool负责下载用户详情页面，解析出用户基本信息并入库，获取该用户的"关注用户"的列表页url并放到ListPageThreadPool。
+
 ##TODO
 * 优化爬取速度
+
 ##最后
 欢迎交流，欢迎提交代码。需要数据的可以联系我。
 
