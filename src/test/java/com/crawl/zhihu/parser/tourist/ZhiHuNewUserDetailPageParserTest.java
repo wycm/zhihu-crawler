@@ -27,7 +27,11 @@ public class ZhiHuNewUserDetailPageParserTest {
         }
         page.setUrl(url);
         DetailPageParser parser = ZhiHuNewUserDetailPageParser.getInstance();
-        User user = parser.parse(page);
-        System.out.println(user);
+        long startTime = System.currentTimeMillis();
+        for(int i = 0; i < 1; i++){
+            User user = parser.parse(page);
+        }
+        long endTime = System.currentTimeMillis();
+        System.out.println("cost time:" + (endTime - startTime) + "ms");
     }
 }

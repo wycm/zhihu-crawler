@@ -16,6 +16,7 @@ public class ListPageTask extends AbstractPageTask {
         super(request, proxyFlag);
     }
 
+
     @Override
     void retry() {
         zhiHuHttpClient.getListPageThreadPool().execute(new ListPageTask(request, Config.isProxy));
@@ -31,10 +32,10 @@ public class ListPageTask extends AbstractPageTask {
             if (s == null){
                 continue;
             }
-            handleUserTokent(s);
+            handleUserToken(s);
         }
     }
-    private void handleUserTokent(String userToken){
+    private void handleUserToken(String userToken){
         String url = Constants.INDEX_URL + "/people/" + userToken + "/following";
         if(!Config.dbEnable){
             zhiHuHttpClient.getDetailPageThreadPool().execute(new DetailPageTask(url, Config.isProxy));

@@ -61,7 +61,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
      */
     @Override
     public void initHttpClient() {
-        setAuthorization();
+        authorization = initAuthorization();
         if(Config.dbEnable){
             ZhiHuDAO.DBTablesInit(ConnectionManager.getConnection());
         }
@@ -83,7 +83,12 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
         detailPageThreadPool.execute(new DetailPageTask(url, Config.isProxy));
         manageHttpClient();
     }
-    private void setAuthorization(){
+
+    /**
+     * 初始化authorization
+     * @return
+     */
+    private String initAuthorization(){
         String content = null;
         try {
             content = HttpClientUtil.getWebPage(Config.startURL);
@@ -107,8 +112,8 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
         pattern = Pattern.compile("CLIENT_ALIAS=\"(([0-9]|[a-z])*)\"");
         matcher = pattern.matcher(jsContent);
         if (matcher.find()){
-            authorization = matcher.group(1);
-            return ;
+            String authorization = matcher.group(1);
+            return authorization;
         }
         throw new RuntimeException("not get authorization");
     }

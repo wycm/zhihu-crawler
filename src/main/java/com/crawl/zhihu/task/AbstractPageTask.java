@@ -85,7 +85,10 @@ public abstract class AbstractPageTask implements Runnable{
 				}
 
 			}
-			else if(status == 404 ||
+			/**
+			 * 401--不能通过验证
+			 */
+			else if(status == 404 || status == 401 ||
 					status == 410){
 				logger.warn(Thread.currentThread().getName() + " " + getProxyStr(currentProxy)  + " statusCode:" + status + "  executing request " + page.getUrl());
 			}

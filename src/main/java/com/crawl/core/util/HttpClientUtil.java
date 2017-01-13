@@ -164,7 +164,7 @@ public class HttpClientUtil {
 		if (request.getConfig() == null){
 			request.setConfig(requestConfig);
 		}
-		request.addHeader("User-Agent", Constants.userAgentArray[new Random().nextInt(Constants.userAgentArray.length)]);
+		request.setHeader("User-Agent", Constants.userAgentArray[new Random().nextInt(Constants.userAgentArray.length)]);
 		HttpClientContext httpClientContext = HttpClientContext.create();
 		httpClientContext.setCookieStore(cookieStore);
 		CloseableHttpResponse response = httpClient.execute(request, httpClientContext);

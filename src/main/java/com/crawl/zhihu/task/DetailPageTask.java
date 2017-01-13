@@ -3,6 +3,7 @@ package com.crawl.zhihu.task;
 
 import com.crawl.core.parser.DetailPageParser;
 import com.crawl.core.util.Config;
+import com.crawl.core.util.SimpleInvocationHandler;
 import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
 import com.crawl.zhihu.dao.ZhiHuDAO;
@@ -12,11 +13,18 @@ import com.crawl.zhihu.parser.ZhiHuNewUserDetailPageParser;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.log4j.Logger;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Proxy;
+
 import static com.crawl.zhihu.ZhiHuHttpClient.parseUserCount;
 
 
 public class DetailPageTask extends AbstractPageTask {
     private static Logger logger = SimpleLogger.getSimpleLogger(DetailPageTask.class);
+    private static DetailPageParser proxyDetailPageParser;
+    static {
+        proxyDetailPageParser = getProxyDetailParser();
+    }
 
     public DetailPageTask(String url, boolean proxyFlag) {
         super(url, proxyFlag);
@@ -30,7 +38,8 @@ public class DetailPageTask extends AbstractPageTask {
     @Override
     void handle(Page page) {
         DetailPageParser parser = null;
-        parser = ZhiHuNewUserDetailPageParser.getInstance();
+//        parser = ZhiHuNewUserDetailPageParser.getInstance();
+        parser = proxyDetailPageParser;
         User u = parser.parse(page);
         logger.info("解析用户成功:" + u.toString());
         if(Config.dbEnable){
@@ -57,5 +66,17 @@ public class DetailPageTask extends AbstractPageTask {
         if(zhiHuHttpClient.getListPageThreadPool().getQueue().size() < 100){
             zhiHuHttpClient.getListPageThreadPool().execute(new ListPageTask(request, Config.isProxy));
         }
+    }
+
+    /**
+     * 代理类
+     * @return
+     */
+    private static DetailPageParser getProxyDetailParser(){
+        DetailPageParser detailPageParser = ZhiHuNewUserDetailPageParser.getInstance();
+        InvocationHandler invocationHandler = new SimpleInvocationHandler(detailPageParser);
+        DetailPageParser proxyDetailPageParser = (DetailPageParser) Proxy.newProxyInstance(detailPageParser.getClass().getClassLoader(),
+                detailPageParser.getClass().getInterfaces(), invocationHandler);
+        return proxyDetailPageParser;
     }
 }
