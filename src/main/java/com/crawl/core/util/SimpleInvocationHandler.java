@@ -26,7 +26,7 @@ public class SimpleInvocationHandler implements InvocationHandler{
         Object result = method.invoke(target, args);
         long endTime = System.currentTimeMillis();
 //        logger.debug("++++++after " + method.getName() + "++++++");
-        logger.info(target.getClass().getSimpleName() + " " + method.getName() + " cost time:" + (endTime - startTime) + "ms");
+        logger.debug(target.getClass().getSimpleName() + " " + method.getName() + " cost time:" + (endTime - startTime) + "ms");
         return result;
     }
 }

@@ -19,7 +19,7 @@ public class ThreadPoolMonitor implements Runnable{
 
     public void run(){
         while(!isStopMonitor){
-            logger.info(name +
+            logger.debug(name +
                     String.format("[monitor] [%d/%d] Active: %d, Completed: %d, queueSize: %d, Task: %d, isShutdown: %s, isTerminated: %s",
                             this.executor.getPoolSize(),
                             this.executor.getCorePoolSize(),
