@@ -1,4 +1,4 @@
-package com.crawl.core.db;
+package com.crawl.core.dao;
 
 import com.crawl.core.util.Config;
 import com.crawl.core.util.SimpleLogger;
@@ -47,7 +47,7 @@ public class ConnectionManager {
 			}
 		}
 	}
-	private static Connection createConnection(){
+	public static Connection createConnection(){
 		String host = Config.dbHost;
 		String user = Config.dbUsername;
 		String password = Config.dbPassword;

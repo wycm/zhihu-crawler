@@ -1,6 +1,6 @@
 package com.crawl.zhihu.dao;
 
-import com.crawl.core.db.ConnectionManager;
+import com.crawl.core.dao.ConnectionManager;
 import com.crawl.zhihu.entity.User;
 import com.crawl.core.util.SimpleLogger;
 import org.apache.log4j.Logger;
@@ -121,11 +121,11 @@ public class ZhiHuDAO {
 
     /**
      * 是否存在该用户
-     * @param userTokent
+     * @param userToken
      * @return
      */
-    public synchronized static boolean isExistUser(String userTokent){
-        String isContainSql = "select count(*) from user WHERE user_token='" + userTokent + "'";
+    public synchronized static boolean isExistUser(String userToken){
+        String isContainSql = "select count(*) from user WHERE user_token='" + userToken + "'";
         try {
             if(isExistRecord(isContainSql)){
                 return true;

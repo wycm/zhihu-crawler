@@ -3,7 +3,7 @@ package com.crawl.zhihu;
 import com.crawl.core.httpclient.AbstractHttpClient;
 import com.crawl.core.httpclient.IHttpClient;
 import com.crawl.core.util.Config;
-import com.crawl.core.db.ConnectionManager;
+import com.crawl.core.dao.ConnectionManager;
 import com.crawl.proxy.ProxyHttpClient;
 import com.crawl.zhihu.dao.ZhiHuDAO;
 import com.crawl.core.util.HttpClientUtil;
@@ -154,8 +154,8 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
                 break;
             }
             double costTime = (System.currentTimeMillis() - startTime) / 1000.0;//单位s
-            logger.info("抓取速率：" + parseUserCount.get() / costTime + "个/s");
-            logger.info("downloadFailureProxyPageSet size:" + ProxyHttpClient.downloadFailureProxyPageSet.size());
+            logger.debug("抓取速率：" + parseUserCount.get() / costTime + "个/s");
+//            logger.info("downloadFailureProxyPageSet size:" + ProxyHttpClient.downloadFailureProxyPageSet.size());
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {
