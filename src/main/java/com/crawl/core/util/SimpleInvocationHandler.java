@@ -21,11 +21,9 @@ public class SimpleInvocationHandler implements InvocationHandler{
     }
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-//        logger.debug("++++++before " + method.getName() + "++++++");
         long startTime = System.currentTimeMillis();
         Object result = method.invoke(target, args);
         long endTime = System.currentTimeMillis();
-//        logger.debug("++++++after " + method.getName() + "++++++");
         logger.debug(target.getClass().getSimpleName() + " " + method.getName() + " cost time:" + (endTime - startTime) + "ms");
         return result;
     }

@@ -43,7 +43,8 @@ public class DetailPageTask extends AbstractPageTask {
         User u = parser.parse(page);
         logger.info("解析用户成功:" + u.toString());
         if(Config.dbEnable){
-            ZhiHuDAO.insertUser(u);
+//            ZhiHuDAO.insertUser(u);
+            zhiHuDao1.insertUser(u);
         }
         parseUserCount.incrementAndGet();
         for(int i = 0;i < u.getFollowees() / 20 + 1;i++) {

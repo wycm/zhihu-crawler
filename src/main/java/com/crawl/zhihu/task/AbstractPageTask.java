@@ -1,12 +1,17 @@
 package com.crawl.zhihu.task;
 
+import com.crawl.core.parser.DetailPageParser;
 import com.crawl.core.util.HttpClientUtil;
+import com.crawl.core.util.SimpleInvocationHandler;
 import com.crawl.proxy.ProxyPool;
 import com.crawl.proxy.entity.Direct;
 import com.crawl.proxy.entity.Proxy;
+import com.crawl.zhihu.dao.ZhiHuDao1;
+import com.crawl.zhihu.dao.ZhiHuDao1Imp;
 import com.crawl.zhihu.entity.Page;
 import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
+import com.crawl.zhihu.parser.ZhiHuNewUserDetailPageParser;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
@@ -14,6 +19,7 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.lang.reflect.InvocationHandler;
 
 import static com.crawl.core.util.Constants.TIME_INTERVAL;
 
@@ -28,8 +34,11 @@ public abstract class AbstractPageTask implements Runnable{
 	protected HttpRequestBase request;
 	private boolean proxyFlag;//是否通过代理下载
 	private Proxy currentProxy;//当前线程使用的代理
-
+	protected static ZhiHuDao1 zhiHuDao1;
 	protected static ZhiHuHttpClient zhiHuHttpClient = ZhiHuHttpClient.getInstance();
+	static {
+		zhiHuDao1 = getZhiHuDao1();
+	}
 	public AbstractPageTask(){
 
 	}
@@ -151,5 +160,16 @@ public abstract class AbstractPageTask implements Runnable{
 			return "";
 		}
 		return proxy.getIp() + ":" + proxy.getPort();
+	}
+	/**
+	 * 代理类，统计方法执行时间
+	 * @return
+	 */
+	private static ZhiHuDao1 getZhiHuDao1(){
+		ZhiHuDao1 zhiHuDao1 = new ZhiHuDao1Imp();
+		InvocationHandler invocationHandler = new SimpleInvocationHandler(zhiHuDao1);
+		ZhiHuDao1 proxyZhiHuDao1 = (ZhiHuDao1) java.lang.reflect.Proxy.newProxyInstance(zhiHuDao1.getClass().getClassLoader(),
+				zhiHuDao1.getClass().getInterfaces(), invocationHandler);
+		return proxyZhiHuDao1;
 	}
 }

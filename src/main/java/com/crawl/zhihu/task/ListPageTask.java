@@ -41,7 +41,8 @@ public class ListPageTask extends AbstractPageTask {
             zhiHuHttpClient.getDetailPageThreadPool().execute(new DetailPageTask(url, Config.isProxy));
             return ;
         }
-        boolean existUserFlag = ZhiHuDAO.isExistUser(userToken);
+//        boolean existUserFlag = ZhiHuDAO.isExistUser(userToken);
+        boolean existUserFlag = zhiHuDao1.isExistUser(userToken);
         while (zhiHuHttpClient.getDetailPageThreadPool().getQueue().size() > 1000){
             try {
                 Thread.sleep(3000);
