@@ -113,4 +113,27 @@ public class Proxy implements Delayed{
                 ", successfulTimes=" + successfulTimes +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Proxy proxy = (Proxy) o;
+
+        if (port != proxy.port) return false;
+        return ip.equals(proxy.ip);
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = ip.hashCode();
+        result = 31 * result + port;
+        return result;
+    }
+
+    public String getProxyStr(){
+        return ip + ":" + port;
+    }
 }

@@ -16,7 +16,7 @@ import java.io.IOException;
 /**
  * 检测代理是否可用
  * 通过访问知乎首页，能否正确响应
- * 将可用代理添加到DelayQueue延时队列中，设置５秒延迟
+ * 将可用代理添加到DelayQueue延时队列中
  */
 public class ProxyTestTask implements Runnable{
     private final static Logger logger = Logger.getLogger(ProxyTestTask.class);
