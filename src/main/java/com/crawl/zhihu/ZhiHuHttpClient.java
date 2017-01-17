@@ -39,22 +39,21 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
         return instance;
     }
     /**
-     * 详情页下载网页线程池
+     * 详情页下载线程池
      */
     private ThreadPoolExecutor detailPageThreadPool;
     /**
-     * 列表页下载网页线程池
+     * 列表页下载线程池
      */
     private ThreadPoolExecutor listPageThreadPool;
     /**
      * request　header
+     * 获取列表页时，必须带上
      */
     private static String authorization;
     private ZhiHuHttpClient() {
         initHttpClient();
         intiThreadPool();
-        new Thread(new ThreadPoolMonitor(detailPageThreadPool, "DetailPageDownloadThreadPool")).start();
-        new Thread(new ThreadPoolMonitor(listPageThreadPool, "ListPageDownloadThreadPool")).start();
     }
     /**
      * 初始化HttpClient
@@ -75,9 +74,11 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
                 Config.downloadThreadSize,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
-        listPageThreadPool = new ThreadPoolExecutor(50, 50,
+        listPageThreadPool = new ThreadPoolExecutor(50, 80,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>());
+                new LinkedBlockingQueue<Runnable>(1000), new ThreadPoolExecutor.DiscardPolicy());
+        new Thread(new ThreadPoolMonitor(detailPageThreadPool, "DetailPageDownloadThreadPool")).start();
+        new Thread(new ThreadPoolMonitor(listPageThreadPool, "ListPageDownloadThreadPool")).start();
     }
     public void startCrawl(String url){
         detailPageThreadPool.execute(new DetailPageTask(url, Config.isProxy));
@@ -154,6 +155,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
                  * 关闭ProxyHttpClient客户端
                  */
                 ProxyHttpClient.getInstance().getProxyTestThreadExecutor().shutdownNow();
+                ProxyHttpClient.getInstance().getProxyDownloadThreadExecutor().shutdownNow();
                 logger.info("--------------爬取结果--------------");
                 logger.info("获取用户数:" + parseUserCount.get());
                 break;

@@ -1,24 +1,17 @@
 package com.crawl.proxy;
 
+import com.crawl.core.util.Config;
+import com.crawl.core.util.Constants;
 import com.crawl.core.util.HttpClientUtil;
 import com.crawl.core.util.ThreadPoolMonitor;
-import com.crawl.proxy.entity.Direct;
 import com.crawl.proxy.entity.Proxy;
-import com.crawl.proxy.site.ProxyListPageParserFactory;
 import com.crawl.proxy.task.ProxyPageTask;
-import com.crawl.proxy.task.ProxyTestTask;
 import com.crawl.core.httpclient.AbstractHttpClient;
-import com.crawl.zhihu.ZhiHuHttpClient;
+import com.crawl.proxy.task.ProxySerializeTask;
 import com.crawl.zhihu.entity.Page;
-import org.apache.http.HttpHost;
-import org.apache.http.client.config.RequestConfig;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -48,22 +41,46 @@ public class ProxyHttpClient extends AbstractHttpClient {
      */
     private ThreadPoolExecutor proxyDownloadThreadExecutor;
     public ProxyHttpClient(){
-        intiThreadPool();
-        new Thread(new ThreadPoolMonitor(proxyTestThreadExecutor, "ProxyTestThreadPool")).start();
-        new Thread(new ThreadPoolMonitor(proxyDownloadThreadExecutor, "ProxyDownloadThreadExecutor")).start();
+        initThreadPool();
+        initProxy();
     }
     /**
      * 初始化线程池
      */
-    private void intiThreadPool(){
+    private void initThreadPool(){
         proxyTestThreadExecutor = new ThreadPoolExecutor(100, 100,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>());
+                new LinkedBlockingQueue<Runnable>(10000), new ThreadPoolExecutor.DiscardPolicy());
         proxyDownloadThreadExecutor = new ThreadPoolExecutor(10, 10,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>());
+        new Thread(new ThreadPoolMonitor(proxyTestThreadExecutor, "ProxyTestThreadPool")).start();
+        new Thread(new ThreadPoolMonitor(proxyDownloadThreadExecutor, "ProxyDownloadThreadExecutor")).start();
     }
 
+    /**
+     * 初始化proxy
+     *
+     */
+    private void initProxy(){
+        Proxy[] proxyArray = null;
+        try {
+            proxyArray = (Proxy[]) HttpClientUtil.deserializeObject(Config.proxyPath);
+            for (Proxy p : proxyArray){
+                if (p == null){
+                    continue;
+                }
+                p.setTimeInterval(Constants.TIME_INTERVAL);
+                p.setFailureTimes(0);
+                p.setSuccessfulTimes(0);
+                ProxyPool.proxyQueue.add(p);
+                ProxyPool.proxySet.add(p);
+            }
+            logger.info("反序列化proxy成功，" + proxyArray.length + "个代理");
+        } catch (Exception e) {
+            logger.warn("反序列化proxy失败");
+        }
+    }
     /**
      * 抓取代理
      */
@@ -91,6 +108,7 @@ public class ProxyHttpClient extends AbstractHttpClient {
                 }
             }
         }).start();
+        new Thread(new ProxySerializeTask()).start();
     }
     public ThreadPoolExecutor getProxyTestThreadExecutor() {
         return proxyTestThreadExecutor;

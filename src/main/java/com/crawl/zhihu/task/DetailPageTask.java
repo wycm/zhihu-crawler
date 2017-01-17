@@ -18,7 +18,10 @@ import java.lang.reflect.Proxy;
 
 import static com.crawl.zhihu.ZhiHuHttpClient.parseUserCount;
 
-
+/**
+ * 知乎用户详情页task
+ * 下载成功解析出用户信息并添加到数据库，获取该用户的关注用户list url，添加到ListPageDownloadThreadPool
+ */
 public class DetailPageTask extends AbstractPageTask {
     private static Logger logger = SimpleLogger.getSimpleLogger(DetailPageTask.class);
     private static DetailPageParser proxyDetailPageParser;
@@ -64,9 +67,7 @@ public class DetailPageTask extends AbstractPageTask {
             zhiHuHttpClient.getListPageThreadPool().execute(new ListPageTask(request, Config.isProxy));
             return ;
         }
-        if(zhiHuHttpClient.getListPageThreadPool().getQueue().size() < 100){
-            zhiHuHttpClient.getListPageThreadPool().execute(new ListPageTask(request, Config.isProxy));
-        }
+        zhiHuHttpClient.getListPageThreadPool().execute(new ListPageTask(request, Config.isProxy));
     }
 
     /**

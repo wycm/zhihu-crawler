@@ -14,7 +14,7 @@ import org.apache.log4j.Logger;
 import java.io.IOException;
 
 /**
- * 检测代理是否可用
+ * 代理检测task
  * 通过访问知乎首页，能否正确响应
  * 将可用代理添加到DelayQueue延时队列中
  */
@@ -44,9 +44,9 @@ public class ProxyTestTask implements Runnable{
             }
             request.releaseConnection();
             long endTime = System.currentTimeMillis();
-            if(!ProxyPool.proxySet.contains(getProxyStr())){
+            if(!ProxyPool.proxySet.contains(proxy)){
                 logger.debug(proxy.toString() + "----------代理可用--------请求耗时:" + (endTime - startTime) + "ms");
-                ProxyPool.proxySet.add(getProxyStr());
+                ProxyPool.proxySet.add(proxy);
                 ProxyPool.proxyQueue.add(proxy);
             }
         } catch (IOException e) {

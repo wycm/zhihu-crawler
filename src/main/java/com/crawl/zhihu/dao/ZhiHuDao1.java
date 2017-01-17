@@ -8,7 +8,6 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 public interface ZhiHuDao1 {
-    Connection cn = ConnectionManager.getConnection();
     public void DBTablesInit();
     boolean isExistRecord(String sql) throws SQLException;
     boolean isExistUser(String userToken);

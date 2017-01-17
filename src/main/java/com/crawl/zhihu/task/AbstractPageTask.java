@@ -1,17 +1,17 @@
 package com.crawl.zhihu.task;
 
-import com.crawl.core.parser.DetailPageParser;
+import com.crawl.core.util.Constants;
 import com.crawl.core.util.HttpClientUtil;
 import com.crawl.core.util.SimpleInvocationHandler;
 import com.crawl.proxy.ProxyPool;
 import com.crawl.proxy.entity.Direct;
 import com.crawl.proxy.entity.Proxy;
+import com.crawl.proxy.util.ProxyUtil;
 import com.crawl.zhihu.dao.ZhiHuDao1;
 import com.crawl.zhihu.dao.ZhiHuDao1Imp;
 import com.crawl.zhihu.entity.Page;
 import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
-import com.crawl.zhihu.parser.ZhiHuNewUserDetailPageParser;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
@@ -24,7 +24,8 @@ import java.lang.reflect.InvocationHandler;
 import static com.crawl.core.util.Constants.TIME_INTERVAL;
 
 /**
- * 下载网页任务， 下载成功的Page放到解析线程池
+ * page task
+ * 下载网页并解析，具体解析由子类实现
  * 若使用代理，从ProxyPool中取
  * @see ProxyPool
  */
@@ -125,7 +126,10 @@ public abstract class AbstractPageTask implements Runnable{
 			if (tempRequest != null){
 				tempRequest.releaseConnection();
 			}
-			setProxyUseStrategy();
+			if (currentProxy != null && !ProxyUtil.isDiscardProxy(currentProxy)){
+				currentProxy.setTimeInterval(Constants.TIME_INTERVAL);
+				ProxyPool.proxyQueue.add(currentProxy);
+			}
 		}
 	}
 
@@ -134,25 +138,12 @@ public abstract class AbstractPageTask implements Runnable{
 	 */
 	abstract void retry();
 
-    /**
-     * 是否继续使用代理
-	 * 失败次数大于３，且失败率超过60%，则丢弃
-     */
-	private void setProxyUseStrategy(){
-        if (currentProxy != null){
-            int succTimes = currentProxy.getSuccessfulTimes();
-            int failTimes = currentProxy.getFailureTimes();
-            if(failTimes >= 3){
-                double failRate = (failTimes + 0.0) / (succTimes + failTimes);
-                if (failRate > 0.6){
-                    return;
-                }
-            }
-            currentProxy.setTimeInterval(TIME_INTERVAL);
-            ProxyPool.proxyQueue.add(currentProxy);//将当前代理放入代理池中
-        }
-    }
 
+
+	/**
+	 * 子类实现page的处理
+	 * @param page
+	 */
 	abstract void handle(Page page);
 
 	private String getProxyStr(Proxy proxy){

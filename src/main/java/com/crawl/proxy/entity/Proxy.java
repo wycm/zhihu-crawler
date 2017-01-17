@@ -1,10 +1,11 @@
 package com.crawl.proxy.entity;
 
 
+import java.io.Serializable;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
-public class Proxy implements Delayed{
+public class Proxy implements Delayed, Serializable{
     private long timeInterval ;//任务间隔时间,单位ms
     private String ip;
     private int port;

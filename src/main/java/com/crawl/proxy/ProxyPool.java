@@ -19,7 +19,7 @@ import static com.crawl.core.util.Constants.TIME_INTERVAL;
  * 代理池
  */
 public class ProxyPool {
-    public final static Set<String> proxySet = new HashSet<String>();
+    public final static Set<Proxy> proxySet = new HashSet<Proxy>();
     /**
      * 代理池延迟队列
      */

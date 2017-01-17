@@ -5,7 +5,9 @@ import org.apache.log4j.Logger;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
-
+/**
+ * 动态代理
+ */
 public class SimpleInvocationHandler implements InvocationHandler{
     private static Logger logger = SimpleLogger.getSimpleLogger(HttpClientUtil.class);
 
@@ -19,6 +21,8 @@ public class SimpleInvocationHandler implements InvocationHandler{
         super();
         this.target = target;
     }
+
+
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         long startTime = System.currentTimeMillis();

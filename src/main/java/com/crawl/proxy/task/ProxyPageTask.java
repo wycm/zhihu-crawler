@@ -23,8 +23,8 @@ import java.util.List;
 import static com.crawl.proxy.ProxyPool.proxyQueue;
 
 /**
- * 下载代理网页，并解析出代理
- * 若下载失败，使用代理去下载代理网页
+ * 下载代理网页并解析
+ * 若下载失败，通过代理去下载代理网页
  */
 public class ProxyPageTask implements Runnable{
 	private static Logger logger = SimpleLogger.getSimpleLogger(ProxyPageTask.class);

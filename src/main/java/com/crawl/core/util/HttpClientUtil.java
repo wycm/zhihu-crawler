@@ -1,5 +1,7 @@
 package com.crawl.core.util;
 
+import com.crawl.proxy.ProxyPool;
+import com.crawl.proxy.entity.Proxy;
 import org.apache.http.*;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.HttpRequestRetryHandler;
@@ -45,6 +47,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
+import static com.crawl.core.util.Constants.TIME_INTERVAL;
 
 
 /**

@@ -69,6 +69,10 @@ public class Config {
      * cookie路径
      */
     public static String cookiePath;
+    /**
+     * proxyPath
+     */
+    public static String proxyPath;
     static {
         Properties p = new Properties();
         try {
@@ -84,6 +88,7 @@ public class Config {
         downloadPageCount = Integer.valueOf(p.getProperty("downloadPageCount"));
         downloadThreadSize = Integer.valueOf(p.getProperty("downloadThreadSize"));
         cookiePath = p.getProperty("cookiePath");
+        proxyPath = p.getProperty("proxyPath");
         isProxy = Boolean.valueOf(p.getProperty("isProxy"));
         if (dbEnable){
             dbName = p.getProperty("db.name");

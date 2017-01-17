@@ -2,6 +2,7 @@ package com.crawl.zhihu.dao;
 
 
 import com.crawl.core.dao.ConnectionManager;
+import com.crawl.core.util.Config;
 import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.entity.User;
 import org.apache.log4j.Logger;
@@ -11,7 +12,13 @@ import java.sql.*;
 import java.util.Properties;
 
 public class ZhiHuDao1Imp implements ZhiHuDao1{
+    private static Connection cn;
     private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuDao1.class);
+    static {
+        if (Config.dbEnable){
+            cn = ConnectionManager.getConnection();
+        }
+    }
     @Override
     public void DBTablesInit() {
         ResultSet rs = null;
