@@ -23,7 +23,8 @@ public class ProxySerializeTask implements Runnable{
                 e.printStackTrace();
             }
             Proxy[] proxyArray = null;
-            synchronized (ProxyPool.proxySet.getClass()){
+            ProxyPool.lock.readLock().lock();
+            try {
                 proxyArray = new Proxy[ProxyPool.proxySet.size()];
                 int i = 0;
                 for (Proxy p : ProxyPool.proxySet){
@@ -31,7 +32,10 @@ public class ProxySerializeTask implements Runnable{
                         proxyArray[i++] = p;
                     }
                 }
+            } finally {
+                ProxyPool.lock.readLock().unlock();
             }
+
             HttpClientUtil.serializeObject(proxyArray, Config.proxyPath);
             logger.info("成功序列化" + proxyArray.length + "个代理");
         }

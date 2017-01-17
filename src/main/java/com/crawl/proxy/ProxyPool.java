@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.DelayQueue;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import static com.crawl.core.util.Constants.TIME_INTERVAL;
 
@@ -19,6 +20,10 @@ import static com.crawl.core.util.Constants.TIME_INTERVAL;
  * 代理池
  */
 public class ProxyPool {
+    /**
+     * proxySet读写锁
+     */
+    public final static ReentrantReadWriteLock lock = new ReentrantReadWriteLock();
     public final static Set<Proxy> proxySet = new HashSet<Proxy>();
     /**
      * 代理池延迟队列
