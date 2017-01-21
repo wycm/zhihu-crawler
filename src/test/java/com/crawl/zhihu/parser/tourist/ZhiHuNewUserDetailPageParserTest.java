@@ -29,7 +29,7 @@ public class ZhiHuNewUserDetailPageParserTest {
         DetailPageParser parser = ZhiHuNewUserDetailPageParser.getInstance();
         long startTime = System.currentTimeMillis();
         for(int i = 0; i < 1; i++){
-            User user = parser.parse(page);
+            User user = parser.parseDetailPage(page);
         }
         long endTime = System.currentTimeMillis();
         System.out.println("cost time:" + (endTime - startTime) + "ms");

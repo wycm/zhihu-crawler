@@ -33,7 +33,7 @@ public class ZhiHuNewUserDetailPageParser implements DetailPageParser {
 
     }
     @Override
-    public User parse(Page page) {
+    public User parseDetailPage(Page page) {
         Document doc = Jsoup.parse(page.getHtml());
         User user = new User();
         String userToken = getUserToken(page.getUrl());
@@ -112,6 +112,6 @@ public class ZhiHuNewUserDetailPageParser implements DetailPageParser {
             userId = matcher.group(1);
             return userId;
         }
-        throw new RuntimeException("not parse userId");
+        throw new RuntimeException("not parseListPage userId");
     }
 }

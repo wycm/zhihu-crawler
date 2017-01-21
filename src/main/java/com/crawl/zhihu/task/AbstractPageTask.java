@@ -33,7 +33,7 @@ public abstract class AbstractPageTask implements Runnable{
 	private static Logger logger = SimpleLogger.getSimpleLogger(AbstractPageTask.class);
 	protected String url;
 	protected HttpRequestBase request;
-	private boolean proxyFlag;//是否通过代理下载
+	protected boolean proxyFlag;//是否通过代理下载
 	private Proxy currentProxy;//当前线程使用的代理
 	protected static ZhiHuDao1 zhiHuDao1;
 	protected static ZhiHuHttpClient zhiHuHttpClient = ZhiHuHttpClient.getInstance();
@@ -122,7 +122,7 @@ public abstract class AbstractPageTask implements Runnable{
                  */
                 currentProxy.setFailureTimes(currentProxy.getFailureTimes() + 1);
             }
-            if(!zhiHuHttpClient.getDetailPageThreadPool().isShutdown()){
+            if(!zhiHuHttpClient.getDetailListPageThreadPool().isShutdown()){
 				retry();
 			}
 		} finally {

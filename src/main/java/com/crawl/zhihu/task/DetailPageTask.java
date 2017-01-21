@@ -6,7 +6,6 @@ import com.crawl.core.util.Config;
 import com.crawl.core.util.SimpleInvocationHandler;
 import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
-import com.crawl.zhihu.dao.ZhiHuDAO;
 import com.crawl.zhihu.entity.Page;
 import com.crawl.zhihu.entity.User;
 import com.crawl.zhihu.parser.ZhiHuNewUserDetailPageParser;
@@ -43,7 +42,7 @@ public class DetailPageTask extends AbstractPageTask {
         DetailPageParser parser = null;
 //        parser = ZhiHuNewUserDetailPageParser.getInstance();
         parser = proxyDetailPageParser;
-        User u = parser.parse(page);
+        User u = parser.parseDetailPage(page);
         logger.info("解析用户成功:" + u.toString());
         if(Config.dbEnable){
 //            ZhiHuDAO.insertUser(u);

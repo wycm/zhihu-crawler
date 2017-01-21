@@ -11,7 +11,7 @@ import java.io.IOException;
 public abstract class AbstractUserIndexDetailPageTest {
     public void testParse(String url, DetailPageParser parser) throws IOException {
         Page page = ZhiHuHttpClient.getInstance().getWebPage(url);
-        User user = parser.parse(page);
+        User user = parser.parseDetailPage(page);
         System.out.println(user);
     }
 }

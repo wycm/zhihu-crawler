@@ -35,6 +35,8 @@ public class Config {
      * 爬虫入口
      */
     public static String  startURL;
+
+    public static String startUserToken;
     /**
      * 下载网页数
      */
@@ -85,6 +87,7 @@ public class Config {
         emailOrPhoneNum = p.getProperty("zhiHu.emailOrPhoneNum");
         password = p.getProperty("zhiHu.password");
         startURL = p.getProperty("startURL");
+        startUserToken = p.getProperty("startUserToken");
         downloadPageCount = Integer.valueOf(p.getProperty("downloadPageCount"));
         downloadThreadSize = Integer.valueOf(p.getProperty("downloadThreadSize"));
         cookiePath = p.getProperty("cookiePath");

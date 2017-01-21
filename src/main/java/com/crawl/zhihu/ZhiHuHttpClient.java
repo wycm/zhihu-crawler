@@ -6,7 +6,9 @@ import com.crawl.core.util.*;
 import com.crawl.core.dao.ConnectionManager;
 import com.crawl.proxy.ProxyHttpClient;
 import com.crawl.zhihu.dao.ZhiHuDAO;
+import com.crawl.zhihu.task.DetailListPageTask;
 import com.crawl.zhihu.task.DetailPageTask;
+import org.apache.http.client.methods.HttpGet;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
@@ -14,6 +16,8 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static com.crawl.core.util.Constants.USER_FOLLOWEES_URL;
 
 public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
     private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuHttpClient.class);
@@ -44,6 +48,10 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
      */
     private ThreadPoolExecutor listPageThreadPool;
     /**
+     * 详情列表页下载线程池
+     */
+    private ThreadPoolExecutor detailListPageThreadPool;
+    /**
      * request　header
      * 获取列表页时，必须带上
      */
@@ -67,20 +75,38 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
      * 初始化线程池
      */
     private void intiThreadPool(){
-        detailPageThreadPool = new SimpleThreadPoolExecutor(Config.downloadThreadSize,
+//        detailPageThreadPool = new SimpleThreadPoolExecutor(Config.downloadThreadSize,
+//                Config.downloadThreadSize,
+//                0L, TimeUnit.MILLISECONDS,
+//                new LinkedBlockingQueue<Runnable>(),
+//                "detailPageThreadPool");
+//        listPageThreadPool = new SimpleThreadPoolExecutor(50, 80,
+//                0L, TimeUnit.MILLISECONDS,
+//                new LinkedBlockingQueue<Runnable>(5000),
+//                new ThreadPoolExecutor.DiscardPolicy(), "listPageThreadPool");
+//        new Thread(new ThreadPoolMonitor(detailPageThreadPool, "DetailPageDownloadThreadPool")).start();
+//        new Thread(new ThreadPoolMonitor(listPageThreadPool, "ListPageDownloadThreadPool")).start();
+        detailListPageThreadPool = new SimpleThreadPoolExecutor(Config.downloadThreadSize,
                 Config.downloadThreadSize,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(),
-                "detailPageThreadPool");
-        listPageThreadPool = new SimpleThreadPoolExecutor(50, 80,
-                0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(5000),
-                new ThreadPoolExecutor.DiscardPolicy(), "listPageThreadPool");
-        new Thread(new ThreadPoolMonitor(detailPageThreadPool, "DetailPageDownloadThreadPool")).start();
-        new Thread(new ThreadPoolMonitor(listPageThreadPool, "ListPageDownloadThreadPool")).start();
+                new LinkedBlockingQueue<Runnable>(1000),
+                new ThreadPoolExecutor.DiscardPolicy(),
+                "detailListPageThreadPool");
+        new Thread(new ThreadPoolMonitor(detailListPageThreadPool, "DetailListPageThreadPool")).start();
+
     }
     public void startCrawl(String url){
-        detailPageThreadPool.execute(new DetailPageTask(url, Config.isProxy));
+//        detailPageThreadPool.execute(new DetailPageTask(url, Config.isProxy));
+        manageHttpClient();
+    }
+
+    @Override
+    public void startCrawl() {
+        String startToken = Config.startUserToken;
+        String startUrl = String.format(Constants.USER_FOLLOWEES_URL, startToken, 0);
+        HttpGet request = new HttpGet(startUrl);
+        request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
+        detailListPageThreadPool.execute(new DetailListPageTask(request, Config.isProxy));
         manageHttpClient();
     }
 
@@ -129,35 +155,40 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
             /**
              * 下载网页数
              */
-            long downloadPageCount = detailPageThreadPool.getTaskCount();
+            long downloadPageCount = detailListPageThreadPool.getTaskCount();
+//            if (downloadPageCount >= Config.downloadPageCount &&
+//                    ! ZhiHuHttpClient.getInstance().getDetailPageThreadPool().isShutdown()) {
+//                isStop = true;
+//                /**
+//                 * shutdown 下载网页线程池
+//                 */
+//                ZhiHuHttpClient.getInstance().getDetailPageThreadPool().shutdown();
+//            }
+//            if(ZhiHuHttpClient.getInstance().getDetailPageThreadPool().isTerminated() &&
+//                    !ZhiHuHttpClient.getInstance().getListPageThreadPool().isShutdown()){
+//                /**
+//                 * 下载网页线程池关闭后，再关闭解析网页线程池
+//                 */
+//                ZhiHuHttpClient.getInstance().getListPageThreadPool().shutdown();
+//            }
+//            if(ZhiHuHttpClient.getInstance().getListPageThreadPool().isTerminated()){
+//                /**
+//                 * 关闭线程池Monitor
+//                 */
+//                ThreadPoolMonitor.isStopMonitor = true;
+//                /**
+//                 * 关闭ProxyHttpClient客户端
+//                 */
+//                ProxyHttpClient.getInstance().getProxyTestThreadExecutor().shutdownNow();
+//                ProxyHttpClient.getInstance().getProxyDownloadThreadExecutor().shutdownNow();
+//                logger.info("--------------爬取结果--------------");
+//                logger.info("获取用户数:" + parseUserCount.get());
+//                break;
+//            }
             if (downloadPageCount >= Config.downloadPageCount &&
-                    ! ZhiHuHttpClient.getInstance().getDetailPageThreadPool().isShutdown()) {
+                    ! detailListPageThreadPool.isShutdown()) {
                 isStop = true;
-                /**
-                 * shutdown 下载网页线程池
-                 */
-                ZhiHuHttpClient.getInstance().getDetailPageThreadPool().shutdown();
-            }
-            if(ZhiHuHttpClient.getInstance().getDetailPageThreadPool().isTerminated() &&
-                    !ZhiHuHttpClient.getInstance().getListPageThreadPool().isShutdown()){
-                /**
-                 * 下载网页线程池关闭后，再关闭解析网页线程池
-                 */
-                ZhiHuHttpClient.getInstance().getListPageThreadPool().shutdown();
-            }
-            if(ZhiHuHttpClient.getInstance().getListPageThreadPool().isTerminated()){
-                /**
-                 * 关闭线程池Monitor
-                 */
-                ThreadPoolMonitor.isStopMonitor = true;
-                /**
-                 * 关闭ProxyHttpClient客户端
-                 */
-                ProxyHttpClient.getInstance().getProxyTestThreadExecutor().shutdownNow();
-                ProxyHttpClient.getInstance().getProxyDownloadThreadExecutor().shutdownNow();
-                logger.info("--------------爬取结果--------------");
-                logger.info("获取用户数:" + parseUserCount.get());
-                break;
+                detailListPageThreadPool.shutdown();
             }
             double costTime = (System.currentTimeMillis() - startTime) / 1000.0;//单位s
             logger.debug("抓取速率：" + parseUserCount.get() / costTime + "个/s");
@@ -168,7 +199,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
                 e.printStackTrace();
             }
         }
-        System.exit(0);
+//        System.exit(0);
     }
 
     public ThreadPoolExecutor getDetailPageThreadPool() {
@@ -177,5 +208,8 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
 
     public ThreadPoolExecutor getListPageThreadPool() {
         return listPageThreadPool;
+    }
+    public ThreadPoolExecutor getDetailListPageThreadPool() {
+        return detailListPageThreadPool;
     }
 }
