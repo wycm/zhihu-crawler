@@ -27,7 +27,6 @@ public class ProxyTestTask implements Runnable{
     @Override
     public void run() {
         long startTime = System.currentTimeMillis();
-        proxy.setLastUseTime(startTime);
         HttpGet request = new HttpGet(Constants.INDEX_URL);
         try {
             RequestConfig requestConfig = RequestConfig.custom().setSocketTimeout(Constants.TIMEOUT).
@@ -38,12 +37,17 @@ public class ProxyTestTask implements Runnable{
                     build();
             request.setConfig(requestConfig);
             Page page = ZhiHuHttpClient.getInstance().getWebPage(request);
-            logger.debug(proxy.toString() + "---------" + page.toString());
+            long endTime = System.currentTimeMillis();
+            String logStr = Thread.currentThread().getName() + " " + proxy.getProxyStr() +
+                    "  executing request " + page.getUrl()  + " response statusCode:" + page.getStatusCode() +
+                    "  request cost time:" + (endTime - startTime) + "ms";
             if (page == null || page.getStatusCode() != 200){
+                logger.warn(logStr);
                 return;
             }
             request.releaseConnection();
-            long endTime = System.currentTimeMillis();
+
+            logger.debug(proxy.toString() + "---------" + page.toString());
             if(!ProxyPool.proxySet.contains(proxy)){
                 logger.debug(proxy.toString() + "----------代理可用--------请求耗时:" + (endTime - startTime) + "ms");
                 ProxyPool.lock.writeLock().lock();

@@ -2,13 +2,10 @@ package com.crawl.zhihu;
 
 import com.crawl.core.httpclient.AbstractHttpClient;
 import com.crawl.core.httpclient.IHttpClient;
-import com.crawl.core.util.Config;
+import com.crawl.core.util.*;
 import com.crawl.core.dao.ConnectionManager;
 import com.crawl.proxy.ProxyHttpClient;
 import com.crawl.zhihu.dao.ZhiHuDAO;
-import com.crawl.core.util.HttpClientUtil;
-import com.crawl.core.util.SimpleLogger;
-import com.crawl.core.util.ThreadPoolMonitor;
 import com.crawl.zhihu.task.DetailPageTask;
 import org.apache.log4j.Logger;
 
@@ -70,13 +67,15 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
      * 初始化线程池
      */
     private void intiThreadPool(){
-        detailPageThreadPool = new ThreadPoolExecutor(Config.downloadThreadSize,
+        detailPageThreadPool = new SimpleThreadPoolExecutor(Config.downloadThreadSize,
                 Config.downloadThreadSize,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>());
-        listPageThreadPool = new ThreadPoolExecutor(50, 80,
+                new LinkedBlockingQueue<Runnable>(),
+                "detailPageThreadPool");
+        listPageThreadPool = new SimpleThreadPoolExecutor(50, 80,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(1000), new ThreadPoolExecutor.DiscardPolicy());
+                new LinkedBlockingQueue<Runnable>(5000),
+                new ThreadPoolExecutor.DiscardPolicy(), "listPageThreadPool");
         new Thread(new ThreadPoolMonitor(detailPageThreadPool, "DetailPageDownloadThreadPool")).start();
         new Thread(new ThreadPoolMonitor(listPageThreadPool, "ListPageDownloadThreadPool")).start();
     }

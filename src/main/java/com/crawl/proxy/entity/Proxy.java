@@ -6,12 +6,13 @@ import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
 public class Proxy implements Delayed, Serializable{
+    private static final long serialVersionUID = -7583883432417635332L;
     private long timeInterval ;//任务间隔时间,单位ms
     private String ip;
     private int port;
     private boolean availableFlag;
     private boolean anonymousFlag;
-    private long lastUseTime;
+    private long lastSuccessfulTime;//最近一次请求成功时间
     private int delay;
     private int failureTimes;//请求失败次数
     private int successfulTimes;//请求成功次数
@@ -54,12 +55,16 @@ public class Proxy implements Delayed, Serializable{
         this.anonymousFlag = anonymousFlag;
     }
 
-    public long getLastUseTime() {
-        return lastUseTime;
+    public long getTimeInterval() {
+        return timeInterval;
     }
 
-    public void setLastUseTime(long lastUseTime) {
-        this.lastUseTime = lastUseTime;
+    public long getLastSuccessfulTime() {
+        return lastSuccessfulTime;
+    }
+
+    public void setLastSuccessfulTime(long lastSuccessfulTime) {
+        this.lastSuccessfulTime = lastSuccessfulTime;
     }
 
     public int getDelay() {
@@ -108,7 +113,7 @@ public class Proxy implements Delayed, Serializable{
                 ", port=" + port +
                 ", availableFlag=" + availableFlag +
                 ", anonymousFlag=" + anonymousFlag +
-                ", lastUseTime=" + lastUseTime +
+                ", lastSuccessfulTime=" + lastSuccessfulTime +
                 ", delay=" + delay +
                 ", failureTimes=" + failureTimes +
                 ", successfulTimes=" + successfulTimes +
