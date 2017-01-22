@@ -41,6 +41,7 @@ public class ProxyPageTask implements Runnable{
 		this.proxyFlag = proxyFlag;
 	}
 	public void run(){
+		long requestStartTime = System.currentTimeMillis();
 		HttpGet tempRequest = null;
 		try {
 			Page page = null;
@@ -57,11 +58,15 @@ public class ProxyPageTask implements Runnable{
 			}
 			page.setProxy(currentProxy);
 			int status = page.getStatusCode();
+			long requestEndTime = System.currentTimeMillis();
+			String logStr = Thread.currentThread().getName() + " " + getProxyStr(currentProxy) +
+					"  executing request " + page.getUrl()  + " response statusCode:" + status +
+					"  request cost time:" + (requestEndTime - requestStartTime) + "ms";
 			if(status == HttpStatus.SC_OK){
-				logger.debug(Thread.currentThread().getName() + " " + getProxyStr(currentProxy)  + " statusCode:" + status + "  executing request " + page.getUrl());
+				logger.debug(logStr);
 				handle(page);
 			} else {
-				logger.error(Thread.currentThread().getName() + " " + getProxyStr(currentProxy)  + " statusCode:" + status + "  executing request " + page.getUrl());
+				logger.error(logStr);
 				Thread.sleep(100);
 				retry();
 			}
@@ -92,7 +97,7 @@ public class ProxyPageTask implements Runnable{
 				getProxyListPageParser(ProxyPool.proxyMap.get(url));
 		List<Proxy> proxyList = parser.parse(page.getHtml());
 		for(Proxy p : proxyList){
-			if(!ZhiHuHttpClient.getInstance().getDetailPageThreadPool().isTerminated()){
+			if(!ZhiHuHttpClient.getInstance().getDetailListPageThreadPool().isTerminated()){
 				if (!ProxyPool.proxySet.contains(p.getProxyStr())){
 					proxyHttpClient.getProxyTestThreadExecutor().execute(new ProxyTestTask(p));
 				}

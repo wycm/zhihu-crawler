@@ -190,7 +190,7 @@ public class HttpClientUtil {
 	public static void serializeObject(Object object,String filePath){
 		OutputStream fos = null;
 		try {
-			fos = new FileOutputStream(filePath);
+			fos = new FileOutputStream(filePath, false);
 			ObjectOutputStream oos = new ObjectOutputStream(fos);
 			oos.writeObject(object);
 			logger.info("序列化成功");

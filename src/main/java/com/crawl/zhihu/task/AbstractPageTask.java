@@ -33,7 +33,7 @@ public abstract class AbstractPageTask implements Runnable{
 	private static Logger logger = SimpleLogger.getSimpleLogger(AbstractPageTask.class);
 	protected String url;
 	protected HttpRequestBase request;
-	private boolean proxyFlag;//是否通过代理下载
+	protected boolean proxyFlag;//是否通过代理下载
 	private Proxy currentProxy;//当前线程使用的代理
 	protected static ZhiHuDao1 zhiHuDao1;
 	protected static ZhiHuHttpClient zhiHuHttpClient = ZhiHuHttpClient.getInstance();
@@ -52,6 +52,7 @@ public abstract class AbstractPageTask implements Runnable{
 		this.proxyFlag = proxyFlag;
 	}
 	public void run(){
+		long requestStartTime = System.currentTimeMillis();
 		HttpGet tempRequest = null;
 		try {
 			Page page = null;
@@ -82,10 +83,15 @@ public abstract class AbstractPageTask implements Runnable{
 			}
 			page.setProxy(currentProxy);
 			int status = page.getStatusCode();
+			long requestEndTime = System.currentTimeMillis();
+			String logStr = Thread.currentThread().getName() + " " + getProxyStr(currentProxy) +
+					"  executing request " + page.getUrl()  + " response statusCode:" + status +
+					"  request cost time:" + (requestEndTime - requestStartTime) + "ms";
 			if(status == HttpStatus.SC_OK){
 				if (page.getHtml().contains("zhihu")){
-					logger.debug(Thread.currentThread().getName() + " " + getProxyStr(currentProxy)  + " statusCode:" + status + "  executing request " + page.getUrl());
+					logger.debug(logStr);
 					currentProxy.setSuccessfulTimes(currentProxy.getSuccessfulTimes() + 1);
+					currentProxy.setLastSuccessfulTime(System.currentTimeMillis());
 					handle(page);
 				}else {
 					/**
@@ -100,10 +106,10 @@ public abstract class AbstractPageTask implements Runnable{
 			 */
 			else if(status == 404 || status == 401 ||
 					status == 410){
-				logger.warn(Thread.currentThread().getName() + " " + getProxyStr(currentProxy)  + " statusCode:" + status + "  executing request " + page.getUrl());
+				logger.warn(logStr);
 			}
 			else {
-				logger.error(Thread.currentThread().getName() + " " + getProxyStr(currentProxy)  + " statusCode:" + status + "  executing request " + page.getUrl());
+				logger.error(logStr);
 				Thread.sleep(100);
 				retry();
 			}
@@ -116,7 +122,7 @@ public abstract class AbstractPageTask implements Runnable{
                  */
                 currentProxy.setFailureTimes(currentProxy.getFailureTimes() + 1);
             }
-            if(!zhiHuHttpClient.getDetailPageThreadPool().isShutdown()){
+            if(!zhiHuHttpClient.getDetailListPageThreadPool().isShutdown()){
 				retry();
 			}
 		} finally {

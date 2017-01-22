@@ -5,5 +5,5 @@ import com.crawl.zhihu.entity.Page;
 import java.util.List;
 
 public interface ListPageParser extends Parser {
-    List parse(Page page);
+    List parseListPage(Page page);
 }

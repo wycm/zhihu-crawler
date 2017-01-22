@@ -23,8 +23,10 @@
 ##Quick Start
 Run with [Main.java](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/java/com/crawl/Main.java) <br>
 
-##注意
-因为登录方式抓取，可能会导致封号。现在采用游客模式抓取。
+##Features
+* 大量使用http代理，突破同一个客户端访问量限制。
+* 支持持久化(mysql),相关配置见[config.properties](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/config.properties)。
+* 多线程、快速，10小时可以抓取70w用户。
 
 ##更新
 ####2016.12.26
@@ -44,5 +46,5 @@ DetailPageThreadPool负责下载用户详情页面，解析出用户基本信息
 * 优化爬取速度
 
 ##最后
-欢迎交流，欢迎提交代码。需要数据的可以联系我。
+有疑问，欢迎交流。需要数据的可以联系我。
 

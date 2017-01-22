@@ -4,5 +4,5 @@ import com.crawl.zhihu.entity.Page;
 import com.crawl.zhihu.entity.User;
 
 public interface DetailPageParser extends Parser {
-    User parse(Page page);
+    User parseDetailPage(Page page);
 }

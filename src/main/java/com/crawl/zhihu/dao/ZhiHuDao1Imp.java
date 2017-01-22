@@ -76,6 +76,11 @@ public class ZhiHuDao1Imp implements ZhiHuDao1{
     }
 
     @Override
+    public boolean isExistRecord(Connection cn, String sql) throws SQLException {
+        return false;
+    }
+
+    @Override
     public boolean isExistUser(String userToken) {
         String isContainSql = "select count(*) from user WHERE user_token='" + userToken + "'";
         try {
@@ -89,7 +94,17 @@ public class ZhiHuDao1Imp implements ZhiHuDao1{
     }
 
     @Override
+    public boolean isExistUser(Connection cn, String userToken) {
+        return false;
+    }
+
+    @Override
     public boolean insertUser(User u) {
+        return insertUser(null, u);
+    }
+
+    @Override
+    public boolean insertUser(Connection cn, User u) {
         try {
             if (isExistUser(u.getUserToken())){
                 return false;
@@ -99,7 +114,11 @@ public class ZhiHuDao1Imp implements ZhiHuDao1{
             String values = "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
             String sql = "insert into user (" + column + ") values(" +values+")";
             PreparedStatement pstmt;
-            pstmt = ConnectionManager.getConnection().prepareStatement(sql);
+            if(cn != null){
+                pstmt = cn.prepareStatement(sql);
+            } else {
+                pstmt = ConnectionManager.getConnection().prepareStatement(sql);
+            }
             pstmt.setString(1,u.getLocation());
             pstmt.setString(2,u.getBusiness());
             pstmt.setString(3,u.getSex());

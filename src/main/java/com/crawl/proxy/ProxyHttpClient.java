@@ -1,9 +1,6 @@
 package com.crawl.proxy;
 
-import com.crawl.core.util.Config;
-import com.crawl.core.util.Constants;
-import com.crawl.core.util.HttpClientUtil;
-import com.crawl.core.util.ThreadPoolMonitor;
+import com.crawl.core.util.*;
 import com.crawl.proxy.entity.Proxy;
 import com.crawl.proxy.task.ProxyPageTask;
 import com.crawl.core.httpclient.AbstractHttpClient;
@@ -48,12 +45,15 @@ public class ProxyHttpClient extends AbstractHttpClient {
      * 初始化线程池
      */
     private void initThreadPool(){
-        proxyTestThreadExecutor = new ThreadPoolExecutor(100, 100,
+        proxyTestThreadExecutor = new SimpleThreadPoolExecutor(100, 100,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(10000), new ThreadPoolExecutor.DiscardPolicy());
-        proxyDownloadThreadExecutor = new ThreadPoolExecutor(10, 10,
+                new LinkedBlockingQueue<Runnable>(10000),
+                new ThreadPoolExecutor.DiscardPolicy(),
+                "proxyTestThreadExecutor");
+        proxyDownloadThreadExecutor = new SimpleThreadPoolExecutor(10, 10,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>());
+                new LinkedBlockingQueue<Runnable>(), "" +
+                "proxyDownloadThreadExecutor");
         new Thread(new ThreadPoolMonitor(proxyTestThreadExecutor, "ProxyTestThreadPool")).start();
         new Thread(new ThreadPoolMonitor(proxyDownloadThreadExecutor, "ProxyDownloadThreadExecutor")).start();
     }
@@ -66,6 +66,7 @@ public class ProxyHttpClient extends AbstractHttpClient {
         Proxy[] proxyArray = null;
         try {
             proxyArray = (Proxy[]) HttpClientUtil.deserializeObject(Config.proxyPath);
+            int usableProxyCount = 0;
             for (Proxy p : proxyArray){
                 if (p == null){
                     continue;
@@ -73,10 +74,15 @@ public class ProxyHttpClient extends AbstractHttpClient {
                 p.setTimeInterval(Constants.TIME_INTERVAL);
                 p.setFailureTimes(0);
                 p.setSuccessfulTimes(0);
-                ProxyPool.proxyQueue.add(p);
-                ProxyPool.proxySet.add(p);
+                long nowTime = System.currentTimeMillis();
+                if (nowTime - p.getLastSuccessfulTime() < 1000 * 60 *60){
+                    //上次成功离现在少于一小时
+                    ProxyPool.proxyQueue.add(p);
+                    ProxyPool.proxySet.add(p);
+                    usableProxyCount++;
+                }
             }
-            logger.info("反序列化proxy成功，" + proxyArray.length + "个代理");
+            logger.info("反序列化proxy成功，" + proxyArray.length + "个代理,可用代理" + usableProxyCount + "个");
         } catch (Exception e) {
             logger.warn("反序列化proxy失败");
         }

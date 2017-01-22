@@ -17,4 +17,8 @@ public interface IHttpClient {
      * @param url
      */
     void startCrawl(String url);
+    /**
+     * 爬虫入口
+     */
+    void startCrawl();
 }
