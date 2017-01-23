@@ -12,20 +12,14 @@ import java.sql.*;
 import java.util.Properties;
 
 public class ZhiHuDao1Imp implements ZhiHuDao1{
-    private static Connection cn;
     private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuDao1.class);
-    static {
-        if (Config.dbEnable){
-            cn = ConnectionManager.getConnection();
-        }
-    }
-    @Override
-    public void DBTablesInit() {
+    public static void DBTablesInit() {
         ResultSet rs = null;
         Properties p = new Properties();
+        Connection cn = ConnectionManager.getConnection();
         try {
             //加载properties文件
-            p.load(ZhiHuDAO.class.getResourceAsStream("/config.properties"));
+            p.load(ZhiHuDao1Imp.class.getResourceAsStream("/config.properties"));
             rs = cn.getMetaData().getTables(null, null, "url", null);
             Statement st = cn.createStatement();
             //不存在url表
@@ -33,6 +27,8 @@ public class ZhiHuDao1Imp implements ZhiHuDao1{
                 //创建url表
                 st.execute(p.getProperty("createUrlTable"));
                 logger.info("url表创建成功");
+                st.execute(p.getProperty("createUrlIndex"));
+                logger.info("url表索引创建成功");
             }
             else{
                 logger.info("url表已存在");
@@ -43,12 +39,15 @@ public class ZhiHuDao1Imp implements ZhiHuDao1{
                 //创建user表
                 st.execute(p.getProperty("createUserTable"));
                 logger.info("user表创建成功");
+                st.execute(p.getProperty("createUserIndex"));
+                logger.info("user表索引创建成功");
             }
             else{
                 logger.info("user表已存在");
             }
             rs.close();
             st.close();
+            cn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -58,16 +57,20 @@ public class ZhiHuDao1Imp implements ZhiHuDao1{
 
     @Override
     public boolean isExistRecord(String sql) throws SQLException{
+        return isExistRecord(ConnectionManager.getConnection(), sql);
+    }
+
+    @Override
+    public boolean isExistRecord(Connection cn, String sql) throws SQLException {
         int num = 0;
         PreparedStatement pstmt;
-        pstmt = ConnectionManager.getConnection().prepareStatement(sql);
+        pstmt = cn.prepareStatement(sql);
         ResultSet rs = pstmt.executeQuery();
         while(rs.next()){
             num = rs.getInt("count(*)");
         }
         rs.close();
         pstmt.close();
-//        ConnectionManager.close();
         if(num == 0){
             return false;
         }else{
@@ -76,12 +79,12 @@ public class ZhiHuDao1Imp implements ZhiHuDao1{
     }
 
     @Override
-    public boolean isExistRecord(Connection cn, String sql) throws SQLException {
-        return false;
+    public boolean isExistUser(String userToken) {
+        return isExistUser(ConnectionManager.getConnection(), userToken);
     }
 
     @Override
-    public boolean isExistUser(String userToken) {
+    public boolean isExistUser(Connection cn, String userToken) {
         String isContainSql = "select count(*) from user WHERE user_token='" + userToken + "'";
         try {
             if(isExistRecord(isContainSql)){
@@ -94,19 +97,14 @@ public class ZhiHuDao1Imp implements ZhiHuDao1{
     }
 
     @Override
-    public boolean isExistUser(Connection cn, String userToken) {
-        return false;
-    }
-
-    @Override
     public boolean insertUser(User u) {
-        return insertUser(null, u);
+        return insertUser(ConnectionManager.getConnection(), u);
     }
 
     @Override
     public boolean insertUser(Connection cn, User u) {
         try {
-            if (isExistUser(u.getUserToken())){
+            if (isExistUser(cn, u.getUserToken())){
                 return false;
             }
             String column = "location,business,sex,employment,username,url,agrees,thanks,asks," +
@@ -114,11 +112,7 @@ public class ZhiHuDao1Imp implements ZhiHuDao1{
             String values = "?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?";
             String sql = "insert into user (" + column + ") values(" +values+")";
             PreparedStatement pstmt;
-            if(cn != null){
-                pstmt = cn.prepareStatement(sql);
-            } else {
-                pstmt = ConnectionManager.getConnection().prepareStatement(sql);
-            }
+            pstmt = cn.prepareStatement(sql);
             pstmt.setString(1,u.getLocation());
             pstmt.setString(2,u.getBusiness());
             pstmt.setString(3,u.getSex());
@@ -143,6 +137,27 @@ public class ZhiHuDao1Imp implements ZhiHuDao1{
         } finally {
 //            ConnectionManager.close();
         }
+        return true;
+    }
+
+    @Override
+    public boolean insertUrl(Connection cn, String md5Url) {
+        String isContainSql = "select count(*) from url WHERE md5_url ='" + md5Url + "'";
+        try {
+            if(isExistRecord(cn, isContainSql)){
+                logger.debug("数据库已经存在该url---" + md5Url);
+                return false;
+            }
+            String sql = "insert into url (md5_url) values( ?)";
+            PreparedStatement pstmt;
+            pstmt = cn.prepareStatement(sql);
+            pstmt.setString(1,md5Url);
+            pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        logger.debug("url插入成功---");
         return true;
     }
 }

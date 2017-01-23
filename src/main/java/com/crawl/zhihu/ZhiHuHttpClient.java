@@ -6,12 +6,16 @@ import com.crawl.core.util.*;
 import com.crawl.core.dao.ConnectionManager;
 import com.crawl.proxy.ProxyHttpClient;
 import com.crawl.zhihu.dao.ZhiHuDAO;
+import com.crawl.zhihu.dao.ZhiHuDao1Imp;
 import com.crawl.zhihu.task.DetailListPageTask;
 import com.crawl.zhihu.task.DetailPageTask;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.log4j.Logger;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.Map;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
@@ -67,7 +71,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
     public void initHttpClient() {
         authorization = initAuthorization();
         if(Config.dbEnable){
-            ZhiHuDAO.DBTablesInit(ConnectionManager.getConnection());
+            ZhiHuDao1Imp.DBTablesInit();
         }
     }
 
@@ -89,7 +93,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
         detailListPageThreadPool = new SimpleThreadPoolExecutor(Config.downloadThreadSize,
                 Config.downloadThreadSize,
                 0L, TimeUnit.MILLISECONDS,
-                new LinkedBlockingQueue<Runnable>(1000),
+                new LinkedBlockingQueue<Runnable>(2000),
                 new ThreadPoolExecutor.DiscardPolicy(),
                 "detailListPageThreadPool");
         new Thread(new ThreadPoolMonitor(detailListPageThreadPool, "DetailListPageThreadPool")).start();
@@ -186,9 +190,23 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
 //                break;
 //            }
             if (downloadPageCount >= Config.downloadPageCount &&
-                    ! detailListPageThreadPool.isShutdown()) {
+                    !detailListPageThreadPool.isShutdown()) {
                 isStop = true;
                 detailListPageThreadPool.shutdown();
+            }
+            if(detailListPageThreadPool.isShutdown()){
+                //关闭数据库连接
+                Map<Thread, Connection> map = DetailListPageTask.getConnectionMap();
+                for(Connection cn : map.values()){
+                    try {
+                        if (cn != null && !cn.isClosed()){
+                            cn.close();
+                        }
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
             }
             double costTime = (System.currentTimeMillis() - startTime) / 1000.0;//单位s
             logger.debug("抓取速率：" + parseUserCount.get() / costTime + "个/s");

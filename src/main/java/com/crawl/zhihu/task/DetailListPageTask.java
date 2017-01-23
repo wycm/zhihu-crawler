@@ -5,6 +5,7 @@ import com.crawl.core.dao.ConnectionManager;
 import com.crawl.core.parser.DetailPageParser;
 import com.crawl.core.parser.ListPageParser;
 import com.crawl.core.util.Config;
+import com.crawl.core.util.Md5Util;
 import com.crawl.core.util.SimpleInvocationHandler;
 import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
@@ -22,6 +23,7 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ThreadPoolExecutor;
 
 import static com.crawl.core.util.Constants.USER_FOLLOWEES_URL;
 import static com.crawl.zhihu.ZhiHuHttpClient.parseUserCount;
@@ -30,9 +32,9 @@ public class DetailListPageTask extends AbstractPageTask{
     private static Logger logger = SimpleLogger.getSimpleLogger(DetailListPageTask.class);
     private static ListPageParser proxyUserListPageParser;
     /**
-     * threadName-数据库连接
+     * Thread-数据库连接
      */
-    private static Map<String, Connection> connectionMap = new ConcurrentHashMap<>();
+    private static Map<Thread, Connection> connectionMap = new ConcurrentHashMap<>();
     static {
         proxyUserListPageParser = getProxyUserListPageParser();
     }
@@ -65,14 +67,22 @@ public class DetailListPageTask extends AbstractPageTask{
         for(User u : list){
             logger.info("解析用户成功:" + u.toString());
             if(Config.dbEnable){
-                if (zhiHuDao1.insertUser(getConnection(), u)){
+                Connection cn = getConnection();
+                if (zhiHuDao1.insertUser(cn, u)){
                     parseUserCount.incrementAndGet();
                 }
                 for (int j = 0; j < u.getFollowees() / 20; j++){
+                    if (zhiHuHttpClient.getDetailListPageThreadPool().getQueue().size() > 1000){
+                        continue;
+                    }
                     String nextUrl = String.format(USER_FOLLOWEES_URL, u.getUserToken(), j * 20);
-                    HttpGet request = new HttpGet(nextUrl);
-                    request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
-                    zhiHuHttpClient.getDetailListPageThreadPool().execute(new DetailListPageTask(request, true));
+                    if (zhiHuDao1.insertUrl(cn, Md5Util.Convert2Md5(nextUrl)) ||
+                            zhiHuHttpClient.getDetailListPageThreadPool().getActiveCount() == 1){
+                        //防止死锁
+                        HttpGet request = new HttpGet(nextUrl);
+                        request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
+                        zhiHuHttpClient.getDetailListPageThreadPool().execute(new DetailListPageTask(request, true));
+                    }
                 }
             }
             else if(!Config.dbEnable || zhiHuHttpClient.getDetailListPageThreadPool().getActiveCount() == 1){
@@ -86,17 +96,25 @@ public class DetailListPageTask extends AbstractPageTask{
             }
         }
     }
+
+    /**
+     * 每个thread维护一个Connection
+     * @return
+     */
     private Connection getConnection(){
-        String threadName = Thread.currentThread().getName();
+        Thread currentThread = Thread.currentThread();
         Connection cn = null;
-        synchronized (this.getClass()){
-            if (!connectionMap.containsKey(threadName)){
-                cn = ConnectionManager.createConnection();
-                connectionMap.put(threadName, cn);
-            }  else {
-                cn = connectionMap.get(threadName);
-            }
+        if (!connectionMap.containsKey(currentThread)){
+            cn = ConnectionManager.createConnection();
+            connectionMap.put(currentThread, cn);
+        }  else {
+            cn = connectionMap.get(currentThread);
         }
         return cn;
     }
+
+    public static Map<Thread, Connection> getConnectionMap() {
+        return connectionMap;
+    }
+
 }

@@ -52,7 +52,7 @@ public abstract class AbstractPageTask implements Runnable{
 		this.proxyFlag = proxyFlag;
 	}
 	public void run(){
-		long requestStartTime = System.currentTimeMillis();
+		long requestStartTime = 0l;
 		HttpGet tempRequest = null;
 		try {
 			Page page = null;
@@ -64,33 +64,39 @@ public abstract class AbstractPageTask implements Runnable{
 						HttpHost proxy = new HttpHost(currentProxy.getIp(), currentProxy.getPort());
 						tempRequest.setConfig(HttpClientUtil.getRequestConfigBuilder().setProxy(proxy).build());
 					}
+					requestStartTime = System.currentTimeMillis();
 					page = zhiHuHttpClient.getWebPage(tempRequest);
 				}else {
+					requestStartTime = System.currentTimeMillis();
 					page = zhiHuHttpClient.getWebPage(url);
 				}
-			}
-			if(request != null){
+			} else if(request != null){
 				if (proxyFlag){
 					currentProxy = ProxyPool.proxyQueue.take();
 					if(!(currentProxy instanceof Direct)) {
 						HttpHost proxy = new HttpHost(currentProxy.getIp(), currentProxy.getPort());
 						request.setConfig(HttpClientUtil.getRequestConfigBuilder().setProxy(proxy).build());
 					}
+					requestStartTime = System.currentTimeMillis();
 					page = zhiHuHttpClient.getWebPage(request);
 				}else {
+					requestStartTime = System.currentTimeMillis();
 					page = zhiHuHttpClient.getWebPage(request);
 				}
 			}
+			long requestEndTime = System.currentTimeMillis();
 			page.setProxy(currentProxy);
 			int status = page.getStatusCode();
-			long requestEndTime = System.currentTimeMillis();
-			String logStr = Thread.currentThread().getName() + " " + getProxyStr(currentProxy) +
+			String logStr = Thread.currentThread().getName() + " " + currentProxy +
 					"  executing request " + page.getUrl()  + " response statusCode:" + status +
 					"  request cost time:" + (requestEndTime - requestStartTime) + "ms";
 			if(status == HttpStatus.SC_OK){
 				if (page.getHtml().contains("zhihu")){
 					logger.debug(logStr);
 					currentProxy.setSuccessfulTimes(currentProxy.getSuccessfulTimes() + 1);
+					currentProxy.setSuccessfulTotalTime(currentProxy.getSuccessfulTotalTime() + (requestEndTime - requestStartTime));
+					double aTime = (currentProxy.getSuccessfulTotalTime() + 0.0) / currentProxy.getSuccessfulTimes();
+					currentProxy.setSuccessfulAverageTime(aTime);
 					currentProxy.setLastSuccessfulTime(System.currentTimeMillis());
 					handle(page);
 				}else {

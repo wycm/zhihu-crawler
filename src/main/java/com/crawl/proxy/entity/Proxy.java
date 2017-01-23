@@ -13,15 +13,15 @@ public class Proxy implements Delayed, Serializable{
     private boolean availableFlag;
     private boolean anonymousFlag;
     private long lastSuccessfulTime;//最近一次请求成功时间
-    private int delay;
+    private long successfulTotalTime;//请求成功总耗时
     private int failureTimes;//请求失败次数
     private int successfulTimes;//请求成功次数
-
+    private double successfulAverageTime;//成功请求平均耗时
     public Proxy(String ip, int port, long timeInterval) {
         this.ip = ip;
         this.port = port;
         this.timeInterval = timeInterval;
-        this.timeInterval=TimeUnit.NANOSECONDS.convert(timeInterval, TimeUnit.MILLISECONDS) + System.nanoTime();
+        this.timeInterval = TimeUnit.NANOSECONDS.convert(timeInterval, TimeUnit.MILLISECONDS) + System.nanoTime();
     }
     public String getIp() {
         return ip;
@@ -67,12 +67,12 @@ public class Proxy implements Delayed, Serializable{
         this.lastSuccessfulTime = lastSuccessfulTime;
     }
 
-    public int getDelay() {
-        return delay;
+    public long getSuccessfulTotalTime() {
+        return successfulTotalTime;
     }
 
-    public void setDelay(int delay) {
-        this.delay = delay;
+    public void setSuccessfulTotalTime(long successfulTotalTime) {
+        this.successfulTotalTime = successfulTotalTime;
     }
 
     public void setTimeInterval(long timeInterval){
@@ -86,7 +86,10 @@ public class Proxy implements Delayed, Serializable{
     @Override
     public int compareTo(Delayed o) {
         Proxy element = (Proxy)o;
-        return timeInterval > element.timeInterval ? 1:(timeInterval < element.timeInterval ? -1 : 0);
+        if (successfulAverageTime == 0.0d ||element.successfulAverageTime == 0.0d){
+            return 0;
+        }
+        return successfulAverageTime > element.successfulAverageTime ? 1:(successfulAverageTime < element.successfulAverageTime ? -1 : 0);
     }
 
     public int getFailureTimes() {
@@ -105,6 +108,14 @@ public class Proxy implements Delayed, Serializable{
         this.successfulTimes = successfulTimes;
     }
 
+    public double getSuccessfulAverageTime() {
+        return successfulAverageTime;
+    }
+
+    public void setSuccessfulAverageTime(double successfulAverageTime) {
+        this.successfulAverageTime = successfulAverageTime;
+    }
+
     @Override
     public String toString() {
         return "Proxy{" +
@@ -114,9 +125,10 @@ public class Proxy implements Delayed, Serializable{
                 ", availableFlag=" + availableFlag +
                 ", anonymousFlag=" + anonymousFlag +
                 ", lastSuccessfulTime=" + lastSuccessfulTime +
-                ", delay=" + delay +
+                ", successfulTotalTime=" + successfulTotalTime +
                 ", failureTimes=" + failureTimes +
                 ", successfulTimes=" + successfulTimes +
+                ", successfulAverageTime=" + successfulAverageTime +
                 '}';
     }
 

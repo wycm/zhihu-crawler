@@ -10,7 +10,7 @@ import org.apache.log4j.Logger;
  * 爬虫入口
  */
 public class Main {
-    private static Logger logger = SimpleLogger.getLogger(Main.class);
+    private static Logger logger = SimpleLogger.getSimpleLogger(Main.class);
     public static void main(String args []){
         String startURL = Config.startURL;
         ProxyHttpClient.getInstance().startCrawl();
