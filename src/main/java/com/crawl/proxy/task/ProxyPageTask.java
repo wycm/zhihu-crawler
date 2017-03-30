@@ -93,6 +93,10 @@ public class ProxyPageTask implements Runnable{
 	}
 
 	public void handle(Page page){
+		if (page.getHtml() == null || page.getHtml().equals("")){
+			return;
+		}
+
 		ProxyListPageParser parser = ProxyListPageParserFactory.
 				getProxyListPageParser(ProxyPool.proxyMap.get(url));
 		List<Proxy> proxyList = parser.parse(page.getHtml());
