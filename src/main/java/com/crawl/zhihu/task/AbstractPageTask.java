@@ -87,9 +87,9 @@ public abstract class AbstractPageTask implements Runnable{
 			long requestEndTime = System.currentTimeMillis();
 			page.setProxy(currentProxy);
 			int status = page.getStatusCode();
-			String logStr = Thread.currentThread().getName() + " " + currentProxy +
-					"  executing request " + page.getUrl()  + " response statusCode:" + status +
-					"  request cost time:" + (requestEndTime - requestStartTime) + "ms";
+			String logStr = String.format("%s %s %s %s %s %s %d %s %d%s", Thread.currentThread().getName(), this.getClass().getName(),
+					currentProxy, "executing request", page.getUrl(), "response statusCode:", status,
+					"request cost time:", (requestEndTime - requestStartTime), "ms");
 			if(status == HttpStatus.SC_OK){
 				if (page.getHtml().contains("zhihu")){
 					logger.debug(logStr);

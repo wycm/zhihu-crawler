@@ -38,9 +38,9 @@ public class ProxyTestTask implements Runnable{
             request.setConfig(requestConfig);
             Page page = ZhiHuHttpClient.getInstance().getWebPage(request);
             long endTime = System.currentTimeMillis();
-            String logStr = Thread.currentThread().getName() + " " + proxy.getProxyStr() +
-                    "  executing request " + page.getUrl()  + " response statusCode:" + page.getStatusCode() +
-                    "  request cost time:" + (endTime - startTime) + "ms";
+            String logStr = String.format("%s %s %s %s %s %s %d %s %d%s", Thread.currentThread().getName(), this.getClass().getName(),
+                    proxy, "executing request", page.getUrl(), "response statusCode:", page.getStatusCode(),
+                    "request cost time:", (endTime - startTime), "ms");
             if (page == null || page.getStatusCode() != 200){
                 logger.warn(logStr);
                 return;
