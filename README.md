@@ -1,12 +1,12 @@
 ﻿知乎爬虫
 ====  
 知乎爬虫，主抓取知乎用户的基本资料。<br>
-第一次爬取时，刚开始爬取速度会比较慢，因为代理比较少。随着可用代理的增多，爬取速度会越来越快。可以达到100+用户/s<br>
+第一次爬取时，刚开始爬取速度会比较慢，因为代理比较少。随着可用代理的增多，爬取速度会越来越快。<br>
 运行环境<br>
 *-cpu:Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz<br>
 *-memory size: DIMM DDR3 Synchronous 1600 MHz (0.6 ns)--(8GB)<br>
 *-system:ubuntu 12.04
-##工程导入(maven)
+## 工程导入(maven)
 * git clone https://github.com/wycm/zhihu-crawler 克隆项目到本地 
 * **eclipse**导入步骤(eclipse_kepler版本，自带maven)，File->Import->Maven->Existing Maven Projects->选择刚刚clone的zhihu-crawler目录->导入成功
 * **idea**导入步骤,File->Open->选择刚刚clone的zhihu-crawler目录->导入成功
@@ -19,6 +19,19 @@
 * 右键工程->Build Path->Add External Archives...->导入zhihu-crawler/lib下的所有jar包
 * 将zhihu-crawler/src/main/resources目录下的[config.properties](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/config.properties)和[log4j.properties](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/log4j.properties)拷贝至src目录下
 
+## 使用到的API
+* 地址(url)：```https://www.zhihu.com/api/v4/members/${userid}/followees```
+* 请求类型：GET
+* **请求参数**
+
+       | 参数名 |类型 | 必填 |值| 说明|
+       |:--------|:----|:---|:-----------------|:--------|
+       |include|String|是|data[*].answer_count,articles_count,follower_count,is_followed,is_following,badge[?(type=best_answerer)].topics|需要返回的字段，这个值可以改根据需要增加一些字段（见如下示例url）|
+       |offset|int|是|0|偏移量（通过调整这个值可以获取到一个用户的所有关注用户资料）|
+       |limit|int|是|20|返回数，一般设置为20(最大20，超过20无效)|
+* url示例：```https://www.zhihu.com/api/v4/members/wo-yan-chen-mo/followees?include=data[*].educations,employments,answer_count,business,locations,articles_count,follower_count,gender,following_count,question_count,voteup_count,thanked_count,is_followed,is_following,badge[?(type=best_answerer)].topics&offset=0&limit=20```
+* 响应：响应一段json数据，会有关注用户资料
+* **注意**：这个请求采用了oauth验证，需要在http header加上```authorization:oauth c3cef7c66a1843f8b3a9e6a1e3160e20```,这个值是存放在js文件中，详细获取方式见代码。
 
 ## Quick Start
 Run with [Main.java](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/java/com/crawl/Main.java) <br>
