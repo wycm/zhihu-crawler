@@ -87,7 +87,7 @@ public class DetailListPageTask extends AbstractPageTask{
             }
             else if(!Config.dbEnable || zhiHuHttpClient.getDetailListPageThreadPool().getActiveCount() == 1){
                 parseUserCount.incrementAndGet();
-                for (int j = 0; j < u.getFollowees(); j++){
+                for (int j = 0; j < u.getFollowees() / 20; j++){
                     String nextUrl = String.format(USER_FOLLOWEES_URL, u.getUserToken(), j * 20);
                     HttpGet request = new HttpGet(nextUrl);
                     request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
