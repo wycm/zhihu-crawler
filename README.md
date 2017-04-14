@@ -24,13 +24,14 @@
 * 请求类型：GET
 * **请求参数**
 
-       | 参数名 |类型 | 必填 |值| 说明|
-       |:--------|:----|:---|:-----------------|:--------|
-       |include|String|是|data[*].answer_count,articles_count,follower_count,is_followed,is_following,badge[?(type=best_answerer)].topics|需要返回的字段，这个值可以改根据需要增加一些字段（见如下示例url）|
-       |offset|int|是|0|偏移量（通过调整这个值可以获取到一个用户的所有关注用户资料）|
-       |limit|int|是|20|返回数，一般设置为20(最大20，超过20无效)|
+| 参数名 |类型 | 必填 | 值 | 说明|
+| :------------ | :------------ | :------------ | :----- | :------------ |
+| include | String | 是| ```data[*]answer_count,articles_count``` |需要返回的字段（这个值可以改根据需要增加一些字段，见如下示例url） |
+| offset  | int    | 是| 0 | 偏移量（通过调整这个值可以获取到一个用户的```所有关注用户```资料） |
+| limit   | int    | 是| 20 | 返回用户数（最大20，超过20无效） |
+
 * url示例：```https://www.zhihu.com/api/v4/members/wo-yan-chen-mo/followees?include=data[*].educations,employments,answer_count,business,locations,articles_count,follower_count,gender,following_count,question_count,voteup_count,thanked_count,is_followed,is_following,badge[?(type=best_answerer)].topics&offset=0&limit=20```
-* 响应：响应一段json数据，会有关注用户资料
+* 响应：json数据，会有关注用户资料
 * **注意**：这个请求采用了oauth验证，需要在http header加上```authorization:oauth c3cef7c66a1843f8b3a9e6a1e3160e20```,这个值是存放在js文件中，详细获取方式见代码。
 
 ## Quick Start
