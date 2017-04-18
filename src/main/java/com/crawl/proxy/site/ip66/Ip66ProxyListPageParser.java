@@ -19,9 +19,12 @@ import static com.crawl.core.util.Constants.TIME_INTERVAL;
 public class Ip66ProxyListPageParser implements ProxyListPageParser {
     @Override
     public List<Proxy> parse(String content) {
+        List<Proxy> proxyList = new ArrayList<>();
+        if (content == null || content.equals("")){
+            return proxyList;
+        }
         Document document = Jsoup.parse(content);
         Elements elements = document.select("table tr:gt(1)");
-        List<Proxy> proxyList = new ArrayList<>(elements.size());
         for (Element element : elements){
             String ip = element.select("td:eq(0)").first().text();
             String port  = element.select("td:eq(1)").first().text();
