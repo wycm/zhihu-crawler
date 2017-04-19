@@ -160,41 +160,14 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
              * 下载网页数
              */
             long downloadPageCount = detailListPageThreadPool.getTaskCount();
-//            if (downloadPageCount >= Config.downloadPageCount &&
-//                    ! ZhiHuHttpClient.getInstance().getDetailPageThreadPool().isShutdown()) {
-//                isStop = true;
-//                /**
-//                 * shutdown 下载网页线程池
-//                 */
-//                ZhiHuHttpClient.getInstance().getDetailPageThreadPool().shutdown();
-//            }
-//            if(ZhiHuHttpClient.getInstance().getDetailPageThreadPool().isTerminated() &&
-//                    !ZhiHuHttpClient.getInstance().getListPageThreadPool().isShutdown()){
-//                /**
-//                 * 下载网页线程池关闭后，再关闭解析网页线程池
-//                 */
-//                ZhiHuHttpClient.getInstance().getListPageThreadPool().shutdown();
-//            }
-//            if(ZhiHuHttpClient.getInstance().getListPageThreadPool().isTerminated()){
-//                /**
-//                 * 关闭线程池Monitor
-//                 */
-//                ThreadPoolMonitor.isStopMonitor = true;
-//                /**
-//                 * 关闭ProxyHttpClient客户端
-//                 */
-//                ProxyHttpClient.getInstance().getProxyTestThreadExecutor().shutdownNow();
-//                ProxyHttpClient.getInstance().getProxyDownloadThreadExecutor().shutdownNow();
-//                logger.info("--------------爬取结果--------------");
-//                logger.info("获取用户数:" + parseUserCount.get());
-//                break;
-//            }
+
             if (downloadPageCount >= Config.downloadPageCount &&
                     !detailListPageThreadPool.isShutdown()) {
                 isStop = true;
+                ThreadPoolMonitor.isStopMonitor = true;
                 detailListPageThreadPool.shutdown();
             }
-            if(detailListPageThreadPool.isShutdown()){
+            if(detailListPageThreadPool.isTerminated()){
                 //关闭数据库连接
                 Map<Thread, Connection> map = DetailListPageTask.getConnectionMap();
                 for(Connection cn : map.values()){
@@ -206,6 +179,11 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
                         e.printStackTrace();
                     }
                 }
+                //关闭代理检测线程池
+                ProxyHttpClient.getInstance().getProxyTestThreadExecutor().shutdownNow();
+                //关闭代理下载页线程池
+                ProxyHttpClient.getInstance().getProxyDownloadThreadExecutor().shutdownNow();
+
                 break;
             }
             double costTime = (System.currentTimeMillis() - startTime) / 1000.0;//单位s
@@ -217,9 +195,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
                 e.printStackTrace();
             }
         }
-//        System.exit(0);
     }
-
     public ThreadPoolExecutor getDetailPageThreadPool() {
         return detailPageThreadPool;
     }

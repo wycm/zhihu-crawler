@@ -27,8 +27,8 @@ public class ZhiHuDao1Imp implements ZhiHuDao1{
                 //创建url表
                 st.execute(p.getProperty("createUrlTable"));
                 logger.info("url表创建成功");
-                st.execute(p.getProperty("createUrlIndex"));
-                logger.info("url表索引创建成功");
+//                st.execute(p.getProperty("createUrlIndex"));
+//                logger.info("url表索引创建成功");
             }
             else{
                 logger.info("url表已存在");
@@ -39,8 +39,8 @@ public class ZhiHuDao1Imp implements ZhiHuDao1{
                 //创建user表
                 st.execute(p.getProperty("createUserTable"));
                 logger.info("user表创建成功");
-                st.execute(p.getProperty("createUserIndex"));
-                logger.info("user表索引创建成功");
+//                st.execute(p.getProperty("createUserIndex"));
+//                logger.info("user表索引创建成功");
             }
             else{
                 logger.info("user表已存在");
