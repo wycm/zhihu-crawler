@@ -1,11 +1,11 @@
-﻿知乎爬虫
-====  
-知乎爬虫，主抓取知乎用户的基本资料。<br>
-第一次爬取时，刚开始爬取速度会比较慢，因为代理比较少。随着可用代理的增多，爬取速度会越来越快,可以达到100+用户/s<br>
-运行环境<br>
-*-cpu:Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz<br>
-*-memory size: DIMM DDR3 Synchronous 1600 MHz (0.6 ns)--(8GB)<br>
-*-system:ubuntu 12.04
+知乎爬虫
+====
+zhihu-crawler是一个基于Java的爬虫实战项目，主要功能是抓取知乎用户的基本资料，如果觉得不错，请给个star。
+## 爬取结果
+* 下图为爬取117w知乎用户数据的简单统计<br>
+![](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/img/zhihu-charts.png)
+* 详细统计见 https://www.vwycm.cn/zhihu/charts
+
 ## 工程导入(maven)
 * git clone https://github.com/wycm/zhihu-crawler 克隆项目到本地
 * **eclipse**导入步骤(eclipse_kepler版本，自带maven)，File->Import->Maven->Existing Maven Projects->选择刚刚clone的zhihu-crawler目录->导入成功
@@ -18,6 +18,9 @@
 * 拷贝刚刚clone的zhihu-crawler/src/main/java/com目录到zhihu-new-crawler/src目录下
 * 右键工程->Build Path->Add External Archives...->导入zhihu-crawler/lib下的所有jar包
 * 将zhihu-crawler/src/main/resources目录下的[config.properties](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/config.properties)和[log4j.properties](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/log4j.properties)拷贝至src目录下
+
+## Quick Start
+Run with [Main.java](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/java/com/crawl/Main.java) <br>
 
 ## 使用到的API
 * 地址(url)：```https://www.zhihu.com/api/v4/members/${userid}/followees```
@@ -34,14 +37,26 @@
 * 响应：json数据，会有关注用户资料
 * **注意**：这个请求采用了oauth验证，需要在http header加上```authorization:oauth c3cef7c66a1843f8b3a9e6a1e3160e20```,这个值是存放在js文件中，详细获取方式见代码。
 
-## Quick Start
-Run with [Main.java](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/java/com/crawl/Main.java) <br>
+## 使用到的三方库
+* HttpClient4.5-网络请求
+* Jsoup-html标签解析
+* JsonPath-json数据解析
 
 ## Features
 * 大量使用http代理，突破同一个客户端访问量限制。
 * 支持持久化(mysql),相关配置见[config.properties](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/config.properties)。
-* 多线程、快速，0.5小时可爬取20w用户。
+* 多线程、爬取速度快。
 
+## 持久化配置
+* 如果要持久化数据到mysql，先手动创建数据库，然后修改配置文件[config.properties](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/config.properties)的如下属性。
+* `db.enable = true`
+* `db.host =ip地址`
+* `db.username = 用户名`
+* `db.password = 密码`
+* `db.name = 数据库名`
+
+## 流程图
+![](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/img/zhihu-crawler-process.jpg)
 ## 更新
 #### 2016.12.26
 * 移除未使用的包，修复ConcurrentModificationException和NoSuchElementException异常问题。
@@ -65,8 +80,7 @@ DetailPageThreadPool负责下载用户详情页面，解析出用户基本信息
 
 ## 最后
 * 想要爬取其它数据，如问题、答案等，完全可以在此基础上自己定制。
-* 知乎爬虫交流群：633925314，欢迎交流。
-* 如果觉得还不错，麻烦给个star。
-* 有疑问想法的，欢迎交流。
-* qq:1057160387，邮箱`1057160387@qq.com`。
+* 有问题的请提issue。
+* 欢迎贡献代码。
+* 爬虫交流群：633925314，欢迎交流。
 
