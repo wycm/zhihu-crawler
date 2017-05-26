@@ -1,10 +1,11 @@
 知乎爬虫
 ====
-zhihu-crawler是一个基于Java爬虫实战项目，主要功能是抓取知乎用户的基本资料，如果觉得不错，请给个star。
+zhihu-crawler是一个基于Java的爬虫实战项目，主要功能是抓取知乎用户的基本资料，如果觉得不错，请给个star。
 ## 爬取结果
 * 下图为爬取117w知乎用户数据的简单统计<br>
 ![](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/img/zhihu-charts.png)
 * 详细统计见 https://www.vwycm.cn/zhihu/charts
+
 ## 工程导入(maven)
 * git clone https://github.com/wycm/zhihu-crawler 克隆项目到本地
 * **eclipse**导入步骤(eclipse_kepler版本，自带maven)，File->Import->Maven->Existing Maven Projects->选择刚刚clone的zhihu-crawler目录->导入成功
