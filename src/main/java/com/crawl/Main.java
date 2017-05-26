@@ -12,9 +12,7 @@ import org.apache.log4j.Logger;
 public class Main {
     private static Logger logger = SimpleLogger.getSimpleLogger(Main.class);
     public static void main(String args []){
-        String startURL = Config.startURL;
         ProxyHttpClient.getInstance().startCrawl();
-        ZhiHuHttpClient.getInstance().startCrawl(startURL);
-//        ZhiHuHttpClient.getInstance().startCrawl();
+        ZhiHuHttpClient.getInstance().startCrawl();
     }
 }

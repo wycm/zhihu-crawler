@@ -63,6 +63,11 @@ public class DetailListPageTask extends AbstractPageTask{
 
     @Override
     void handle(Page page) {
+        if(!page.getHtml().startsWith("{\"paging\"")){
+            //代理异常，未能正确返回目标请求数据，丢弃
+            currentProxy = null;
+            return;
+        }
         List<User> list = proxyUserListPageParser.parseListPage(page);
         for(User u : list){
             logger.info("解析用户成功:" + u.toString());

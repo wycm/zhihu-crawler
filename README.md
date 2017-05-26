@@ -75,6 +75,9 @@ DetailPageThreadPool负责下载用户详情页面，解析出用户基本信息
 #### 2017.03.30
 * 知乎api变更，关注列表页不能获取到关注人数，导致线程池任务不能持续下去。抓取模式切换成原来ListPageThreadPool和DetailPageThreadPool的方式。
 
+#### 2017.05.26
+* 修复代理返回错误数据，导致java.lang.reflect.UndeclaredThrowableException异常。
+
 ## TODO
 * 优化爬取速度
 

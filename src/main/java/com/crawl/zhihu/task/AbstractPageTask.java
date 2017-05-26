@@ -34,7 +34,7 @@ public abstract class AbstractPageTask implements Runnable{
 	protected String url;
 	protected HttpRequestBase request;
 	protected boolean proxyFlag;//是否通过代理下载
-	private Proxy currentProxy;//当前线程使用的代理
+	protected Proxy currentProxy;//当前线程使用的代理
 	protected static ZhiHuDao1 zhiHuDao1;
 	protected static ZhiHuHttpClient zhiHuHttpClient = ZhiHuHttpClient.getInstance();
 	static {
