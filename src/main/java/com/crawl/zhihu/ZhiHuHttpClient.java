@@ -79,17 +79,17 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
      * 初始化线程池
      */
     private void intiThreadPool(){
-//        detailPageThreadPool = new SimpleThreadPoolExecutor(Config.downloadThreadSize,
-//                Config.downloadThreadSize,
-//                0L, TimeUnit.MILLISECONDS,
-//                new LinkedBlockingQueue<Runnable>(),
-//                "detailPageThreadPool");
-//        listPageThreadPool = new SimpleThreadPoolExecutor(50, 80,
-//                0L, TimeUnit.MILLISECONDS,
-//                new LinkedBlockingQueue<Runnable>(5000),
-//                new ThreadPoolExecutor.DiscardPolicy(), "listPageThreadPool");
-//        new Thread(new ThreadPoolMonitor(detailPageThreadPool, "DetailPageDownloadThreadPool")).start();
-//        new Thread(new ThreadPoolMonitor(listPageThreadPool, "ListPageDownloadThreadPool")).start();
+        detailPageThreadPool = new SimpleThreadPoolExecutor(Config.downloadThreadSize,
+                Config.downloadThreadSize,
+                0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(),
+                "detailPageThreadPool");
+        listPageThreadPool = new SimpleThreadPoolExecutor(50, 80,
+                0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(5000),
+                new ThreadPoolExecutor.DiscardPolicy(), "listPageThreadPool");
+        new Thread(new ThreadPoolMonitor(detailPageThreadPool, "DetailPageDownloadThreadPool")).start();
+        new Thread(new ThreadPoolMonitor(listPageThreadPool, "ListPageDownloadThreadPool")).start();
         detailListPageThreadPool = new SimpleThreadPoolExecutor(Config.downloadThreadSize,
                 Config.downloadThreadSize,
                 0L, TimeUnit.MILLISECONDS,
@@ -100,7 +100,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
 
     }
     public void startCrawl(String url){
-//        detailPageThreadPool.execute(new DetailPageTask(url, Config.isProxy));
+        detailPageThreadPool.execute(new DetailPageTask(url, Config.isProxy));
         manageHttpClient();
     }
 
