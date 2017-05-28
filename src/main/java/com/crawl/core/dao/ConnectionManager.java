@@ -52,7 +52,7 @@ public class ConnectionManager {
 		String user = Config.dbUsername;
 		String password = Config.dbPassword;
 		String dbName = Config.dbName;
-		String url="jdbc:mysql://" + host + ":3306/" + dbName;
+		String url="jdbc:mysql://" + host + ":3306/" + dbName + "?characterEncoding=utf8";
 		Connection con=null;
 		try{
 			con = DriverManager.getConnection(url,user,password);//建立mysql的连接
