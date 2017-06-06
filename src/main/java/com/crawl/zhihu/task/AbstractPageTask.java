@@ -91,7 +91,7 @@ public abstract class AbstractPageTask implements Runnable{
 					"  executing request " + page.getUrl()  + " response statusCode:" + status +
 					"  request cost time:" + (requestEndTime - requestStartTime) + "ms";
 			if(status == HttpStatus.SC_OK){
-				if (page.getHtml().contains("zhihu" && !page.getHtml().contains("安全验证")){
+				if (page.getHtml().contains("zhihu") && !page.getHtml().contains("安全验证")){
 					logger.debug(logStr);
 					currentProxy.setSuccessfulTimes(currentProxy.getSuccessfulTimes() + 1);
 					currentProxy.setSuccessfulTotalTime(currentProxy.getSuccessfulTotalTime() + (requestEndTime - requestStartTime));
