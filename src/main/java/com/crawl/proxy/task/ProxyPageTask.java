@@ -102,7 +102,14 @@ public class ProxyPageTask implements Runnable{
 		List<Proxy> proxyList = parser.parse(page.getHtml());
 		for(Proxy p : proxyList){
 			if(!ZhiHuHttpClient.getInstance().getDetailListPageThreadPool().isTerminated()){
-				if (!ProxyPool.proxySet.contains(p)){
+				ProxyPool.lock.readLock().lock();
+				boolean containFlag = ProxyPool.proxySet.contains(p);
+				ProxyPool.lock.readLock().unlock();
+				if (!containFlag){
+					ProxyPool.lock.writeLock().lock();
+					ProxyPool.proxySet.add(p);
+					ProxyPool.lock.writeLock().unlock();
+
 					proxyHttpClient.getProxyTestThreadExecutor().execute(new ProxyTestTask(p));
 				}
 			}

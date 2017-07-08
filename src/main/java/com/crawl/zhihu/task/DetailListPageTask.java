@@ -28,6 +28,9 @@ import java.util.concurrent.ThreadPoolExecutor;
 import static com.crawl.core.util.Constants.USER_FOLLOWEES_URL;
 import static com.crawl.zhihu.ZhiHuHttpClient.parseUserCount;
 
+/**
+ * 知乎用户列表详情页task
+ */
 public class DetailListPageTask extends AbstractPageTask{
     private static Logger logger = SimpleLogger.getSimpleLogger(DetailListPageTask.class);
     private static ListPageParser proxyUserListPageParser;

@@ -7,8 +7,10 @@ import com.crawl.core.dao.ConnectionManager;
 import com.crawl.proxy.ProxyHttpClient;
 import com.crawl.zhihu.dao.ZhiHuDAO;
 import com.crawl.zhihu.dao.ZhiHuDao1Imp;
+import com.crawl.zhihu.task.AbstractPageTask;
 import com.crawl.zhihu.task.DetailListPageTask;
 import com.crawl.zhihu.task.DetailPageTask;
+import com.crawl.zhihu.task.GeneralPageTask;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.log4j.Logger;
 
@@ -69,7 +71,6 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
      */
     @Override
     public void initHttpClient() {
-        authorization = initAuthorization();
         if(Config.dbEnable){
             ZhiHuDao1Imp.DBTablesInit();
         }
@@ -106,6 +107,8 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
 
     @Override
     public void startCrawl() {
+        authorization = initAuthorization();
+
         String startToken = Config.startUserToken;
         String startUrl = String.format(Constants.USER_FOLLOWEES_URL, startToken, 0);
         HttpGet request = new HttpGet(startUrl);
@@ -119,12 +122,14 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
      * @return
      */
     private String initAuthorization(){
+        logger.info("初始化authoriztion中...");
         String content = null;
-        try {
-            content = HttpClientUtil.getWebPage(Config.startURL);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
+//            content = HttpClientUtil.getWebPage(Config.startURL);
+        GeneralPageTask generalPageTask = new GeneralPageTask(Config.startURL, true);
+        generalPageTask.run();
+        content = generalPageTask.getPage().getHtml();
+
         Pattern pattern = Pattern.compile("https://static\\.zhihu\\.com/heifetz/main\\.app\\.([0-9]|[a-z])*\\.js");
         Matcher matcher = pattern.matcher(content);
         String jsSrc = null;
@@ -134,15 +139,20 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
             throw new RuntimeException("not find javascript url");
         }
         String jsContent = null;
-        try {
-            jsContent = HttpClientUtil.getWebPage(jsSrc);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            jsContent = HttpClientUtil.getWebPage(jsSrc);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+        GeneralPageTask jsPageTask = new GeneralPageTask(jsSrc, true);
+        jsPageTask.run();
+        jsContent = jsPageTask.getPage().getHtml();
+
         pattern = Pattern.compile("CLIENT_ALIAS=\"(([0-9]|[a-z])*)\"");
         matcher = pattern.matcher(jsContent);
         if (matcher.find()){
             String authorization = matcher.group(1);
+            logger.info("初始化authoriztion完成");
             return authorization;
         }
         throw new RuntimeException("not get authorization");
@@ -206,4 +216,5 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
     public ThreadPoolExecutor getDetailListPageThreadPool() {
         return detailListPageThreadPool;
     }
+
 }
