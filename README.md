@@ -87,5 +87,5 @@ DetailPageThreadPool负责下载用户详情页面，解析出用户基本信息
 * 欢迎贡献代码。
 * 爬虫交流群：633925314，欢迎交流。
 * 需要数据(117w知乎用户基本信息资料)的，关注公众号即可：lwndso<br>
-![](https://github.com/wycm/zhihu-crawler/2.0/trunk/src/main/resources/img/wx.jpg)
+![](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/img/wx.jpg)
 
