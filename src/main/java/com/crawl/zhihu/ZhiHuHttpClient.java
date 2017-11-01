@@ -125,7 +125,6 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
         logger.info("初始化authoriztion中...");
         String content = null;
 
-//            content = HttpClientUtil.getWebPage(Config.startURL);
         GeneralPageTask generalPageTask = new GeneralPageTask(Config.startURL, true);
         generalPageTask.run();
         content = generalPageTask.getPage().getHtml();
@@ -139,11 +138,6 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
             throw new RuntimeException("not find javascript url");
         }
         String jsContent = null;
-//        try {
-//            jsContent = HttpClientUtil.getWebPage(jsSrc);
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
         GeneralPageTask jsPageTask = new GeneralPageTask(jsSrc, true);
         jsPageTask.run();
         jsContent = jsPageTask.getPage().getHtml();
