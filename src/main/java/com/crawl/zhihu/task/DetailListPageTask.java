@@ -57,12 +57,12 @@ public class DetailListPageTask extends AbstractPageTask{
     }
 
     @Override
-    void retry() {
+    protected void retry() {
         zhiHuHttpClient.getDetailListPageThreadPool().execute(new DetailListPageTask(request, Config.isProxy));
     }
 
     @Override
-    void handle(Page page) {
+    protected void handle(Page page) {
         if(!page.getHtml().startsWith("{\"paging\"")){
             //代理异常，未能正确返回目标请求数据，丢弃
             currentProxy = null;

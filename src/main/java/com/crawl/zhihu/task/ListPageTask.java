@@ -21,12 +21,12 @@ public class ListPageTask extends AbstractPageTask {
 
 
     @Override
-    void retry() {
+    protected void retry() {
         zhiHuHttpClient.getListPageThreadPool().execute(new ListPageTask(request, Config.isProxy));
     }
 
     @Override
-    void handle(Page page) {
+    protected void handle(Page page) {
         /**
          * "我关注的人"列表页
          */

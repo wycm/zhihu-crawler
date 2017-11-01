@@ -147,7 +147,7 @@ public abstract class AbstractPageTask implements Runnable{
 	/**
 	 * retry
 	 */
-	abstract void retry();
+	protected abstract void retry();
 
 
 
@@ -155,7 +155,7 @@ public abstract class AbstractPageTask implements Runnable{
 	 * 子类实现page的处理
 	 * @param page
 	 */
-	abstract void handle(Page page);
+	protected abstract void handle(Page page);
 
 	private String getProxyStr(Proxy proxy){
 		if (proxy == null){

@@ -16,7 +16,7 @@ public class GeneralPageTask extends AbstractPageTask{
     }
 
     @Override
-    void retry() {
+    protected void retry() {
         try {
             Thread.sleep(100);
         } catch (InterruptedException e) {
@@ -26,7 +26,7 @@ public class GeneralPageTask extends AbstractPageTask{
     }
 
     @Override
-    void handle(Page page) {
+    protected void handle(Page page) {
         this.page = page;
     }
 

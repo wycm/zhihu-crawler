@@ -33,12 +33,12 @@ public class DetailPageTask extends AbstractPageTask {
     }
 
     @Override
-    void retry() {
+    protected void retry() {
         zhiHuHttpClient.getDetailPageThreadPool().execute(new DetailPageTask(url, Config.isProxy));
     }
 
     @Override
-    void handle(Page page) {
+    protected void handle(Page page) {
         DetailPageParser parser = null;
 //        parser = ZhiHuNewUserDetailPageParser.getInstance();
         parser = proxyDetailPageParser;
