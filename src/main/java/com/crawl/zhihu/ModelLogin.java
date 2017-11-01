@@ -2,10 +2,10 @@ package com.crawl.zhihu;
 
 import com.crawl.core.util.Config;
 import com.crawl.core.util.HttpClientUtil;
-import com.crawl.core.util.SimpleLogger;
 import net.minidev.json.JSONObject;
 import net.minidev.json.JSONValue;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
@@ -15,7 +15,7 @@ import java.util.*;
  * 模拟登录知乎
  */
 public class ModelLogin {
-    private static Logger logger = SimpleLogger.getSimpleLogger(ModelLogin.class);
+    private static Logger logger = LoggerFactory.getLogger(ModelLogin.class);
 
     //邮箱登录地址
     final private static String EMAIL_LOGIN_URL = "https://www.zhihu.com/login/email";

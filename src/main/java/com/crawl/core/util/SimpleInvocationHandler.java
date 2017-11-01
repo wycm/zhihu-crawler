@@ -1,6 +1,7 @@
 package com.crawl.core.util;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -9,7 +10,7 @@ import java.lang.reflect.Method;
  * 动态代理
  */
 public class SimpleInvocationHandler implements InvocationHandler{
-    private static Logger logger = SimpleLogger.getSimpleLogger(HttpClientUtil.class);
+    private static Logger logger = LoggerFactory.getLogger(HttpClientUtil.class);
 
     private Object target;
 

@@ -1,14 +1,14 @@
 package com.crawl;
 
 
-import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.task.AbstractPageTask;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class ExceptionTest {
-    private static Logger logger = SimpleLogger.getSimpleLogger(AbstractPageTask.class);
+    private static Logger logger = LoggerFactory.getLogger(AbstractPageTask.class);
     public static void main(String[] args){
         try {
             throw new IOException();

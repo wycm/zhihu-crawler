@@ -2,16 +2,15 @@ package com.crawl.zhihu.dao;
 
 import com.crawl.core.dao.ConnectionManager;
 import com.crawl.zhihu.entity.User;
-import com.crawl.core.util.SimpleLogger;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
 public class ZhiHuDAO {
-    private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuDAO.class);
-//    private static Connection cn = ConnectionManager.getConnection();
+    private static Logger logger = LoggerFactory.getLogger(ZhiHuDAO.class);
 
     /**
      * 数据库表初始化，创建数据库表。

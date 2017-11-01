@@ -2,18 +2,18 @@ package com.crawl.core.httpclient;
 
 import com.crawl.zhihu.entity.Page;
 import com.crawl.core.util.HttpClientUtil;
-import com.crawl.core.util.SimpleLogger;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.util.EntityUtils;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
 
 public abstract class AbstractHttpClient{
-    private Logger logger = SimpleLogger.getSimpleLogger(AbstractHttpClient.class);
+    private Logger logger = LoggerFactory.getLogger(AbstractHttpClient.class);
     public InputStream getWebPageInputStream(String url){
         try {
             CloseableHttpResponse response = HttpClientUtil.getResponse(url);

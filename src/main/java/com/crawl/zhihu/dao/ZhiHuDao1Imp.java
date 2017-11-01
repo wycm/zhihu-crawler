@@ -2,17 +2,16 @@ package com.crawl.zhihu.dao;
 
 
 import com.crawl.core.dao.ConnectionManager;
-import com.crawl.core.util.Config;
-import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.entity.User;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.sql.*;
 import java.util.Properties;
 
 public class ZhiHuDao1Imp implements ZhiHuDao1{
-    private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuDao1.class);
+    private static Logger logger = LoggerFactory.getLogger(ZhiHuDao1.class);
     public static void DBTablesInit() {
         ResultSet rs = null;
         Properties p = new Properties();

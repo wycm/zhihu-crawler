@@ -1,20 +1,18 @@
 package com.crawl.zhihu;
 
+import com.crawl.Main;
 import com.crawl.core.httpclient.AbstractHttpClient;
 import com.crawl.core.httpclient.IHttpClient;
 import com.crawl.core.util.*;
-import com.crawl.core.dao.ConnectionManager;
 import com.crawl.proxy.ProxyHttpClient;
-import com.crawl.zhihu.dao.ZhiHuDAO;
 import com.crawl.zhihu.dao.ZhiHuDao1Imp;
-import com.crawl.zhihu.task.AbstractPageTask;
 import com.crawl.zhihu.task.DetailListPageTask;
 import com.crawl.zhihu.task.DetailPageTask;
 import com.crawl.zhihu.task.GeneralPageTask;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Map;
@@ -23,10 +21,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static com.crawl.core.util.Constants.USER_FOLLOWEES_URL;
 
 public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
-    private static Logger logger = SimpleLogger.getSimpleLogger(ZhiHuHttpClient.class);
+    private static Logger logger = LoggerFactory.getLogger(Main.class);
     private volatile static ZhiHuHttpClient instance;
     /**
      * 统计用户数量

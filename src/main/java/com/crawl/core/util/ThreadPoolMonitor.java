@@ -1,6 +1,7 @@
 package com.crawl.core.util;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -8,7 +9,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * 线程池工具类，监视ThreadPoolExecutor执行情况
  */
 public class ThreadPoolMonitor implements Runnable{
-    private static Logger logger = SimpleLogger.getSimpleLogger(ThreadPoolMonitor.class);
+    private static Logger logger = LoggerFactory.getLogger(ThreadPoolMonitor.class);
     private ThreadPoolExecutor executor;
     public static volatile boolean isStopMonitor = false;
     private String name = "";

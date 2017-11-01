@@ -3,7 +3,6 @@ package com.crawl.proxy.task;
 import com.crawl.core.util.Config;
 import com.crawl.core.util.Constants;
 import com.crawl.core.util.HttpClientUtil;
-import com.crawl.core.util.SimpleLogger;
 import com.crawl.proxy.ProxyHttpClient;
 import com.crawl.proxy.ProxyListPageParser;
 import com.crawl.proxy.ProxyPool;
@@ -15,7 +14,8 @@ import com.crawl.zhihu.entity.Page;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,7 +27,7 @@ import static com.crawl.proxy.ProxyPool.proxyQueue;
  * 若下载失败，通过代理去下载代理网页
  */
 public class ProxyPageTask implements Runnable{
-	private static Logger logger = SimpleLogger.getSimpleLogger(ProxyPageTask.class);
+	private static Logger logger = LoggerFactory.getLogger(ProxyPageTask.class);
 	protected String url;
 	private boolean proxyFlag;//是否通过代理下载
 	private Proxy currentProxy;//当前线程使用的代理

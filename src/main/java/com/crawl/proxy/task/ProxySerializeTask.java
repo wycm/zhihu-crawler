@@ -2,18 +2,18 @@ package com.crawl.proxy.task;
 
 import com.crawl.core.util.Config;
 import com.crawl.core.util.HttpClientUtil;
-import com.crawl.core.util.SimpleLogger;
 import com.crawl.proxy.ProxyPool;
 import com.crawl.proxy.entity.Proxy;
 import com.crawl.proxy.util.ProxyUtil;
 import com.crawl.zhihu.ZhiHuHttpClient;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 代理序列化
  */
 public class ProxySerializeTask implements Runnable{
-    private static Logger logger = SimpleLogger.getSimpleLogger(ProxyPageTask.class);
+    private static Logger logger = LoggerFactory.getLogger(ProxyPageTask.class);
     @Override
     public void run() {
         while (!ZhiHuHttpClient.isStop){

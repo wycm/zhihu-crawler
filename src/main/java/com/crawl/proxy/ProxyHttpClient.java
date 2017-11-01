@@ -6,7 +6,8 @@ import com.crawl.proxy.task.ProxyPageTask;
 import com.crawl.core.httpclient.AbstractHttpClient;
 import com.crawl.proxy.task.ProxySerializeTask;
 import com.crawl.zhihu.entity.Page;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -15,7 +16,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 public class ProxyHttpClient extends AbstractHttpClient {
-    private static final Logger logger = Logger.getLogger(ProxyHttpClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(ProxyHttpClient.class);
     private volatile static ProxyHttpClient instance;
     public static Set<Page> downloadFailureProxyPageSet = new HashSet<>(ProxyPool.proxyMap.size());
 

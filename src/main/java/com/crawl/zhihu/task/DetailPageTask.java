@@ -4,13 +4,13 @@ package com.crawl.zhihu.task;
 import com.crawl.core.parser.DetailPageParser;
 import com.crawl.core.util.Config;
 import com.crawl.core.util.SimpleInvocationHandler;
-import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
 import com.crawl.zhihu.entity.Page;
 import com.crawl.zhihu.entity.User;
 import com.crawl.zhihu.parser.ZhiHuNewUserDetailPageParser;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -22,7 +22,7 @@ import static com.crawl.zhihu.ZhiHuHttpClient.parseUserCount;
  * 下载成功解析出用户信息并添加到数据库，获取该用户的关注用户list url，添加到ListPageDownloadThreadPool
  */
 public class DetailPageTask extends AbstractPageTask {
-    private static Logger logger = SimpleLogger.getSimpleLogger(DetailPageTask.class);
+    private static Logger logger = LoggerFactory.getLogger(DetailPageTask.class);
     private static DetailPageParser proxyDetailPageParser;
     static {
         proxyDetailPageParser = getProxyDetailParser();

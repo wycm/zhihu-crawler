@@ -1,7 +1,6 @@
 package com.crawl.zhihu.dao;
 
 
-import com.crawl.core.dao.ConnectionManager;
 import com.crawl.zhihu.entity.User;
 
 import java.sql.Connection;

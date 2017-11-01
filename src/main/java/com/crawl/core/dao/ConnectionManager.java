@@ -1,9 +1,9 @@
 package com.crawl.core.dao;
 
 import com.crawl.core.util.Config;
-import com.crawl.core.util.SimpleLogger;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLSyntaxErrorException;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +13,7 @@ import java.sql.SQLException;
  * DB Connection管理
  */
 public class ConnectionManager {
-	private static Logger logger = SimpleLogger.getSimpleLogger(ConnectionManager.class);
+	private static Logger logger = LoggerFactory.getLogger(ConnectionManager.class);
 	private static Connection conn;
 	public static Connection getConnection(){
 		//获取数据库连接

@@ -9,7 +9,8 @@ import org.apache.http.HttpHost;
 import org.apache.http.client.config.CookieSpecs;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
@@ -19,7 +20,7 @@ import java.io.IOException;
  * 将可用代理添加到DelayQueue延时队列中
  */
 public class ProxyTestTask implements Runnable{
-    private final static Logger logger = Logger.getLogger(ProxyTestTask.class);
+    private final static Logger logger = LoggerFactory.getLogger(ProxyTestTask.class);
     private Proxy proxy;
     public ProxyTestTask(Proxy proxy){
         this.proxy = proxy;

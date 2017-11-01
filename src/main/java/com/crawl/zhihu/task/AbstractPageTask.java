@@ -10,18 +10,17 @@ import com.crawl.proxy.util.ProxyUtil;
 import com.crawl.zhihu.dao.ZhiHuDao1;
 import com.crawl.zhihu.dao.ZhiHuDao1Imp;
 import com.crawl.zhihu.entity.Page;
-import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 
-import static com.crawl.core.util.Constants.TIME_INTERVAL;
 
 /**
  * page task
@@ -30,7 +29,7 @@ import static com.crawl.core.util.Constants.TIME_INTERVAL;
  * @see ProxyPool
  */
 public abstract class AbstractPageTask implements Runnable{
-	private static Logger logger = SimpleLogger.getSimpleLogger(AbstractPageTask.class);
+	private static Logger logger = LoggerFactory.getLogger(AbstractPageTask.class);
 	protected String url;
 	protected HttpRequestBase request;
 	protected boolean proxyFlag;//是否通过代理下载

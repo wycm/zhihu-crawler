@@ -2,20 +2,18 @@ package com.crawl.zhihu.task;
 
 
 import com.crawl.core.dao.ConnectionManager;
-import com.crawl.core.parser.DetailPageParser;
 import com.crawl.core.parser.ListPageParser;
 import com.crawl.core.util.Config;
 import com.crawl.core.util.Md5Util;
 import com.crawl.core.util.SimpleInvocationHandler;
-import com.crawl.core.util.SimpleLogger;
 import com.crawl.zhihu.ZhiHuHttpClient;
 import com.crawl.zhihu.entity.Page;
 import com.crawl.zhihu.entity.User;
-import com.crawl.zhihu.parser.ZhiHuNewUserDetailPageParser;
 import com.crawl.zhihu.parser.ZhiHuUserListPageParser;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Proxy;
@@ -23,7 +21,6 @@ import java.sql.Connection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadPoolExecutor;
 
 import static com.crawl.core.util.Constants.USER_FOLLOWEES_URL;
 import static com.crawl.zhihu.ZhiHuHttpClient.parseUserCount;
@@ -32,7 +29,7 @@ import static com.crawl.zhihu.ZhiHuHttpClient.parseUserCount;
  * 知乎用户列表详情页task
  */
 public class DetailListPageTask extends AbstractPageTask{
-    private static Logger logger = SimpleLogger.getSimpleLogger(DetailListPageTask.class);
+    private static Logger logger = LoggerFactory.getLogger(DetailListPageTask.class);
     private static ListPageParser proxyUserListPageParser;
     /**
      * Thread-数据库连接
