@@ -9,7 +9,6 @@ import com.crawl.proxy.ProxyPool;
 import com.crawl.proxy.entity.Direct;
 import com.crawl.proxy.entity.Proxy;
 import com.crawl.proxy.site.ProxyListPageParserFactory;
-import com.crawl.zhihu.ZhiHuHttpClient;
 import com.crawl.zhihu.entity.Page;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
@@ -101,17 +100,15 @@ public class ProxyPageTask implements Runnable{
 				getProxyListPageParser(ProxyPool.proxyMap.get(url));
 		List<Proxy> proxyList = parser.parse(page.getHtml());
 		for(Proxy p : proxyList){
-			if(!ZhiHuHttpClient.getInstance().getDetailListPageThreadPool().isTerminated()){
-				ProxyPool.lock.readLock().lock();
-				boolean containFlag = ProxyPool.proxySet.contains(p);
-				ProxyPool.lock.readLock().unlock();
-				if (!containFlag){
-					ProxyPool.lock.writeLock().lock();
-					ProxyPool.proxySet.add(p);
-					ProxyPool.lock.writeLock().unlock();
+			ProxyPool.lock.readLock().lock();
+			boolean containFlag = ProxyPool.proxySet.contains(p);
+			ProxyPool.lock.readLock().unlock();
+			if (!containFlag){
+				ProxyPool.lock.writeLock().lock();
+				ProxyPool.proxySet.add(p);
+				ProxyPool.lock.writeLock().unlock();
 
-					proxyHttpClient.getProxyTestThreadExecutor().execute(new ProxyTestTask(p));
-				}
+				proxyHttpClient.getProxyTestThreadExecutor().execute(new ProxyTestTask(p));
 			}
 		}
 	}

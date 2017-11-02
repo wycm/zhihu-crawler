@@ -6,10 +6,11 @@ import com.crawl.core.httpclient.IHttpClient;
 import com.crawl.core.util.*;
 import com.crawl.proxy.ProxyHttpClient;
 import com.crawl.zhihu.dao.ZhiHuDao1Imp;
+import com.crawl.zhihu.support.PicAnswerTask;
 import com.crawl.zhihu.task.DetailListPageTask;
-import com.crawl.zhihu.task.DetailPageTask;
 import com.crawl.zhihu.task.GeneralPageTask;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,8 +23,11 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
+/**
+ * 用户抓取HttpClient
+ */
 public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
-    private static Logger logger = LoggerFactory.getLogger(Main.class);
+    private static Logger logger = LoggerFactory.getLogger(ZhiHuHttpClient.class);
     private volatile static ZhiHuHttpClient instance;
     /**
      * 统计用户数量
@@ -55,13 +59,15 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
      */
     private ThreadPoolExecutor detailListPageThreadPool;
     /**
+     * 答案页下载线程池
+     */
+    private ThreadPoolExecutor answerPageThreadPool;
+    /**
      * request　header
      * 获取列表页时，必须带上
      */
     private static String authorization;
     private ZhiHuHttpClient() {
-        initHttpClient();
-        intiThreadPool();
     }
     /**
      * 初始化HttpClient
@@ -95,16 +101,12 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
                 new ThreadPoolExecutor.DiscardPolicy(),
                 "detailListPageThreadPool");
         new Thread(new ThreadPoolMonitor(detailListPageThreadPool, "DetailListPageThreadPool")).start();
-
-    }
-    public void startCrawl(String url){
-        detailPageThreadPool.execute(new DetailPageTask(url, Config.isProxy));
-        manageHttpClient();
     }
 
     @Override
-    public void startCrawl() {
-        authorization = initAuthorization();
+    public void startCrawl(){
+        initHttpClient();
+        intiThreadPool();
 
         String startToken = Config.startUserToken;
         String startUrl = String.format(Constants.USER_FOLLOWEES_URL, startToken, 0);
@@ -115,10 +117,27 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
     }
 
     /**
+     * 爬取用户回答中图片
+     */
+    public void startCrawlAnswerPic(String userToken){
+        answerPageThreadPool = new SimpleThreadPoolExecutor(Config.downloadThreadSize,
+                Config.downloadThreadSize,
+                0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(2000),
+                new ThreadPoolExecutor.DiscardPolicy(),
+                "answerPageThreadPool");
+        new Thread(new ThreadPoolMonitor(answerPageThreadPool, "AnswerPageThreadPool")).start();
+        String startUrl = String.format(Constants.USER_ANSWER_URL, userToken, 0);
+        HttpRequestBase request = new HttpGet(startUrl);
+        request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
+        answerPageThreadPool.execute(new PicAnswerTask(request, true, userToken));
+    }
+
+    /**
      * 初始化authorization
      * @return
      */
-    private String initAuthorization(){
+    private static void initAuthorization(){
         logger.info("初始化authoriztion中...");
         String content = null;
 
@@ -142,13 +161,17 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
         pattern = Pattern.compile("oauth\\\"\\),h=\\\"(([0-9]|[a-z])*)\"");
         matcher = pattern.matcher(jsContent);
         if (matcher.find()){
-            String authorization = matcher.group(1);
+            String a = matcher.group(1);
             logger.info("初始化authoriztion完成");
-            return authorization;
+            authorization = a;
+        } else {
+            throw new RuntimeException("not get authorization");
         }
-        throw new RuntimeException("not get authorization");
     }
     public static String getAuthorization(){
+        if(authorization == null){
+            initAuthorization();
+        }
         return authorization;
     }
     /**
@@ -208,4 +231,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
         return detailListPageThreadPool;
     }
 
+    public ThreadPoolExecutor getAnswerPageThreadPool() {
+        return answerPageThreadPool;
+    }
 }

@@ -16,6 +16,13 @@ public class Constants {
             "include=data[*].educations,employments,answer_count,business,locations,articles_count,follower_count," +
             "gender,following_count,question_count,voteup_count,thanked_count,is_followed,is_following," +
             "badge[?(type=best_answerer)].topics&offset=%d&limit=20";
+    public final static String USER_ANSWER_URL = "https://www.zhihu.com/api/v4/members/%s/answers?" +
+            "include=data[*].is_normal,admin_closed_comment,reward_info,is_collapsed,annotation_action," +
+            "annotation_detail,collapse_reason,collapsed_by,suggest_edit,comment_count,can_comment,content," +
+            "voteup_count,reshipment_settings,comment_permission,mark_infos,created_time,updated_time,review_info," +
+            "question,excerpt,relationship.is_authorized,voting,is_author,is_thanked,is_nothelp,upvoted_followees;" +
+            "data[*].author.badge[?(type=best_answerer)].topics&offset=%d&limit=20&sort_by=created";
+
     public final static String[] userAgentArray = new String[]{
             "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.110 Safari/537.36",
             "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2623.110 Safari/537.36",

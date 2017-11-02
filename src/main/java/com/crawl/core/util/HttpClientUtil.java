@@ -224,19 +224,26 @@ public class HttpClientUtil {
 	 * @param saveFileName 文件名，包括后缀名
 	 * @param isReplaceFile 若存在文件时，是否还需要下载文件
 	 */
-	public static void downloadFile(String fileURL
-			, String path
-			, String saveFileName
-			, Boolean isReplaceFile){
+	public static void downloadFile(String fileURL,
+									String path,
+									String saveFileName,
+									Boolean isReplaceFile){
+		downloadFile(new HttpGet(fileURL), path, saveFileName, isReplaceFile);
+	}
+
+	public static void downloadFile(HttpRequestBase requestBase,
+									String path,
+									String saveFileName,
+									Boolean isReplaceFile){
 		try{
-			CloseableHttpResponse response = getResponse(fileURL);
+			CloseableHttpResponse response = getResponse(requestBase);
 			logger.info("status:" + response.getStatusLine().getStatusCode());
 			File file =new File(path);
 			//如果文件夹不存在则创建
 			if  (!file .exists()  && !file .isDirectory()){
 				file.mkdirs();
 			} else{
-				logger.info("//目录存在");
+				logger.debug("//目录存在");
 			}
 			file = new File(path + saveFileName);
 			if(!file.exists() || isReplaceFile){
@@ -253,11 +260,11 @@ public class HttpClientUtil {
 						byte[] temp = new byte[readed];
 						System.arraycopy(buff, 0, temp, 0, readed);
 						os.write(temp);
-						logger.info("文件下载中....");
+						logger.debug("文件下载中....");
 					}
 					is.close();
 					os.close();
-					logger.info(fileURL + "--文件成功下载至" + path + saveFileName);
+					logger.info(requestBase.getURI() + "--文件成功下载至" + path + saveFileName);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
