@@ -78,6 +78,8 @@ DetailPageThreadPool负责下载用户详情页面，解析出用户基本信息
 #### 2017.05.26
 * 修复代理返回错误数据，导致java.lang.reflect.UndeclaredThrowableException异常。
 
+#### 2017.11.05
+* 知乎authorization文件更新，修改authorization获取方式。
 ## TODO
 * 优化爬取速度
 
