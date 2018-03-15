@@ -158,7 +158,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
         jsPageTask.run();
         jsContent = jsPageTask.getPage().getHtml();
 
-        pattern = Pattern.compile("oauth\\\"\\),h=\\\"(([0-9]|[a-z])*)\"");
+        pattern = Pattern.compile("oauth (([0-9]|[a-z])+)");
         matcher = pattern.matcher(jsContent);
         if (matcher.find()){
             String a = matcher.group(1);
