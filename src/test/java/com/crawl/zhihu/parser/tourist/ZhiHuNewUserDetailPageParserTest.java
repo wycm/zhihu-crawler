@@ -5,6 +5,7 @@ import com.crawl.zhihu.parser.ZhiHuNewUserDetailPageParser;
 import com.crawl.zhihu.entity.Page;
 import com.crawl.zhihu.entity.User;
 import com.crawl.core.util.HttpClientUtil;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -27,11 +28,7 @@ public class ZhiHuNewUserDetailPageParserTest {
         }
         page.setUrl(url);
         DetailPageParser parser = ZhiHuNewUserDetailPageParser.getInstance();
-        long startTime = System.currentTimeMillis();
-        for(int i = 0; i < 1; i++){
-            User user = parser.parseDetailPage(page);
-        }
-        long endTime = System.currentTimeMillis();
-        System.out.println("cost time:" + (endTime - startTime) + "ms");
+        User user = parser.parseDetailPage(page);
+        Assert.assertNotNull(user.getUsername());
     }
 }

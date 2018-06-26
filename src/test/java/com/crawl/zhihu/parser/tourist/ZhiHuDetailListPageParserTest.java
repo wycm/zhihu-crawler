@@ -2,11 +2,14 @@ package com.crawl.zhihu.parser.tourist;
 
 import com.crawl.zhihu.ZhiHuHttpClient;
 import com.crawl.zhihu.entity.Page;
+import com.crawl.zhihu.entity.User;
 import com.crawl.zhihu.parser.ZhiHuUserListPageParser;
 import org.apache.http.client.methods.HttpGet;
+import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.List;
 
 
 public class ZhiHuDetailListPageParserTest {
@@ -20,6 +23,10 @@ public class ZhiHuDetailListPageParserTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        ZhiHuUserListPageParser.getInstance().parseListPage(page);
+        List<User> list = ZhiHuUserListPageParser.getInstance().parseListPage(page);
+        Assert.assertTrue(list.size() > 0);
+        for(User u : list){
+            Assert.assertNotNull(u.getUsername());
+        }
     }
 }

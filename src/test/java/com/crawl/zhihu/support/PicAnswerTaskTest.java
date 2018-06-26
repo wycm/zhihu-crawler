@@ -13,7 +13,6 @@ import java.io.IOException;
 
 public class PicAnswerTaskTest {
 
-    @Test
     public void testHandle(){
         Page page = null;
         try {
