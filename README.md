@@ -80,6 +80,12 @@ DetailPageThreadPool负责下载用户详情页面，解析出用户基本信息
 
 #### 2017.11.05
 * 知乎authorization文件更新，修改authorization获取方式。
+
+#### 2018.07.09
+* 知乎网站更新，不再需要authorization验证
+* 完善单测
+* 修复已知bug
+
 ## TODO
 * 优化爬取速度
 

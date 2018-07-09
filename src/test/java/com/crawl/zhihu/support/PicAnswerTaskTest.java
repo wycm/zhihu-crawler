@@ -18,7 +18,7 @@ public class PicAnswerTaskTest {
         try {
             String url = String.format(Constants.USER_ANSWER_URL, "WxzxzW");
             HttpRequestBase request = new HttpGet(url);
-            request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
+//            request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
             page = ZhiHuHttpClient.getInstance().getWebPage(request);
             PicAnswerTask picAnswerTask = new PicAnswerTask();
             picAnswerTask.handle(page);

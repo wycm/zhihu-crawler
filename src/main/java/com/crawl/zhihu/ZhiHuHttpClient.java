@@ -129,7 +129,6 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
         new Thread(new ThreadPoolMonitor(answerPageThreadPool, "AnswerPageThreadPool")).start();
         String startUrl = String.format(Constants.USER_ANSWER_URL, userToken, 0);
         HttpRequestBase request = new HttpGet(startUrl);
-//        request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
         answerPageThreadPool.execute(new PicAnswerTask(request, true, userToken));
     }
 

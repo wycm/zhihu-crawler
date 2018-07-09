@@ -105,10 +105,10 @@ public class ProxyPageTask implements Runnable{
 			ProxyPool.lock.readLock().unlock();
 			if (!containFlag){
 				ProxyPool.lock.writeLock().lock();
-				ProxyPool.proxySet.add(p);
+				if(ProxyPool.proxySet.add(p)){
+					proxyHttpClient.getProxyTestThreadExecutor().execute(new ProxyTestTask(p));
+				}
 				ProxyPool.lock.writeLock().unlock();
-
-				proxyHttpClient.getProxyTestThreadExecutor().execute(new ProxyTestTask(p));
 			}
 		}
 	}
