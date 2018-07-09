@@ -85,7 +85,7 @@ public class DetailListPageTask extends AbstractPageTask{
                             zhiHuHttpClient.getDetailListPageThreadPool().getActiveCount() == 1){
                         //防止死锁
                         HttpGet request = new HttpGet(nextUrl);
-                        request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
+//                        request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
                         zhiHuHttpClient.getDetailListPageThreadPool().execute(new DetailListPageTask(request, true));
                     }
                 }
@@ -95,7 +95,7 @@ public class DetailListPageTask extends AbstractPageTask{
                 for (int j = 0; j < u.getFollowees() / 20; j++){
                     String nextUrl = String.format(USER_FOLLOWEES_URL, u.getUserToken(), j * 20);
                     HttpGet request = new HttpGet(nextUrl);
-                    request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
+//                    request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
                     zhiHuHttpClient.getDetailListPageThreadPool().execute(new DetailListPageTask(request, true));
                 }
             }

@@ -111,7 +111,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
         String startToken = Config.startUserToken;
         String startUrl = String.format(Constants.USER_FOLLOWEES_URL, startToken, 0);
         HttpGet request = new HttpGet(startUrl);
-        request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
+//        request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
         detailListPageThreadPool.execute(new DetailListPageTask(request, Config.isProxy));
         manageHttpClient();
     }
@@ -129,7 +129,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
         new Thread(new ThreadPoolMonitor(answerPageThreadPool, "AnswerPageThreadPool")).start();
         String startUrl = String.format(Constants.USER_ANSWER_URL, userToken, 0);
         HttpRequestBase request = new HttpGet(startUrl);
-        request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
+//        request.setHeader("authorization", "oauth " + ZhiHuHttpClient.getAuthorization());
         answerPageThreadPool.execute(new PicAnswerTask(request, true, userToken));
     }
 
@@ -170,7 +170,7 @@ public class ZhiHuHttpClient extends AbstractHttpClient implements IHttpClient{
     }
     public static String getAuthorization(){
         if(authorization == null){
-            initAuthorization();
+//            initAuthorization();
         }
         return authorization;
     }
