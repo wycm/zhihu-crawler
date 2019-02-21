@@ -1,0 +1,31 @@
+server:
+  port: 8082
+spring:
+  profiles:
+    active: prod #切换不同环境的配置信息
+  mvc:
+    view:
+      prefix: /WEB-INF/view/
+      suffix: .jsp
+  datasource:
+    url: jdbc:mysql://localhost:3306/temp?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+  jedis:
+    host: localhost
+    port: 6379
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/zhihu
+
+mybatis.mapper-locations: classpath:mapper/*.xml
+#为true只抓取昨天到现在的数据，false抓取所有历史数据
+timelimit.flag: false
+#是否抓取手机端接口
+zhihu:
+  crawler:
+    mobile:
+      api: true
+proxy.page.proxy.queueName: zhihu-proxy-page-proxy-list
+target.page.proxy.queueName: zhihu-page-proxy-list
