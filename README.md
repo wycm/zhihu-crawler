@@ -7,9 +7,9 @@ zhihu-crawler是一个基于Java的爬虫实战项目，主要功能是抓取知
 * 详细统计见 https://www.vwycm.cn/zhihu/charts
 
 ## 需要
-1.jdk 1.8
-2.redis
-3.mongodb
+1. jdk 1.8
+2. redis
+3. mongodb
 
 ## Quick Start
 1. 修改redis、mongodb相关配置，[application.yaml](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/application.yaml)
