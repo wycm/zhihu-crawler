@@ -6,12 +6,15 @@ zhihu-crawler是一个基于Java的爬虫实战项目，主要功能是抓取知
 ![](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/img/zhihu-charts.png)
 * 详细统计见 https://www.vwycm.cn/zhihu/charts
 
+## 需要
+1.jdk 1.8
+2.redis
+3.mongodb
 
 ## Quick Start
-1. 安装redis、mongodb、maven。
-2. 修改redis、mongodb相关配置，[application.yaml](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/application.yaml)
-1. 设置日志路径，默认在`/var/www/logs`[logback-spring.xml](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/logback-spring.xml)
-2. Run with ZhihuCrawlerApplication.java 
+1. 修改redis、mongodb相关配置，[application.yaml](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/application.yaml)
+2. 设置日志路径，默认在`/var/www/logs`[logback-spring.xml](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/logback-spring.xml)
+3. Run with ZhihuCrawlerApplication.java 
 
 ## 使用到的接口
 * 地址(url)：```https://www.zhihu.com/api/v4/members/${userid}/followees```
@@ -27,55 +30,51 @@ zhihu-crawler是一个基于Java的爬虫实战项目，主要功能是抓取知
 * url示例：```https://www.zhihu.com/api/v4/members/wo-yan-chen-mo/followees?include=data[*].educations,employments,answer_count,business,locations,articles_count,follower_count,gender,following_count,question_count,voteup_count,thanked_count,is_followed,is_following,badge[?(type=best_answerer)].topics&offset=0&limit=20```
 * 响应：json数据，会有关注用户资料
 
-## 使用到的三方库
-* AsyncHttpClient-网络请求
-* Jsoup-html标签解析
-* JsonPath-json数据解析
-
 ## Features
 * 大量使用http代理，突破同一个客户端访问量限制。
 * 支持持久化(mongodb)。
 * 多线程、爬取速度快、支持分布式爬取。
 
-## 2.0流程图
-![](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/img/zhihu-crawler-process.jpg)
+## TODO
+* 新增topic抓取
+* 新增问题、答案、文章抓取
+* 支持实时抓取，每小时内更新知乎全站所有热门内容
+
 ## 更新
-#### 2016.12.26
-* 移除未使用的包，修复ConcurrentModificationException和NoSuchElementException异常问题。
-* 增加游客（免登录）模式抓取。
-* 增加代理抓取模块。
 
-#### 2017.01.10
-* 不再采用登录抓取，并移除登录抓取相关模块，模拟登录的主要逻辑代码见[ModelLogin.java](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/java/com/crawl/zhihu/ModelLogin.java)。
-* 优化项目结构，加快爬取速度。采用ListPageThreadPool和DetailPageThreadPool两个线程池。ListPageThreadPool负责下载”关注用户“列表页，解析出关注用户，将关注用户的url去重，然后放到DetailPageThreadPool线程池。
-DetailPageThreadPool负责下载用户详情页面，解析出用户基本信息并入库，获取该用户的"关注用户"的列表页url并放到ListPageThreadPool。
-
-#### 2017.01.17
-* 增加代理序列化。
-* 调整项目结构，大幅度提高爬取速度。不再使用ListPageThreadPool和DetailPageThreadPool的方式。直接下载关注列表页，可以直接获取到用户详细资料。
-
-#### 2017.03.30
-* 知乎api变更，关注列表页不能获取到关注人数，导致线程池任务不能持续下去。抓取模式切换成原来ListPageThreadPool和DetailPageThreadPool的方式。
-
-#### 2017.05.26
-* 修复代理返回错误数据，导致java.lang.reflect.UndeclaredThrowableException异常。
-
-#### 2017.11.05
-* 知乎authorization文件更新，修改authorization获取方式。
+### 2019.02.21
+* 基于Spring Boot重构项目，支持横向扩展，分布式抓取
+* 数据持久化采用mongodb
+* 采用基于Netty的AsyncHttpClient代替HttpClient4.5
 
 #### 2018.07.09
 * 知乎网站更新，不再需要authorization验证
 * 完善单测
 * 修复已知bug
 
-### 2019.02.21
-* 基于Spring Boot重构项目，支持横向扩展，分布式抓取
-* 数据持久化采用mongodb
-* 采用基于Netty的AsyncHttpClient代替HttpClient4.5
-* 注：以上流程图还是基于2.0
+#### 2017.11.05
+* 知乎authorization文件更新，修改authorization获取方式。
 
-## TODO
-* 优化爬取速度
+#### 2017.05.26
+* 修复代理返回错误数据，导致java.lang.reflect.UndeclaredThrowableException异常。
+
+#### 2017.03.30
+* 知乎api变更，关注列表页不能获取到关注人数，导致线程池任务不能持续下去。抓取模式切换成原来ListPageThreadPool和DetailPageThreadPool的方式。
+
+#### 2017.01.17
+* 增加代理序列化。
+* 调整项目结构，大幅度提高爬取速度。不再使用ListPageThreadPool和DetailPageThreadPool的方式。直接下载关注列表页，可以直接获取到用户详细资料。
+
+#### 2017.01.10
+* 不再采用登录抓取，并移除登录抓取相关模块，模拟登录的主要逻辑代码见[ModelLogin.java](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/java/com/crawl/zhihu/ModelLogin.java)。
+* 优化项目结构，加快爬取速度。采用ListPageThreadPool和DetailPageThreadPool两个线程池。ListPageThreadPool负责下载”关注用户“列表页，解析出关注用户，将关注用户的url去重，然后放到DetailPageThreadPool线程池。
+DetailPageThreadPool负责下载用户详情页面，解析出用户基本信息并入库，获取该用户的"关注用户"的列表页url并放到ListPageThreadPool。
+
+#### 2016.12.26
+* 移除未使用的包，修复ConcurrentModificationException和NoSuchElementException异常问题。
+* 增加游客（免登录）模式抓取。
+* 增加代理抓取模块。
+
 
 ## 最后
 * 想要爬取其它数据，如问题、答案等，完全可以在此基础上自己定制。
