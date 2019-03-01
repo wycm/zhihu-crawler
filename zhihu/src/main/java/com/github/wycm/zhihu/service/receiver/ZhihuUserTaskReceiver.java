@@ -16,7 +16,7 @@ public class ZhihuUserTaskReceiver extends BaseReceiver{
     @PostConstruct
     @Override
     public void receive() {
-//        new Thread(() -> receive(ZhihuUserTask.class)).start();
+        new Thread(() -> receive(ZhihuUserTask.class)).start();
     }
 
     @Override
