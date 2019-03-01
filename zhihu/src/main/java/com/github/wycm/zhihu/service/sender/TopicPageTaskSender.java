@@ -31,32 +31,36 @@ public class TopicPageTaskSender extends BaseSender {
     @Autowired
     private RedisLockUtil redisLockUtil;
 
+    private volatile int counter = 0;
+
     //每天01:01:10时执行，抓取topic
 //    @Scheduled(cron = "10 40 01 * * ?")
-    @Scheduled(initialDelay = 5000, fixedDelay = 1000 * 60 * 60 * 24)
+    @Scheduled(initialDelay = 5000, fixedDelay = 1000 * 60 * 60)
     @Override
     public void send() {
         new Thread(() -> {
             log.info("start send TopicPageTask message");
+            counter = counter + 1;
             List<Topic> list = zhihuTopicRepository.findAll();
-            if (!CollectionUtils.isEmpty(list)) {
-                list.forEach(t -> {
+            if (list.size() < 10000 || counter % 24 == 0){
+                if (!CollectionUtils.isEmpty(list)) {
+                    list.forEach(t -> {
+                        String requestId = UUID.randomUUID().toString();
+                        if (redisLockUtil.lock(ZhihuTopicPageTask.class.getSimpleName() + "LockKey:" +
+                                        ZhihuConstants.ZHIHU_ROOT_TOPIC_CHILDREN_URL_TEMPLATE.replace("${topicId}", t.getId()),
+                                requestId, 1000 * 3600 * 23)) {
+                            taskQueueService.sendTask(CrawlerUtils.getTaskQueueName(ZhihuTopicPageTask.class),
+                                    new CrawlerMessage(ZhihuConstants.ZHIHU_ROOT_TOPIC_CHILDREN_URL_TEMPLATE.replace("${topicId}", t.getId())), 100000);
+                        }
+                    });
+                } else {
                     String requestId = UUID.randomUUID().toString();
                     if (redisLockUtil.lock(ZhihuTopicPageTask.class.getSimpleName() + "LockKey:" +
-                                    ZhihuConstants.ZHIHU_ROOT_TOPIC_CHILDREN_URL_TEMPLATE.replace("${topicId}", t.getId()),
+                                    ZhihuConstants.ZHIHU_ROOT_TOPIC_CHILDREN_URL_TEMPLATE.replace("${topicId}", "19776749"),
                             requestId, 1000 * 3600 * 23)) {
                         taskQueueService.sendTask(CrawlerUtils.getTaskQueueName(ZhihuTopicPageTask.class),
-                                new CrawlerMessage(ZhihuConstants.ZHIHU_ROOT_TOPIC_CHILDREN_URL_TEMPLATE.replace("${topicId}", t.getId())), 100000);
+                                new CrawlerMessage(ZhihuConstants.ZHIHU_ROOT_TOPIC_CHILDREN_URL_TEMPLATE.replace("${topicId}", "19776749")), 100000);
                     }
-                });
-
-            } else {
-                String requestId = UUID.randomUUID().toString();
-                if (redisLockUtil.lock(ZhihuTopicPageTask.class.getSimpleName() + "LockKey:" +
-                                ZhihuConstants.ZHIHU_ROOT_TOPIC_CHILDREN_URL_TEMPLATE.replace("${topicId}", "19776749"),
-                        requestId, 1000 * 3600 * 23)) {
-                    taskQueueService.sendTask(CrawlerUtils.getTaskQueueName(ZhihuTopicPageTask.class),
-                            new CrawlerMessage(ZhihuConstants.ZHIHU_ROOT_TOPIC_CHILDREN_URL_TEMPLATE.replace("${topicId}", "19776749")), 100000);
                 }
             }
             log.info("end send TopicPageTask message");
