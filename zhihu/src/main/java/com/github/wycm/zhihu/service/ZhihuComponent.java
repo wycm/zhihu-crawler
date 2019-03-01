@@ -15,9 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import redis.clients.jedis.JedisPool;
 
-/**
- * Created by wycm on 2019-01-22.
- */
 @Component
 @Data
 public class ZhihuComponent {
@@ -60,5 +57,11 @@ public class ZhihuComponent {
 
     @Autowired
     private CommonProperties commonProperties;
+
+    @Autowired
+    private ZhihuTopicMongoPageParser zhihuTopicMongoPageParser;
+
+    @Autowired
+    private ZhihuTopicMongodbDao topicMongodbDao;
 
 }

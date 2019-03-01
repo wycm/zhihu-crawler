@@ -13,10 +13,6 @@ import redis.clients.jedis.JedisPool;
 
 import java.util.UUID;
 
-/**
- * Created by wycm on 2018/10/13.
- */
-
 @RunWith(SimpleSpringJUnit4ClassRunner.class)
 @SpringBootTest(classes= ZhihuCrawlerApplication.class)
 public class RedisLockTest {

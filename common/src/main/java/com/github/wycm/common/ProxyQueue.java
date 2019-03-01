@@ -10,9 +10,6 @@ import org.springframework.stereotype.Component;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 
-/**
- * Created by wycm on 2018/10/14.
- */
 @Component
 @Slf4j
 public class ProxyQueue {

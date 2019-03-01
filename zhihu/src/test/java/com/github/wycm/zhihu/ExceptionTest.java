@@ -2,9 +2,6 @@ package com.github.wycm.zhihu;
 
 import org.junit.Test;
 
-/**
- * Created by wycm on 2018/11/12.
- */
 public class ExceptionTest {
     @Test
     public void test(){

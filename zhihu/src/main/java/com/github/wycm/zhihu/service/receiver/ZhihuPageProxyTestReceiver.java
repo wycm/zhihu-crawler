@@ -11,9 +11,6 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
-/**
- * Created by wycm on 2018/10/24.
- */
 @Slf4j
 @Service
 @NoArgsConstructor

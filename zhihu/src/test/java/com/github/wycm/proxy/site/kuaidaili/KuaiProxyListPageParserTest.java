@@ -14,9 +14,7 @@ import redis.clients.jedis.JedisPool;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by wycm on 2019-02-17.
- */
+
 @RunWith(SimpleSpringJUnit4ClassRunner.class)
 @SpringBootTest(classes= ZhihuCrawlerApplication.class)
 public class KuaiProxyListPageParserTest {

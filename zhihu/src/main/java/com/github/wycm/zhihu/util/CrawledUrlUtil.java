@@ -6,9 +6,7 @@ import com.github.wycm.zhihu.dao.mongodb.entity.CrawledUrl;
 
 import java.util.Date;
 
-/**
- * Created by wycm on 2018/10/17.
- */
+
 public class CrawledUrlUtil {
     /**
      * 生成抓取url,替换掉链接中的一些变量

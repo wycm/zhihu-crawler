@@ -11,9 +11,6 @@ import com.github.wycm.zhihu.task.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-/**
- * Created by wycm on 2018/10/24.
- */
 @Slf4j
 public abstract class BaseReceiver<T extends AbstractPageTask> {
     @Autowired
@@ -24,6 +21,7 @@ public abstract class BaseReceiver<T extends AbstractPageTask> {
 
     static {
         ThreadPoolUtil.createThreadPool(ZhihuUserTask.class, SystemUtil.getRecommendThreadSize());
+        ThreadPoolUtil.createThreadPool(ZhihuTopicPageTask.class, SystemUtil.getRecommendThreadSize() / 2);
         ThreadPoolUtil.createThreadPool(ZhihuProxyPageProxyTestTask.class, SystemUtil.getRecommendThreadSize() / 2);
         ThreadPoolUtil.createThreadPool(ZhihuPageProxyTestTask.class, SystemUtil.getRecommendThreadSize() / 2);
         ThreadPoolUtil.createThreadPool(ZhihuProxyPageDownloadTask.class, SystemUtil.getRecommendThreadSize() / 4);
@@ -49,10 +47,10 @@ public abstract class BaseReceiver<T extends AbstractPageTask> {
                 log.error(e.getMessage(), e);
                 return;
             }
-                ThreadPoolUtil
-                        .getThreadPool(tClass)
-                        .execute(createNewTask(message));
-                log.info("create new task success");
+            ThreadPoolUtil
+                    .getThreadPool(tClass)
+                    .execute(createNewTask(message));
+            log.info("create new task success");
         }
     }
 

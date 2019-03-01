@@ -6,9 +6,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
-/**
- * Created by wycm on 2018/10/13.
- */
 @Document(collection="ZhihuTopic")
 @Data
 public class Topic {

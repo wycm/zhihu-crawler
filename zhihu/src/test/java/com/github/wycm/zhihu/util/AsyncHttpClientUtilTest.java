@@ -6,9 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
-/**
- * Created by wycm on 2018/10/28.
- */
+
 public class AsyncHttpClientUtilTest {
 
     @Test

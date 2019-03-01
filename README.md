@@ -11,10 +11,11 @@ zhihu-crawler是一个基于Java的爬虫实战项目，主要功能是抓取知
 2. redis
 3. mongodb
 
-## Quick Start
+## 快速开始
 1. 修改redis、mongodb相关配置，[application.yaml](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/application.yaml)
-2. 设置日志路径，默认在`/var/www/logs`[logback-spring.xml](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/logback-spring.xml)
-3. Run with ZhihuCrawlerApplication.java 
+2. 初始化mongodb脚步，[mongo-init.sql](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/mongo-init.sql)
+3. 设置日志路径，默认在`/var/www/logs`[logback-spring.xml](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/logback-spring.xml)
+4. Run with [ZhihuCrawlerApplication.java](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/java/com/github/wycm/zhihu/ZhihuCrawlerApplication.java )
 
 ## 使用到的接口
 * 地址(url)：```https://www.zhihu.com/api/v4/members/${userid}/followees```
@@ -30,15 +31,14 @@ zhihu-crawler是一个基于Java的爬虫实战项目，主要功能是抓取知
 * url示例：```https://www.zhihu.com/api/v4/members/wo-yan-chen-mo/followees?include=data[*].educations,employments,answer_count,business,locations,articles_count,follower_count,gender,following_count,question_count,voteup_count,thanked_count,is_followed,is_following,badge[?(type=best_answerer)].topics&offset=0&limit=20```
 * 响应：json数据，会有关注用户资料
 
-## Features
+## 特性
 * 大量使用http代理，突破同一个客户端访问量限制。
 * 支持持久化(mongodb)。
 * 多线程、爬取速度快、支持分布式爬取。
 
 ## TODO
-* 新增topic抓取
 * 新增问题、答案、文章抓取
-* 支持实时抓取，每小时内更新知乎全站所有热门内容
+* 支持实时抓取，每小时更新知乎全站所有热门内容
 
 ## 更新
 

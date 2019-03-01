@@ -8,9 +8,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by wycm on 2018/10/13.
- */
 @Document(collection="ZhihuUser")
 @Data
 public class ZhihuUser {

@@ -7,9 +7,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import redis.clients.jedis.JedisPool;
 
-/**
- * Created by wycm on 2018/10/14.
- */
+
 @Configuration
 @Slf4j
 public class ZhihuCrawlerConfiguration {

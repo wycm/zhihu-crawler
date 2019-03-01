@@ -19,9 +19,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Created by wycm on 2018/10/24.
- */
 @Service
 @Slf4j
 public class ZhihuUserTaskSender extends BaseSender {

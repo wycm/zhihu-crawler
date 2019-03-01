@@ -13,9 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 
-/**
- * Created by wycm on 2018/10/24.
- */
 @Slf4j
 @Service
 public class ProxyPageDownloadTaskSender extends BaseSender{

@@ -11,10 +11,6 @@ import org.springframework.data.mongodb.core.convert.DefaultMongoTypeMapper;
 import org.springframework.data.mongodb.core.convert.MappingMongoConverter;
 import org.springframework.data.mongodb.core.mapping.MongoMappingContext;
 
-/**
- * Created by wycm on 2018/11/8.
- *  remove _class column
- */
 @Configuration
 public class SpringMongoConfig {
     @Value("${spring.data.mongodb.uri}")

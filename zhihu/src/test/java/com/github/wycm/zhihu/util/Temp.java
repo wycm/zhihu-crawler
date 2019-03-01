@@ -3,10 +3,6 @@ package com.github.wycm.zhihu.util;
 import org.jsoup.Jsoup;
 import org.junit.Test;
 
-/**
- * Created by wycm on 2018/10/27.
- */
-
 public class Temp {
     @Test
     public void test(){
