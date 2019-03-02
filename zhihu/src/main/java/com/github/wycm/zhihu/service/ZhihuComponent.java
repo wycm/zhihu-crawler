@@ -64,4 +64,18 @@ public class ZhihuComponent {
     @Autowired
     private ZhihuTopicMongodbDao topicMongodbDao;
 
+    @Autowired
+    private ZhihuTopicActivityMongodbDao zhihuTopicActivityMongodbDao;
+
+    @Autowired
+    private ZhihuTopicActivityMongoPageParser zhihuTopicActivityMongoPageParser;
+
+    @Autowired
+    private ZhihuQuestionMongodbDao zhihuQuestionMongodbDao;
+
+    @Autowired
+    private ZhihuAnswerMongodbDao zhihuAnswerMongodbDao;
+
+    @Autowired
+    private ZhihuArticleMongodbDao zhihuArticleMongodbDao;
 }
