@@ -7,29 +7,12 @@ spring:
     view:
       prefix: /WEB-INF/view/
       suffix: .jsp
-  datasource:
-    url: jdbc:mysql://localhost:3306/temp?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true&zeroDateTimeBehavior=convertToNull
-    username: root
-    password: 1389c21ad3
-    driver-class-name: com.mysql.jdbc.Driver
   jedis:
     host: localhost
     port: 6379
-#    password: wangyang123
   data:
     mongodb:
       uri: mongodb://localhost:27017/zhihu
 
-
-#logging:
-#  file: /var/www/logs/zhihu-crawler.log
-#  level:
-#      org.apache.http: ERROR
-#      com.jayway.jsonpath: ERROR
-#      com.github.wycm.zhihu.crawler.crawler.core.util.ThreadPoolMonitor: DEBUG
-
-mybatis.mapper-locations: classpath:mapper/*.xml
-#为true只抓取昨天到现在的数据，false抓取所有历史数据
-timelimit.flag: true
-
-
+proxy.page.proxy.queueName: zhihu-proxy-page-proxy-list
+target.page.proxy.queueName: zhihu-page-proxy-list

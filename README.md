@@ -12,8 +12,8 @@ zhihu-crawler是一个基于Java的爬虫实战项目，主要功能是抓取知
 3. mongodb
 
 ## 快速开始
-1. 修改redis、mongodb相关配置，[application.yaml](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/application.yaml)
-2. 初始化mongodb脚步，[mongo-init.sql](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/mongo-init.sql)
+1. 修改```zhihu/src/main/resources/application.yaml```redis、mongodb相关配置，[application.yaml](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/application.yaml)
+2. 初始化```zhihu/src/main/resources/mongo-init.sql```mongodb脚步，[mongo-init.sql](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/mongo-init.sql)
 3. 设置日志路径，默认在`/var/www/logs`[logback-spring.xml](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/logback-spring.xml)
 4. Run with [ZhihuCrawlerApplication.java](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/java/com/github/wycm/zhihu/ZhihuCrawlerApplication.java )
 
