@@ -1,4 +1,4 @@
-use zhihu
+use zhihu-test2
 
 db.createCollection("CrawledUrl")
 db.CrawledUrl.remove({})
@@ -21,6 +21,5 @@ db.ZhihuQuestion.createIndex({"answerUpdateTime":1}, {background: true})
 
 
 
-db.createCollection("news")
-db.news.remove({})
-db.news.createIndex({"news_link":1},{"unique":true})
+db.createCollection("ZhihuUser")
+db.ZhihuUser.remove({})

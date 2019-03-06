@@ -12,7 +12,7 @@ spring:
     port: 6379
   data:
     mongodb:
-      uri: mongodb://localhost:27017/zhihu
+      uri: mongodb://localhost:27017/zhihu-test2
 
 proxy.page.proxy.queueName: zhihu-proxy-page-proxy-list
 target.page.proxy.queueName: zhihu-page-proxy-list

@@ -14,7 +14,7 @@ import javax.annotation.PostConstruct;
 @NoArgsConstructor
 public class TopicPageTaskReceiver extends BaseReceiver{
 
-    @PostConstruct
+//    @PostConstruct
     @Override
     public void receive() {
         new Thread(() -> receive(ZhihuTopicPageTask.class)).start();

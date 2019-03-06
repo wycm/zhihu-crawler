@@ -11,7 +11,7 @@ public class Constants {
     /**
      * 单个ip请求间隔，单位ms
      */
-    public final static long TIME_INTERVAL = 2000;
+    public final static long TIME_INTERVAL = 500;
     /**
      * redis proxy过期时间，单位秒
      */

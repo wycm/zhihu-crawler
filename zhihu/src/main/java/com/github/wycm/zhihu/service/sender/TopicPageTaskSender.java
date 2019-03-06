@@ -35,7 +35,7 @@ public class TopicPageTaskSender extends BaseSender {
 
     //每天01:01:10时执行，抓取topic
 //    @Scheduled(cron = "10 40 01 * * ?")
-    @Scheduled(initialDelay = 5000, fixedDelay = 1000 * 60 * 60)
+//    @Scheduled(initialDelay = 5000, fixedDelay = 1000 * 60 * 60)
     @Override
     public void send() {
         new Thread(() -> {
