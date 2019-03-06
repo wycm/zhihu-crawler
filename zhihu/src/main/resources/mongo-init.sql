@@ -1,4 +1,4 @@
-use zhihu-test2
+use zhihu
 
 db.createCollection("CrawledUrl")
 db.CrawledUrl.remove({})

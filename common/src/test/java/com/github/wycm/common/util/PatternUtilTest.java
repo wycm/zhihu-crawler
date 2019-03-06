@@ -5,7 +5,9 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-
+/**
+ * Created by wycm on 2019-03-06.
+ */
 public class PatternUtilTest {
 
     @Test

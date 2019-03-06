@@ -2,28 +2,22 @@ package com.github.wycm.proxy.site.kuaidaili;
 
 import com.github.wycm.common.Proxy;
 import com.github.wycm.common.util.SimpleHttpClient;
-import com.github.wycm.zhihu.SimpleSpringJUnit4ClassRunner;
-import com.github.wycm.zhihu.ZhihuCrawlerApplication;
 import org.junit.Assert;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import redis.clients.jedis.JedisPool;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+import static org.junit.Assert.*;
 
-@RunWith(SimpleSpringJUnit4ClassRunner.class)
-@SpringBootTest(classes= ZhihuCrawlerApplication.class)
+/**
+ * Created by wycm on 2019-03-06.
+ */
 public class KuaiProxyListPageParserTest {
-    @Autowired
-    private JedisPool jedisPool;
 
     @Test
     public void parse() throws ExecutionException, InterruptedException {
-        SimpleHttpClient simpleHttpClient = new SimpleHttpClient(jedisPool);
+        SimpleHttpClient simpleHttpClient = new SimpleHttpClient(null);
         String r = simpleHttpClient.get("https://www.kuaidaili.com/free/");
         KuaiProxyListPageParser pageParser = new KuaiProxyListPageParser();
         List<Proxy> proxyList =pageParser.parse(r);
