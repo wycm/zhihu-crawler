@@ -1,6 +1,6 @@
 知乎爬虫
 ====
-zhihu-crawler是一个基于Java的爬虫实战项目，主要功能是抓取知乎用户的基本资料，如果觉得不错，请给个star。
+zhihu-crawler是一个基于Java的高性能、支持免费http代理池、支持横向扩展、分布式抓取爬虫项目，主要功能是抓取知乎用户、话题、问题、答案、文章等数据，如果觉得不错，请给个star。
 ## 爬取结果
 * 下图为爬取117w知乎用户数据的简单统计<br>
 ![](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/img/zhihu-charts.png)
@@ -75,12 +75,12 @@ DetailPageThreadPool负责下载用户详情页面，解析出用户基本信息
 * 增加游客（免登录）模式抓取。
 * 增加代理抓取模块。
 
+## 免责申明
+* 本项目仅供个人学习与交流使用，严禁用于商业以及不良用途。
 
 ## 最后
-* 想要爬取其它数据，如问题、答案等，完全可以在此基础上自己定制。
 * 有问题的请提issue。
 * 欢迎贡献代码。
 * 爬虫交流群：633925314，欢迎交流。
-* 需要数据(117w知乎用户基本信息资料)的，关注公众号即可：lwndso<br>
-![](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/img/wx.jpg)
-
+* 需要数据的，关注公众号即可(117w知乎用户基本信息资料，该数据仅供个人学习与交流使用，严禁用于商业以及不良用途)：lwndso<br>
+![一个程序员日常分享，包括但不限于爬虫、Java后端技术，欢迎关注](https://raw.githubusercontent.com/wycm/md-image/master/2019-02-28/9.png)
