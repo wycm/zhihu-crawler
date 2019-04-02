@@ -1,6 +1,6 @@
 知乎爬虫
 ====
-zhihu-crawler是一个基于Java的爬虫实战项目，主要功能是抓取知乎用户的基本资料，如果觉得不错，请给个star。
+zhihu-crawler是一个基于Java的高性能、支持免费http代理池、支持横向扩展、分布式抓取爬虫项目，主要功能是抓取知乎用户、话题、问题、答案、文章等数据，如果觉得不错，请给个star。
 ## 爬取结果
 * 下图为爬取117w知乎用户数据的简单统计<br>
 ![](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/img/zhihu-charts.png)
@@ -16,20 +16,6 @@ zhihu-crawler是一个基于Java的爬虫实战项目，主要功能是抓取知
 2. 初始化```zhihu/src/main/resources/mongo-init.sql```mongodb脚步，[mongo-init.sql](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/mongo-init.sql)
 3. 设置日志路径，默认在`/var/www/logs`[logback-spring.xml](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/resources/logback-spring.xml)
 4. Run with [ZhihuCrawlerApplication.java](https://github.com/wycm/zhihu-crawler/blob/3.0/zhihu/src/main/java/com/github/wycm/zhihu/ZhihuCrawlerApplication.java )
-
-## 使用到的接口
-* 地址(url)：```https://www.zhihu.com/api/v4/members/${userid}/followees```
-* 请求类型：GET
-* **请求参数**
-
-| 参数名 |类型 | 必填 | 值 | 说明|
-| :------------ | :------------ | :------------ | :----- | :------------ |
-| include | String | 是| ```data[*]answer_count,articles_count``` |需要返回的字段（这个值可以改根据需要增加一些字段，见如下示例url） |
-| offset  | int    | 是| 0 | 偏移量（通过调整这个值可以获取到一个用户的```所有关注用户```资料） |
-| limit   | int    | 是| 20 | 返回用户数（最大20，超过20无效） |
-
-* url示例：```https://www.zhihu.com/api/v4/members/wo-yan-chen-mo/followees?include=data[*].educations,employments,answer_count,business,locations,articles_count,follower_count,gender,following_count,question_count,voteup_count,thanked_count,is_followed,is_following,badge[?(type=best_answerer)].topics&offset=0&limit=20```
-* 响应：json数据，会有关注用户资料
 
 ## 特性
 * 大量使用http代理，突破同一个客户端访问量限制（注：使用的都是网上公开的免费代理，近期测试来看，部分免费代理网站都做了反爬，可用的免费代理比以前少了很多，抓取速度相比以前慢了很多）。
@@ -81,6 +67,8 @@ DetailPageThreadPool负责下载用户详情页面，解析出用户基本信息
 * 有问题的请提issue。
 * 欢迎贡献代码。
 * 爬虫交流群：633925314，欢迎交流。
-* 需要数据(117w知乎用户基本信息资料)的，关注公众号即可：lwndso<br>
-![](https://github.com/wycm/zhihu-crawler/blob/2.0/src/main/resources/img/wx.jpg)
+* 需要数据(117w知乎用户基本信息资料，该数据仅供个人学习与交流使用，严禁用于商业以及不良用途)的，关注公众号即可：lwndso<br>
+![一个程序员日常分享，包括但不限于爬虫、Java后端技术，欢迎关注](https://raw.githubusercontent.com/wycm/md-image/master/2019-02-28/9.png)
 
+## 免责申明
+* 本项目仅供个人学习与交流使用，严禁用于商业以及不良用途。
